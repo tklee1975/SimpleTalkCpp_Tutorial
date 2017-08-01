@@ -7,14 +7,9 @@
 #include <stdlib.h>
 #include <assert.h>
 
-struct DListNodeStruct {
-	struct DListNodeStruct* prev;
-	struct DListNodeStruct* next;
-};
-
-typedef struct DListNodeStruct DListNode;
-
 struct StudentStruct {
+	struct StudentStruct* prev;
+	struct StudentStruct* next;
 	DListNode list_node; //common header
 	int id;
 	char name[100];
@@ -22,15 +17,7 @@ struct StudentStruct {
 	char address[2000];
 };
 
-struct TeachStruct {
-	DListNode list_node; //common header
-
-	int id;
-	char name[100];
-};
-
 typedef struct StudentStruct Student;
-typedef struct TeacherStruct Teacher;
 
 void Student_Init(Student* s) {
 	s->id = 0;
@@ -75,6 +62,10 @@ void DList_InsertToHead(DList* ls, DListNode* s) {
 	if (s->next) {
 		s->next->prev = s;
 	}
+	
+	if (!ls->head) {
+		ls->tail = s; //update tail as well, if the list is empty
+	}
 
 	ls->head = s;
 	ls->count++;
@@ -98,6 +89,8 @@ void DList_Insert(DList* ls, DListNode* s, DListNode* after) {
 	}
 
 	after->next = s; //4
+	
+	ls->count++;
 }
 
 void DList_AppendToTail(DList* ls, DListNode* s);
@@ -109,21 +102,16 @@ void DList_Release(DList* ls) {
 		next = p->next;
 		free(p);
 	}
+	ls->count = 0;
 }
 
 typedef DList StudentList;
-typedef DList ContactList;
-
-void ContactList_InsertStudentToHead(ContactList* ls, Student* s) {
-	DList_InsertToHead((DList*)ls, (DListNode*)s);
-}
-
-void ContactList_InsertTeacherToHead(ContactList* ls, Teacher* s) {
-	DList_InsertToHead((DList*)ls, (DListNode*)s);
-}
 
 void StudentList_Insert(StudentList* ls, Student* s, Student* after) {
-	DList_Insert((DList*)ls, (DListNode*)s, (DListNode*)after);
+	DListNode* a = NULL;
+	if (after)
+		a = after->list_node;
+	DList_Insert((DList*)ls, &s->list_node, a);
 }
 
 void StudentList_Init(StudentList* ls) {
