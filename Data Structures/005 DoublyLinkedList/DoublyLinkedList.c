@@ -100,6 +100,16 @@ void DList_Append(DList* ls, Student* s, Student* before) {
 	assert(0);
 }
 
+void DList_Print(SList* ls) {
+	printf("\nprint list count=%d:\n", ls->count);
+	Student* p = ls->head;
+	while (p) {
+		printf("  %d: %s\n", p->id, p->name);
+		p = p->next;
+	}
+	printf("\n");
+}
+
 void DList_Release(DList* ls) {
 	Student* next;
 	for (Student* p = ls->head; p; p = next) {
@@ -124,7 +134,7 @@ int main() {
 	Student* tom = Student_NewWithId(6, "Tom");
 	DList_Insert(&ls, tom, NULL);
 
-	StudentList_Print(&ls);
+	DList_Print(&ls);
 
 	Student* bob = Student_NewWithId(36, "Bob");
 	DList_Insert(&ls, bob, john);
