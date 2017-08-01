@@ -8,8 +8,8 @@
 #include <assert.h>
 
 struct StudentStruct {	
-	struct DListNodeStruct* prev;
-	struct DListNodeStruct* next;
+	struct StudentStruct* prev;
+	struct StudentStruct* next;
 	int id;
 	char name[100];
 	int age;
@@ -40,8 +40,8 @@ Student* Student_NewWithId(int id, char* name) {
 }
 
 typedef struct {
-	DListNode* head;
-	DListNode* tail;
+	Student* head;
+	Student* tail;
 	int count;
 } DList;
 
@@ -68,7 +68,7 @@ void DList_InsertToHead(DList* ls, Student* s) {
 	ls->count++;
 }
 
-void DList_Insert(DList* ls, DListNode* s, Student* after) {
+void DList_Insert(DList* ls, Student* s, Student* after) {
 	assert(!s->prev && !s->next);
 
 	if (!after) {
@@ -92,15 +92,15 @@ void DList_Insert(DList* ls, DListNode* s, Student* after) {
 
 void DList_AppendToTail(DList* ls, Student* s) {	
 	//TODO
-	assert(false);
+	assert(0);
 }
 
-void DList_Append(DList* ls, DListNode* s, Student* before) {
+void DList_Append(DList* ls, Student* s, Student* before) {
 	//TODO
-	assert(false);
+	assert(0);
 }
 
-void DList_Release(Student* ls) {
+void DList_Release(DList* ls) {
 	Student* next;
 	for (Student* p = ls->head; p; p = next) {
 		next = p->next;
