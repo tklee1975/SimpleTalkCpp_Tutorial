@@ -7,10 +7,14 @@
 #include <stdlib.h>
 #include <assert.h>
 
-struct StudentStruct {
-	struct StudentStruct* prev;
-	struct StudentStruct* next;
-	DListNode list_node; //common header
+struct DListNodeStruct {
+	struct DListNodeStruct* prev;
+	struct DListNodeStruct* next;
+};
+typedef struct DListNodeStruct DListNode;
+
+struct StudentStruct {	
+	DListNode list_node;
 	int id;
 	char name[100];
 	int age;
@@ -57,16 +61,14 @@ void DList_InsertToHead(DList* ls, DListNode* s) {
 	assert(!s->prev && !s->next);
 
 	s->prev = NULL;
-	s->next = ls->head; //1
 
-	if (s->next) {
-		s->next->prev = s;
+	if (ls->head) {
+		s->next = ls->head;
+		ls->head->prev = s;
+	} else {
+		ls->tail = s;
 	}
 	
-	if (!ls->head) {
-		ls->tail = s; //update tail as well, if the list is empty
-	}
-
 	ls->head = s;
 	ls->count++;
 }
