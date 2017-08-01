@@ -100,7 +100,7 @@ void DList_Append(DList* ls, Student* s, Student* before) {
 	assert(0);
 }
 
-void DList_Print(SList* ls) {
+void DList_Print(DList* ls) {
 	printf("\nprint list count=%d:\n", ls->count);
 	Student* p = ls->head;
 	while (p) {
