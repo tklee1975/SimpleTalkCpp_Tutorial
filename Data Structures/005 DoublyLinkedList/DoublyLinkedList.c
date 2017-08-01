@@ -7,14 +7,9 @@
 #include <stdlib.h>
 #include <assert.h>
 
-struct DListNodeStruct {
+struct StudentStruct {	
 	struct DListNodeStruct* prev;
 	struct DListNodeStruct* next;
-};
-typedef struct DListNodeStruct DListNode;
-
-struct StudentStruct {	
-	DListNode list_node;
 	int id;
 	char name[100];
 	int age;
@@ -28,8 +23,8 @@ void Student_Init(Student* s) {
 	s->name[0] = 0;
 	s->age = 0;
 	s->address[0] = 0;
-	s->list_node.prev = NULL;
-	s->list_node.next = NULL;
+	s->prev = NULL;
+	s->next = NULL;
 }
 
 void Student_InitWithId(Student* s, int id, char* name) {
@@ -57,7 +52,7 @@ void DList_Init(DList* ls) {
 	ls->count = 0;
 }
 
-void DList_InsertToHead(DList* ls, DListNode* s) {
+void DList_InsertToHead(DList* ls, Student* s) {
 	assert(!s->prev && !s->next);
 
 	s->prev = NULL;
@@ -73,7 +68,7 @@ void DList_InsertToHead(DList* ls, DListNode* s) {
 	ls->count++;
 }
 
-void DList_Insert(DList* ls, DListNode* s, DListNode* after) {
+void DList_Insert(DList* ls, DListNode* s, Student* after) {
 	assert(!s->prev && !s->next);
 
 	if (!after) {
@@ -95,12 +90,19 @@ void DList_Insert(DList* ls, DListNode* s, DListNode* after) {
 	ls->count++;
 }
 
-void DList_AppendToTail(DList* ls, DListNode* s);
-void DList_Append(DList* ls, DListNode* s, DListNode* before);
+void DList_AppendToTail(DList* ls, Student* s) {	
+	//TODO
+	assert(false);
+}
 
-void DList_Release(DList* ls) {
-	DListNode* next;
-	for (DListNode* p = ls->head; p; p = next) {
+void DList_Append(DList* ls, DListNode* s, Student* before) {
+	//TODO
+	assert(false);
+}
+
+void DList_Release(Student* ls) {
+	Student* next;
+	for (Student* p = ls->head; p; p = next) {
 		next = p->next;
 		free(p);
 	}
@@ -109,52 +111,27 @@ void DList_Release(DList* ls) {
 
 typedef DList StudentList;
 
-void StudentList_Insert(StudentList* ls, Student* s, Student* after) {
-	DListNode* a = NULL;
-	if (after)
-		a = after->list_node;
-	DList_Insert((DList*)ls, &s->list_node, a);
-}
-
-void StudentList_Init(StudentList* ls) {
-	DList_Init((DList*)ls);
-}
-
-void StudentList_Release(StudentList* ls) {
-	DList_Release((DList*)ls);
-}
-
-void StudentList_Print(DList* ls) {
-	printf("\nprint list count=%d\n", ls->count);
-	for (DListNode* p = ls->head; p; p = p->next) {
-		Student* s = (Student*)p;
-		printf("  %d: %s\n", s->id, s->name);
-	}
-	printf("\n");
-}
-
-
 int main() {
-	StudentList ls;
-	StudentList_Init(&ls);
+	DList ls;
+	DList_Init(&ls);
 
 	Student* john = Student_NewWithId(10, "John");
-	StudentList_Insert(&ls, john, NULL);
+	DList_Insert(&ls, john, NULL);
 
 	Student* mary = Student_NewWithId(44, "Mary");
-	StudentList_Insert(&ls, mary, NULL);
+	DList_Insert(&ls, mary, NULL);
 
 	Student* tom = Student_NewWithId(6, "Tom");
-	StudentList_Insert(&ls, tom, NULL);
+	DList_Insert(&ls, tom, NULL);
 
 	StudentList_Print(&ls);
 
 	Student* bob = Student_NewWithId(36, "Bob");
-	StudentList_Insert(&ls, bob, john);
+	DList_Insert(&ls, bob, john);
 
-	StudentList_Print(&ls);
+	DList_Print(&ls);
 
-	StudentList_Release(&ls);
+	DList_Release(&ls);
 
 	printf("=== Program Ended ===\n");
 	printf("Press any to key to Exit !");
