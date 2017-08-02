@@ -10,6 +10,8 @@
 struct StudentStruct {	
 	struct StudentStruct* prev;
 	struct StudentStruct* next;
+	void* list; //for validation
+
 	int id;
 	char name[100];
 	int age;
@@ -25,6 +27,7 @@ void Student_Init(Student* s) {
 	s->address[0] = 0;
 	s->prev = NULL;
 	s->next = NULL;
+	s->list = NULL;
 }
 
 void Student_InitWithId(Student* s, int id, char* name) {
@@ -53,7 +56,7 @@ void DList_Init(DList* ls) {
 }
 
 void DList_InsertToHead(DList* ls, Student* s) {
-	assert(!s->prev && !s->next);
+	assert(!s->prev && !s->next && !s->list);
 
 	s->prev = NULL;
 
@@ -64,12 +67,14 @@ void DList_InsertToHead(DList* ls, Student* s) {
 		ls->tail = s;
 	}
 	
+	s->list = ls;
+
 	ls->head = s;
 	ls->count++;
 }
 
 void DList_Insert(DList* ls, Student* s, Student* after) {
-	assert(!s->prev && !s->next);
+	assert(!s->prev && !s->next && !s->list);
 
 	if (!after) {
 		DList_InsertToHead(ls, s);
@@ -86,7 +91,7 @@ void DList_Insert(DList* ls, Student* s, Student* after) {
 	}
 
 	after->next = s; //4
-	
+	s->list = ls;
 	ls->count++;
 }
 
@@ -98,6 +103,26 @@ void DList_AppendToTail(DList* ls, Student* s) {
 void DList_Append(DList* ls, Student* s, Student* before) {
 	//TODO
 	assert(0);
+}
+
+void DList_Remove(DList* ls, Student* s) {
+	assert(s->list == ls);
+
+	printf("remove %s\n", s->name);
+	if (s->prev) {
+		s->prev->next = s->next;
+	} else {
+		ls->head = s->next;
+	}
+
+	if (s->next) {
+		s->next->prev = s->prev;
+	} else {
+		ls->tail = s->prev;
+	}
+
+	s->prev = s->next = NULL;
+	ls->count--;
 }
 
 void DList_Print(DList* ls) {
@@ -138,6 +163,9 @@ int main() {
 
 	Student* bob = Student_NewWithId(36, "Bob");
 	DList_Insert(&ls, bob, john);
+
+	DList_Print(&ls);
+	DList_Remove(&ls, bob);
 
 	DList_Print(&ls);
 
