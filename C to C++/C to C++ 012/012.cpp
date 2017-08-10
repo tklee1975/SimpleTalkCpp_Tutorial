@@ -6,8 +6,6 @@
 #include <stdlib.h>
 #include <memory>
 #include <vector>
-#include <list>
-#include <algorithm>
 
 //STL standard template library
 
