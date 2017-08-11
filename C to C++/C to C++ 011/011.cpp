@@ -99,7 +99,7 @@ public:
 
 			T& o = m_data[i];
 			//placement new + move semantic
-			new(p) T( std::move(o)); // T& (lvalue) -> T&& (rvalue)
+			new(p) T( std::move(o)); // T& -> T&&
 
 			m_data[i].~T();
 		}
