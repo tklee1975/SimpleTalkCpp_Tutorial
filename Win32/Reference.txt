@@ -37,3 +37,10 @@ tags:
 	廣東話 C++ 教學, 簡單黎講 C++, C++ in Cantonese, C 語言進階, Win32, Windows Programming, 廣東話 程式設計
 
 	
+	
+==================================================
+- GetSystemMetrics
+- WM_PAINT
+
+
+
