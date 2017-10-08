@@ -1,7 +1,7 @@
 Win32 API#  (廣東話, Cantonese) [簡單黎講 C++]
 
 
-簡單黎講 C++ - C to C++
+簡單黎講 C++ - Win32 API
 廣東話 C++ 教學系列 https://www.youtube.com/channel/UCWW9g_90Ik1U8ULNG5PvoYQ
 
 facebook page
