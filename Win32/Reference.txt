@@ -1,4 +1,4 @@
-Win32 API#  (廣東話, Cantonese) [簡單黎講 C++]
+Win32 API #  (廣東話, Cantonese) [簡單黎講 C++]
 
 
 簡單黎講 C++ - Win32 API
@@ -35,38 +35,3 @@ Reference Books:
 	
 tags:
 	廣東話 C++ 教學, 簡單黎講 C++, C++ in Cantonese, C 語言進階, Win32, Windows Programming, 廣東話 程式設計
-
-	
-	
-==================================================
-- GetSystemMetrics
-	- SM_CXSCREEN
-	- SM_CYCAPTION
-	- SM_CMOUSEBUTTONS
-	- SM_CMONITORS
-	- SM_CLEANBOOT
-
-- MessageBox
-	- YES / NO
-	- ICON
-	
-
-- WM_CLOSE
-
-- WM_SIZING
-- WM_SIZE
-	- WS_THICKFRAME
-
-- WM_PAINT
-	- BeginPaint
-	
-- WM_TIMER
-
-- Minesweeper
-
-
-- SetWindowLongPtr()
-	- subclassing WndProc
-	- extra storage
-	
-- WM_USER
