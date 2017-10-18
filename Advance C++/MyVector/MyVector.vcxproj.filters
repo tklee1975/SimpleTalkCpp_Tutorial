@@ -23,5 +23,8 @@
     <ClInclude Include="MyVector.h">
       <Filter>Source Files</Filter>
     </ClInclude>
+    <ClInclude Include="MyArray.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
