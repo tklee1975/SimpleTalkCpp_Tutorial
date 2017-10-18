@@ -1,4 +1,4 @@
-Win32 API #  (廣東話, Cantonese) [簡單黎講 C++]
+Database #  (廣東話, Cantonese) [簡單黎講 C++]
 
 
 簡單黎講 C++ - Database
