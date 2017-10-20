@@ -31,7 +31,7 @@ private:
 	int test = 0;
 };
 
-void dump(const MyVector<int>& v) {
+void dump(const MyIVector<int>& v) {
 	printf("MyVector<int> size = %d, cap = %d\n", v.size(), v.capacity());
 //	for (int i = 0; i < v.size(); i++) {
 //		printf(" %d", v[i]);
@@ -59,7 +59,7 @@ void dump(const MyVector<int>& v) {
 	printf("\n");
 }
 
-void dump(const MyVector<MyData> & v) {
+void dump(const MyIVector<MyData> & v) {
 	printf("MyVector<MyData> size = %d, cap = %d\n", v.size(), v.capacity());
 	for (int i = 0; i < v.size(); i++) {
 		v[i].print();
@@ -99,25 +99,22 @@ void test003() {
 }
 
 void test004() {
-	MyVector<MyColor> v;
+	MyVector<int, 0> v;
 	v.resize(1);
-	v.resize(10); // <--- 
+	v.resize(4);
+	v.resize(16);
 
-//	v[11] // <--- inbound check
-
-	int a[10]; // <----
-//	a[11] // <--- no inbound check
-	a[0] = 1;
-
-	MyArray<int, 10> b;
-	b[0] = 2;
-
-	int b_size = 0;
-	
-
-	for (auto& e : b) {
-		e = 1;
+	int i = 0;
+	for (auto& e : v) {
+		e = i;
+		i++;
 	}
+
+	dump(v);
+
+//	String <-- array of char + null terminator
+//	MyString<char, 10> s;  
+//	MyString<wchar_t, 4> w;
 }
 
 void FillData(MyVector<int> & v) {

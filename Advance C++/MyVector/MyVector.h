@@ -3,6 +3,7 @@
 #include <cstdlib>
 #include <new>
 #include <stdio.h>
+#include <cassert>
 
 class NonCopyable {
 public:
@@ -41,13 +42,17 @@ void my_memcpy(T* dst, const T* src, int n) {
 }
 
 template<typename T>
-class MyVector : public NonCopyable {
+class MyIVector : public NonCopyable {
 public:
-	MyVector() {}
-	MyVector(MyVector && r)			{ operator=(std::move(r)); }
-	~MyVector() { clearAndFree();}
+	MyIVector() {}
+	MyIVector(MyIVector && r)			{ operator=(std::move(r)); }
+	virtual ~MyIVector() { 
+		// cannot call any virtual function from MyVector !!!!! 
+		// it will call MyIVector virtual function !!!
+		assert(m_data == nullptr);
+	}
 
-	void operator=(MyVector && r);
+	void operator=(MyIVector && r);
 
 	// TODO
 //	MyVector(const MyVector& r)		{ operator=(r); }
@@ -93,6 +98,9 @@ public:
 
 	void reserve	(int n);
 	int	 capacity	() const { return m_capacity; }
+
+			T* data()				{ return m_data; }
+	const	T* data() const			{ return m_data; }
 
 			T* begin()				{ return m_data; }
 	const	T* begin() const		{ return m_data; }
@@ -147,6 +155,11 @@ public:
 	RevEnumerator  revEach()		{ return RevEnumerator( rbegin(), rend()); }
 	CRevEnumerator revEach() const	{ return CRevEnumerator(rbegin(), rend()); }
 
+protected:
+	virtual T*		onMalloc(int n) = 0;
+	virtual void	onFree(T* p) = 0;
+	virtual bool	isUsingLocalBuf() const = 0;
+
 private:
 	void inBoundCheck(int i) const {
 		if (!inBound(i)) {
@@ -159,8 +172,52 @@ private:
 	int	m_capacity = 0;
 };
 
+template<typename T, int LOCAL_BUF_SIZE>
+class LocalBuf : public NonCopyable {
+public:
+	      T* localBuf()       { return reinterpret_cast<T*>(_localBuf); }
+	const T* localBuf() const { return reinterpret_cast<const T*>(_localBuf); }
+private:
+	char _localBuf[LOCAL_BUF_SIZE * sizeof(T)];
+};
+
+// template specialization for char buf[0]
 template<typename T>
-void MyVector<T>::clear() {
+class LocalBuf<T, 0> : public NonCopyable {
+public:
+	      T* localBuf()       { return nullptr; }
+	const T* localBuf() const { return nullptr; }
+private:
+};
+
+template<typename T, int LOCAL_BUF_SIZE = 8>
+class MyVector : public MyIVector<T>, public LocalBuf<T, LOCAL_BUF_SIZE> {
+	using BUF = LocalBuf<T, LOCAL_BUF_SIZE>;
+public:
+	virtual ~MyVector() {
+		clearAndFree();
+	}
+
+protected:
+	virtual T*	onMalloc(int n) {
+		if (n <= LOCAL_BUF_SIZE) {
+			return BUF::localBuf();
+		} else {
+			return reinterpret_cast<T*>(std::malloc(n * sizeof(T)));
+		}
+	}
+
+	virtual void onFree(T* p) {
+		if (p && p != BUF::localBuf()) {
+			std::free(p);
+		}
+	}
+
+	virtual bool isUsingLocalBuf() const { return localBuf() == data(); }
+};
+
+template<typename T>
+void MyIVector<T>::clear() {
 	auto* dst = m_data;
 	auto* end = m_data + m_size;
 
@@ -171,50 +228,64 @@ void MyVector<T>::clear() {
 }
 
 template<typename T>
-void MyVector<T>::operator=(MyVector && r) {
+void MyIVector<T>::operator=(MyIVector && r) {
 	clearAndFree();
-	m_data = r.m_data;
-	m_size = r.m_size;
-	m_capacity = r.m_capacity;
 
-	r.m_data = nullptr;
-	r.m_size = 0;
-	r.m_capacity = 0;
+	if (r.isUsingLocalBuf()) {
+		reserve(r.m_size);
+		auto* dst = m_data;
+		auto* src = r.m_data;
+		auto* end = r.m_data + r.m_size;
+
+		for (; src < end; dst++, src++) {
+			new(dst) T(std::move(*src));
+		}
+		m_size = r.m_size;
+		r.clear();
+
+	}else{
+		m_data = r.m_data;
+		m_size = r.m_size;
+		m_capacity = r.m_capacity;
+
+		r.m_data = nullptr;
+		r.m_size = 0;
+		r.m_capacity = 0;
+	}
 }
 
 template<typename T> inline
-void MyVector<T>::clearAndFree() {
+void MyIVector<T>::clearAndFree() {
 	clear();
-	if (m_data) {
-		std::free(m_data);
-		m_capacity = 0;
-	}
+	onFree(m_data);
+	m_data = nullptr;
+	m_capacity = 0;
 }
 
 template<typename T>
 template<typename... ARGS>
-void MyVector<T>::emplace_back(ARGS&&... args) {
+void MyIVector<T>::emplace_back(ARGS&&... args) {
 	reserve(m_size + 1);
 	new (m_data + m_size) T(std::forward<ARGS>(args)...);
 	m_size++;
 }
 
 template<typename T> inline
-void MyVector<T>::append(const T& v) {
+void MyIVector<T>::append(const T& v) {
 	reserve(m_size + 1);
 	new (m_data + m_size) T(v);
 	m_size++;
 }
 
 template<typename T> inline
-void MyVector<T>::append(T && v) {
+void MyIVector<T>::append(T && v) {
 	reserve(m_size + 1);
 	new (m_data + m_size) T(std::forward<T>(v));
 	m_size++;
 }
 
 template<typename T> inline
-void MyVector<T>::reserve(int n)
+void MyIVector<T>::reserve(int n)
 {
 	if (m_capacity >= n)
 		return;
@@ -224,25 +295,26 @@ void MyVector<T>::reserve(int n)
 		newCapacity = n;
 	}
 
-	auto* newData = reinterpret_cast<T*>(std::malloc(newCapacity * sizeof(T)));
+	auto* newData = onMalloc(newCapacity);
+	if (newData != m_data) {
+		// move elements
+		try {
+			auto* src = m_data;
+			auto* end = m_data + m_size;
+			auto* dst = newData;
 
-	try {
-		auto* src = m_data;
-		auto* end = m_data + m_size;
-		auto* dst = newData;
-
-		if (isRawCopyable<T>::value) {
-			memcpy(dst, src, sizeof(T) * m_size);
-		} else {
-			for (; src < end; src++, dst++) {
-				new(dst) T(std::move(*src)); //placement new
-				src->~T();
+			if (isRawCopyable<T>::value) {
+				memcpy(dst, src, sizeof(T) * m_size);
+			} else {
+				for (; src < end; src++, dst++) {
+					new(dst) T(std::move(*src)); //placement new
+					src->~T();
+				}
 			}
+		} catch (...) {
+			onFree(newData);
+			throw;
 		}
-	}
-	catch (...) {
-		std::free(newData);
-		throw;
 	}
 
 	m_data = newData;
@@ -251,7 +323,7 @@ void MyVector<T>::reserve(int n)
 
 template<typename T> 
 template<typename... ARGS> inline
-void MyVector<T>::resize(int newSize, ARGS&&... args)
+void MyIVector<T>::resize(int newSize, ARGS&&... args)
 {
 	if (m_size == newSize)
 		return;
