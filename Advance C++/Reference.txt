@@ -44,4 +44,4 @@ Reference:
 	https://www.youtube.com/watch?v=nnY4e4faNp0&index=58&list=PLHTh1InhhwT6bwIpRk0ZbCA0N2p1taxd6
 
 tags:
-	廣東話 C++ 教學, 簡單黎講 C++, C++ in Cantonese, Performance 廣東話 程式設計
+	廣東話 C++ 教學, 簡單黎講 C++, C++ in Cantonese, Advance C++, Performance, 廣東話, 程式設計

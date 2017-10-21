@@ -16,4 +16,4 @@ Reference:
 	http://zetcode.com/db/mysqlc/
 	
 tags:
-	廣東話 C++ 教學, 簡單黎講 C++, C++ in Cantonese, Database, MySQL, SQLite, 廣東話 程式設計
+	廣東話 C++ 教學, 簡單黎講 C++, C++ in Cantonese, Database, MySQL, SQLite, 廣東話, 程式設計
