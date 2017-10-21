@@ -6,6 +6,8 @@
 #include <Commctrl.h>
 #include <exception>
 #include <memory>
+#include <vector>
+#include <string>
 #include <stdint.h>
 
 template<class T>

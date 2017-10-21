@@ -145,10 +145,14 @@
   <ItemGroup>
     <ClCompile Include="MyDB.cpp" />
     <ClCompile Include="MyDB_MySQL.cpp" />
+    <ClCompile Include="MyDB_SQLite3.cpp" />
+    <ClCompile Include="sqlite\sqlite3.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MyDB.h" />
     <ClInclude Include="my_common.h" />
+    <ClInclude Include="sqlite\sqlite3.h" />
+    <ClInclude Include="sqlite\sqlite3ext.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

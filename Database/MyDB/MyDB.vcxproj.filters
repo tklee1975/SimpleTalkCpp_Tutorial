@@ -13,6 +13,9 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Source Files\sqlite">
+      <UniqueIdentifier>{0d66c9d5-07c0-4ba1-8f31-b9586088e977}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MyDB.cpp">
@@ -21,6 +24,12 @@
     <ClCompile Include="MyDB_MySQL.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="MyDB_SQLite3.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sqlite\sqlite3.c">
+      <Filter>Source Files\sqlite</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MyDB.h">
@@ -28,6 +37,12 @@
     </ClInclude>
     <ClInclude Include="my_common.h">
       <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sqlite\sqlite3.h">
+      <Filter>Source Files\sqlite</Filter>
+    </ClInclude>
+    <ClInclude Include="sqlite\sqlite3ext.h">
+      <Filter>Source Files\sqlite</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
