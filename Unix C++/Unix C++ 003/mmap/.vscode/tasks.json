@@ -5,5 +5,5 @@
 	"isShellCommand": true,
 	"showOutput": "always",
 	"command": "make",
-	"args": ["all"]
+	"args": ["clean", "all"]
 }

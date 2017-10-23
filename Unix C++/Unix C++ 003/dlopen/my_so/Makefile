@@ -8,12 +8,17 @@ CPP_SRC = $(shell ls *.cpp)
 CPP_O=$(patsubst %.cpp,%.cpp_o, $(CPP_SRC))
 CPP_O_D=$(patsubst %.cpp,%.cpp_o.d, $(CPP_SRC))
 
+PWD = $(shell pwd)
+
 all: $(PRODUCT)
 
 # added -fPIC when compile .cpp
 # added MY_SO_EXPORT to export functions
 CPP_FLAGS = -std=c++11 -fPIC -DMY_SO_EXPORT
 
+LINK_FLAGS = -shared
+
+# -g for debug information
 ifeq ($(CONFIG), Debug)
 	CPP_FLAGS += -D_DEBUG -g
 else
@@ -33,7 +38,7 @@ $(PRODUCT): $(CPP_O)
 	
 %.cpp_o: %.cpp
 	@echo ===== compile $@ ========
-	g++ -o $@ -c $< $(CPP_FLAGS) -MMD -MF $@.d
+	g++ -o $@ -c "$(PWD)/$<" $(CPP_FLAGS) -MMD -MF $@.d
 	
 clean:
 	-rm $(PRODUCT)

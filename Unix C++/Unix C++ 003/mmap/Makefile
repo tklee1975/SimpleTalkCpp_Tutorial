@@ -8,6 +8,8 @@ CPP_SRC = $(shell ls *.cpp)
 CPP_O=$(patsubst %.cpp,%.cpp_o, $(CPP_SRC))
 CPP_O_D=$(patsubst %.cpp,%.cpp_o.d, $(CPP_SRC))
 
+PWD = $(shell pwd)
+
 all: $(PRODUCT)
 
 CPP_FLAGS = -std=c++11
@@ -30,7 +32,7 @@ $(PRODUCT): $(CPP_O)
 	
 %.cpp_o: %.cpp
 	@echo ===== compile $@ ========
-	g++ -o $@ -c $< $(CPP_FLAGS) -MMD -MF $@.d
+	g++ -o $@ -c "$(PWD)/$<" $(CPP_FLAGS) -MMD -MF $@.d
 	
 clean:
 	-rm $(PRODUCT)
