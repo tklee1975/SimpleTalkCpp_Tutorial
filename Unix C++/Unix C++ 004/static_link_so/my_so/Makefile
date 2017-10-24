@@ -41,6 +41,6 @@ $(PRODUCT): $(CPP_O)
 	g++ -o $@ -c "$(PWD)/$<" $(CPP_FLAGS) -MMD -MF $@.d
 	
 clean:
-	-rm $(PRODUCT)
-	-rm *.cpp_o
-	-rm *.cpp_o.d
+	-rm -f $(PRODUCT)
+	-rm -f *.cpp_o
+	-rm -f *.cpp_o.d

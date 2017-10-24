@@ -2,7 +2,7 @@
 
 CONFIG ?= Debug
 
-PRODUCT = ../my_prog
+PRODUCT = my_testd
 CPP_SRC = $(shell ls *.cpp)
 
 CPP_O=$(patsubst %.cpp,%.cpp_o, $(CPP_SRC))
@@ -14,10 +14,7 @@ all: $(PRODUCT)
 
 CPP_FLAGS = -std=c++11
 
-# -L../ and -lmy_so to link libmy_so.so
-# -Wl,-rpath,./ to tell linker my_prog will use ./ for .so search path
-# please using rpath instead of LD_LIBRARY_PATH, because it might affect all program globally
-LINK_FLAGS = -L.. -lmy_so -Wl,-rpath,./
+LINK_FLAGS =
 
 # -g for debug information
 ifeq ($(CONFIG), Debug)
