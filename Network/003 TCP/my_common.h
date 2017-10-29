@@ -4,6 +4,7 @@
 	#include <Winsock2.h> // must include before windows.h
 	#include <Windows.h>
 	#include <conio.h>
+	#include <ws2tcpip.h> // getaddrinfo
 	#pragma comment(lib, "Ws2_32.lib")
 #else
 	#include <unistd.h> // sleep()

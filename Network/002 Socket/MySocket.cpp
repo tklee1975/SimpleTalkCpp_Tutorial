@@ -56,7 +56,7 @@ void MySocket::send(const MySocketAddr& addr, const char* data, size_t dataSize)
 	if (dataSize > INT_MAX)
 		throw MyError("send dataSize is too big");
 
-	int ret =::sendto(_sock, data, dataSize, 0, &addr._addr, sizeof(addr._addr));
+	int ret =::sendto(_sock, data, (int)dataSize, 0, &addr._addr, sizeof(addr._addr));
 	if (ret < 0) {
 		throw MyError("send");
 	}
@@ -64,11 +64,13 @@ void MySocket::send(const MySocketAddr& addr, const char* data, size_t dataSize)
 
 void MySocket::recv(std::vector<char> & buf, size_t bytesToRecv) {
 	buf.clear();
+	if (bytesToRecv > INT_MAX)
+		throw MyError("recv bytesToRecv is too big");
 	buf.resize(bytesToRecv);
 
 	MySocketAddr addr;
 	socklen_t addrLen = sizeof(addr._addr);	
-	int ret = ::recvfrom(_sock, buf.data(), bytesToRecv, 0, &addr._addr, &addrLen);
+	int ret = ::recvfrom(_sock, buf.data(), (int)bytesToRecv, 0, &addr._addr, &addrLen);
 	if (ret < 0) {
 		throw MyError("recv");
 	}
