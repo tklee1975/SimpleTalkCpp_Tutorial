@@ -67,7 +67,7 @@ void MySocket::recv(std::vector<char> & buf, size_t bytesToRecv) {
 	buf.resize(bytesToRecv);
 
 	MySocketAddr addr;
-	int addrLen = sizeof(addr._addr);	
+	socklen_t addrLen = sizeof(addr._addr);	
 	int ret = ::recvfrom(_sock, buf.data(), bytesToRecv, 0, &addr._addr, &addrLen);
 	if (ret < 0) {
 		throw MyError("recv");

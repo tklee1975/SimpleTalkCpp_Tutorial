@@ -2,13 +2,14 @@
 
 #ifdef _WIN32
 	#include <Winsock2.h> // must include before windows.h
-	#include <Ws2tcpip.h>
 	#include <Windows.h>
 	#include <conio.h>
 	#pragma comment(lib, "Ws2_32.lib")
 #else
+	#include <unistd.h> // sleep()
+	#include <arpa/inet.h> // htons
 	#include <sys/socket.h>
-	#include <netdb.h>
+	#include <netdb.h> // struct addrinfo
 	#include <sys/ioctl.h>
 #endif
 
@@ -18,6 +19,8 @@
 #include <iostream>
 #include <vector>
 #include <stdio.h>
+#include <string.h>
+#include <limits.h>
 
 class MyNonCopyable {
 public:
@@ -38,6 +41,6 @@ inline void my_sleep(int sec) {
 #ifdef _WIN32
 	Sleep(sec * 1000);
 #else
-	sleep(src);
+	sleep(sec);
 #endif
 }

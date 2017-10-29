@@ -6,6 +6,8 @@
 	#include <conio.h>
 	#pragma comment(lib, "Ws2_32.lib")
 #else
+	#include <unistd.h> // sleep()
+	#include <arpa/inet.h> // htons
 	#include <sys/socket.h>
 #endif
 
@@ -15,6 +17,8 @@
 #include <iostream>
 #include <vector>
 #include <stdio.h>
+#include <string.h>
+#include <limits.h>
 
 class MyNonCopyable {
 public:
@@ -35,6 +39,6 @@ inline void my_sleep(int sec) {
 #ifdef _WIN32
 	Sleep(sec * 1000);
 #else
-	sleep(src);
+	sleep(sec);
 #endif
 }

@@ -24,7 +24,7 @@ class MySocket : public MyNonCopyable {
 public:
 	
 #ifdef _WIN32
-	
+	typedef int socklen_t;	
 #else
 	typedef int SOCKET;
 	const SOCKET INVALID_SOCKET = -1;

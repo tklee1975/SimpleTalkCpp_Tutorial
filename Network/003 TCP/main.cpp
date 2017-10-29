@@ -25,7 +25,7 @@ void testUDP() {
 
 			sock.recv(buf, n);
 			buf.push_back(0);
-			printf("recv %u: %s\n", n, buf.data());
+			printf("recv %d: %s\n", (int)n, buf.data());
 		}
 
 	}else{
@@ -64,7 +64,7 @@ void testTCP() {
 
 			client.recv(buf, n);
 			buf.push_back(0);
-			printf("recv %u: %s\n", n, buf.data());
+			printf("recv %d: %s\n", (int)n, buf.data());
 
 			for (auto& c : buf) {
 				c = toupper(c);
@@ -99,7 +99,7 @@ void testTCP() {
 
 			sock.recv(buf, n);
 			buf.push_back(0);
-			printf("recv %u: %s\n", n, buf.data());
+			printf("recv %d: %s\n", (int)n, buf.data());
 		}
 	}
 }
