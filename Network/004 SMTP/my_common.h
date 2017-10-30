@@ -23,6 +23,7 @@
 #include <string.h>
 #include <limits.h>
 #include <memory>
+#include <signal.h>
 
 class MyNonCopyable {
 public:

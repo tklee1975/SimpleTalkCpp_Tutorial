@@ -166,9 +166,15 @@ void MySocket::recv(std::vector<char> & buf, size_t bytesToRecv) {
 	buf.clear();
 	if (bytesToRecv > INT_MAX)
 		throw MyError("recv bytesToRecv is too big");
-	buf.resize(bytesToRecv);
 
-	int ret = ::recv(_sock, buf.data(), (int)bytesToRecv, 0);
+	buf.resize(bytesToRecv);
+	recv(buf.data(), bytesToRecv);
+}
+
+void MySocket::recv(char* buf, size_t bytesToRecv) {
+	if (bytesToRecv > INT_MAX)
+		throw MyError("recv bytesToRecv is too big");
+	int ret = ::recv(_sock, buf, (int)bytesToRecv, 0);
 	if (ret < 0) {
 		throw MyError("recv");
 	}

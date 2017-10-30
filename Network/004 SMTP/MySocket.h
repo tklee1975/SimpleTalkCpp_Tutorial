@@ -58,6 +58,7 @@ public:
 
 	size_t availableBytesToRead();
 
+	void recv(char* buf, size_t bytesToRecv);
 	void recv(std::vector<char> & buf, size_t bytesToRecv);
 	void recvfrom(MySocketAddr& addr, std::vector<char> & buf, size_t bytesToRecv);
 
