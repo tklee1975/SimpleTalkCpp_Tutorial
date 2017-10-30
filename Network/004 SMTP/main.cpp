@@ -15,7 +15,7 @@ public:
 
 		MySocketAddr addr;
 		addr.setIPv4(0,0,0,0);
-		addr.setPort(25);
+		addr.setPort(2525);
 
 		_listenSock.bind(addr);
 		_listenSock.listen();
