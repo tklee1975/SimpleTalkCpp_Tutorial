@@ -192,6 +192,7 @@ public:
 
 		printf("mail ready to send, data %s\n", mail.data.c_str());
 
+		state = State::Ready;
 		sendOK();
 	}
 
