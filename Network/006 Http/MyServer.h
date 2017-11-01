@@ -1,3 +1,5 @@
+#pragma once
+
 #include "MyClient.h"
 
 class MyServer : public MyNonCopyable {

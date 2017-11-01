@@ -1,5 +1,5 @@
 #include "MyFileStream.h"
-#include "MyStrUtil.h"
+#include "MyUtil.h"
 
 #ifdef _WIN32
 
@@ -7,7 +7,7 @@ void MyFileStream::openRead(const char* filename)
 {
 	close();
 	std::wstring filenameW;
-	MyStrUtil::utfConvert(filenameW, filename);
+	MyUtil::utfConvert(filenameW, filename);
 
 	_h = CreateFile(filenameW.c_str(), GENERIC_READ, FILE_SHARE_READ, nullptr, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr);
 	if (_h == INVALID_HANDLE_VALUE)
@@ -20,6 +20,10 @@ void MyFileStream::close()
 		CloseHandle(_h);
 		_h = INVALID_HANDLE_VALUE;
 	}
+}
+
+bool MyFileStream::isOpened() const {
+	return _h != INVALID_HANDLE_VALUE;
 }
 
 uint64_t MyFileStream::fileSize()

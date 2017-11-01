@@ -1,9 +1,13 @@
+#pragma once
+
 #include "my_common.h"
 
 class MyFileStream {
 public:
 	MyFileStream() = default;
 	~MyFileStream() { close(); }
+
+	bool isOpened() const;
 
 	void openRead(const char* filename);
 	void close();

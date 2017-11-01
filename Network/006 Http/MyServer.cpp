@@ -9,7 +9,7 @@ MyServer::MyServer()
 
 void MyServer::run()
 {
-	MyFilePath::currentDir(_documentRoot);
+	MyUtil::getCurrentDir(_documentRoot);
 	_documentRoot.append("/www");
 
 	_listenSock.createTCP();

@@ -21,9 +21,6 @@
     <ClCompile Include="MySocket.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="MyStrUtil.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="MyServer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -33,7 +30,7 @@
     <ClCompile Include="MyFileStream.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="MyFilePath.cpp">
+    <ClCompile Include="MyUtil.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -49,9 +46,6 @@
     <ClInclude Include="MySocket.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="MyStrUtil.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
     <ClInclude Include="MyClient.h">
       <Filter>Source Files</Filter>
     </ClInclude>
@@ -61,7 +55,7 @@
     <ClInclude Include="MyFileStream.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="MyFilePath.h">
+    <ClInclude Include="MyUtil.h">
       <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>

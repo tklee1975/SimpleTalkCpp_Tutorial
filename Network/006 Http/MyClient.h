@@ -1,5 +1,8 @@
+#pragma once
+
 #include "MySocket.h"
-#include "MyFilePath.h"
+#include "MyUtil.h"
+#include "MyFileStream.h"
 
 class MyServer;
 class MyClient : public MyNonCopyable {
@@ -9,22 +12,9 @@ public:
 	void onConnected();
 
 	void onRecv();
-	void onRecvHeader(const char* header);
 
-	void beginResponse(int status);
-	void endResponse(const char* content, uint64_t contentLength);
-
-	template<size_t N>
-	void endResponse(const char (&content)[N]) {
-		if (N) endResponse(content, N-1);
-	}
-
-	void sendResponse(int status, const char* content, uint64_t contentLength);
-
-	template<size_t N>
-	void sendResponse(int status, const char (&content)[N]) {
-		if (N) sendResponse(status, content, N-1);
-	}
+	void onRecv_WaitRequest();
+	void onRecv_ProcessHeader();
 
 	void close();
 
@@ -34,13 +24,72 @@ public:
 	void send(const char (&sz)[N]) { if (N) send(sz, N-1); }
 	void send(const std::string& s) { send(s.c_str(), s.size()); }
 
-	MySocket sock;
+	enum class Action {
+		WaitRequest,
+		SendContent,
+	};
 
+	enum class HttpMethod {
+		Unknown,
+		Get,
+		Head,
+		Post,
+	};
+
+	class Request {
+	public:
+		Request() { reset(); }
+
+		std::string header;
+
+		HttpMethod  method;
+		std::string	host;
+
+		std::string	url;
+		std::string urlPath;
+		std::string urlQuery;
+
+		std::string localPath;
+
+		void reset();
+		void parseUrl();
+	};
+
+	class Response {
+	public:
+		Response() { reset(); }
+
+		int status;
+		std::string	header;
+
+		std::vector<char> content;
+		size_t            contentSent;
+
+		MyFileStream		fileContent;
+		uint64_t			fileContentSent;
+		std::vector<char>	fileBuf;
+		size_t				fileBufOffset;
+
+		void reset();
+
+		void begin(int status, const char* reason = nullptr);
+		void addHeaderField(const char* name, const char* value);
+
+		template<size_t N>
+		void setContent(const char (&sz)[N]) { if (N) content.assign(sz, sz+N-1); }
+		void send(MyClient* client);
+
+		void sendContent(MyClient* client);
+	};
+
+	MySocket sock;
 	MyServer* server = nullptr;
+	Action action = Action::WaitRequest;
 
 	std::string recvBuf;
 	std::string lineBuf;
 	std::string token;
-	std::string responseBuf;
-	std::vector<char> responseContent;
+
+	Request		request;
+	Response	response;
 };

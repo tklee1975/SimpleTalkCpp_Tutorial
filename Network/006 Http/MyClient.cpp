@@ -29,111 +29,127 @@ void MyClient::onRecv()
 		sock.recv(p, n);
 	}
 
+	switch (action) {
+		case Action::WaitRequest: onRecv_WaitRequest();			break;
+		default:
+			throw MyError("Unhandled Action");
+	}
+}
+
+void MyClient::onRecv_WaitRequest() {
 	// find header
 	auto* header = &(*recvBuf.begin());
 	auto* headerEnd = strstr(header, "\r\n\r\n");
 	if (!headerEnd)
-		return;
+		return; // need more header
 
 	*headerEnd = 0;
+	headerEnd += 4; // 4 bytes \r\n\r\n
 
-	onRecvHeader(header);
+	request.reset();
+	response.reset();
 
-	auto headerSize = headerEnd + 4 - header;
+	request.header = header;
+
+	auto headerSize = headerEnd - header;
 	auto remainSize = recvBuf.size() - headerSize;
-	memmove(header, headerEnd + 4, remainSize);
+
+	memmove(header, headerEnd, remainSize);
 	recvBuf.resize(remainSize);
+
+	//-------
+	onRecv_ProcessHeader();
 }
 
-void MyClient::onRecvHeader(const char* header)
-{
-	responseBuf.clear();
-	responseContent.clear();
+void MyClient::onRecv_ProcessHeader() {
+	printf("> client %p: recv header\n%s\n\n", this, request.header.c_str());
 
-	printf("> client %p: recv header\n%s\n\n", this, header);
+	auto* nextLine = request.header.c_str();
+	nextLine = MyUtil::getLine(lineBuf, nextLine);
 
-	auto* nextLine = header;
-	nextLine = MyStrUtil::getLine(lineBuf, nextLine);
+	{ // Request line
+		auto* input = lineBuf.c_str();
+		input = MyUtil::getUpperStringToken(token, input, ' ');
 
-	auto* input = lineBuf.c_str();
-	input = MyStrUtil::getUpperToken(token, input, ' ');
-
-	if (token == "GET") {
-		input = MyStrUtil::getToken(token, input, ' ');
-
-		std::string filename;
-
-		{ // get absolute file path
-			std::string tmp = server->documentRoot();
-			tmp.append(token);
-			MyFilePath::getAbsPath(filename, tmp.c_str());
-		}
-
-		// !!! avoid access file out of document root !!!
-		if (!MyStrUtil::startsWith(filename.c_str(), server->documentRoot().c_str())) {
-			sendResponse(401, "401 - Unauthorized");
-		}
-
-		printf("GET filename = [%s]\n", filename.c_str());
-
-		try {
-			MyFileStream file;
-			file.openRead(filename.c_str());
-	
-			int status = 200;
-			const size_t tmpSize = 1024;
-			char tmp[tmpSize + 1];
-			int n = snprintf(tmp, tmpSize,	"HTTP/1.1 %d \r\n"
-											"Content-Length: %llu\r\n\r\n",
-											status,
-											file.fileSize());
-			responseBuf.append(tmp);
-
-			file.read(responseContent, (size_t) file.fileSize()); // !!! size_t can be 32 bit
-			send(responseBuf);
-			sock.send(responseContent.data(), responseContent.size());
-			
-		}catch(...) {
-			sendResponse(404, "404 - File Not Found");
+		if (token == "GET") {
+			request.method = HttpMethod::Get;
+		} else if (token == "HEAD") {
+			request.method = HttpMethod::Head;
+		} else if (token == "POST") {
+			request.method = HttpMethod::Post;
+		} else {		
+			response.begin(405, "Method Not Allowed");
+			response.addHeaderField("Allow", "GET, HEAD, POST");
+			response.setContent("405 - Method Not Allowed");
+			response.send(this);
 			return;
 		}
-	}
-	else if (token == "POST") {
+
+		//-- get url
+		input = MyUtil::getStringToken(request.url, input, ' ');
+		request.parseUrl();
+
+		// get local absolute file path
+		std::string tmp = server->documentRoot();
+		tmp.append(request.urlPath);
+		MyUtil::getAbsPath(request.localPath, tmp.c_str());
+
+		// !!! avoid access file out of document root !!!
+		if (!MyUtil::stringStartsWith(request.localPath.c_str(), server->documentRoot().c_str())) {
+			response.begin(401, "Unauthorized");
+			response.setContent("401 - Unauthorized");
+			response.send(this);
+		}
 	}
 
-	sendResponse(400, "400 - Bad Request");
-}
+	// other header field
+	for(;;) {
+		nextLine = MyUtil::getLine(lineBuf, nextLine);
+		if (!lineBuf.size())
+			break;
 
-void MyClient::beginResponse(int status)
-{
-	const size_t tmpSize = 1024;
-	char tmp[tmpSize + 1];
-	int n = snprintf(tmp, tmpSize, "HTTP/1.1 %d \r\n", status);
-	if (n < 0) {
-		throw MyError("makeResponseHeader");
+		auto* p = MyUtil::getUpperStringToken(token, lineBuf.c_str(), ':');
+		if (!p)
+			continue;
+
+		if (*p == ':')
+			p++;
+
+		// trim space and tab
+		for (;*p; p++) {
+			if (*p != ' ' && *p != '\t')
+				break;
+		}
+
+		if (!token.size())
+			return;
+
+//		printf(">> [%s] = [%s]\n", token.c_str(), p);
+		if (token == "HOST") {
+			request.host = p;
+		}
 	}
-	tmp[tmpSize] = 0;
-	responseBuf = tmp;
-}
 
-void MyClient::endResponse(const char* content, uint64_t contentLength)
-{
-	const size_t tmpSize = 1024;
-	char tmp[tmpSize + 1];
-	int n = snprintf(tmp, tmpSize, "Content-Length: %llu\r\n\r\n", contentLength);
-	if (n < 0) {
-		throw MyError("makeResponseHeader");
+	if (request.method == HttpMethod::Get || request.method == HttpMethod::Head) {
+		try {
+			response.begin(200, "OK");
+			response.fileContent.openRead(request.localPath.c_str());
+			response.send(this);
+			action = Action::SendContent;
+		} catch(...) {
+			response.begin(404, "File Not Found");
+			response.setContent("404 - File Not Found");
+			response.send(this);
+		}
+		return;
 	}
-	tmp[tmpSize] = 0;
-	responseBuf.append(tmp);
-	responseBuf.append(content, content + contentLength);
-}
 
-void MyClient::sendResponse(int status, const char* content, uint64_t contentLength)
-{
-	beginResponse(status);
-	endResponse(content, contentLength);
-	send(responseBuf.c_str(), responseBuf.size());
+	{
+		// error
+		response.begin(500, "Internal Server Error");
+		response.setContent("500 - Internal Server Error");
+		response.send(this);
+	}
 }
 
 void MyClient::close()
@@ -151,3 +167,106 @@ void MyClient::send(const char* s, size_t n)
 	sock.send(s, n);
 }
 
+void MyClient::Response::reset() {
+	status = 0;
+	header.clear();
+
+	content.clear();
+	contentSent = 0;
+
+	fileContent.close();
+	fileContentSent = 0;
+	fileBuf.clear();
+	fileBufOffset = 0;
+}
+
+void MyClient::Response::begin(int status, const char* reason) {
+	char tmp[256 + 1];
+	snprintf(tmp, 256, "HTTP/1.1 %d ", status);
+	tmp[256] = 0;
+
+	header = tmp;
+	if (reason)
+		header.append(reason);
+	header.append("\r\n");
+}
+
+void MyClient::Response::addHeaderField(const char* name, const char* value) {
+	header.append(name);
+	header.append(": ");
+	header.append(value);
+	header.append("\r\n");
+}
+
+void MyClient::Response::send(MyClient* client) {
+	uint64_t contentLength = fileContent.isOpened() ? fileContent.fileSize() : content.size();
+
+	char tmp[256 + 1];
+	snprintf(tmp, 256, "Content-Length: %llu\r\n\r\n", contentLength);
+	tmp[256] = 0;
+
+	header.append(tmp);
+
+	client->send(header.c_str(), header.size());
+	sendContent(client);
+}
+
+void MyClient::Response::sendContent(MyClient* client) {
+	if (fileContent.isOpened()) {
+		// send file content
+
+		auto fileSize = fileContent.fileSize();
+		if (fileContentSent >= fileSize) {
+			client->action = Action::WaitRequest;
+			return;
+		}
+
+		if (fileBufOffset >= fileBuf.size()) {
+			// read file to buffer
+
+			const size_t kFileBufSize = 16 * 1024;
+
+			auto n = fileSize - fileContentSent;
+			if (n > kFileBufSize)
+				n = kFileBufSize;
+
+			fileContent.read(fileBuf, (size_t)n);
+			fileBufOffset = 0;
+		}
+
+
+		// send buffer
+		client->sock.send(fileBuf.data(), fileBuf.size());
+
+	} else {
+		client->sock.send(content.data(), content.size());
+	}
+}
+
+void MyClient::Request::reset() {
+	method = HttpMethod::Unknown;
+	host.clear();
+
+	url.clear();
+	urlPath.clear();
+	urlQuery.clear();
+
+	localPath.clear();
+}
+
+void MyClient::Request::parseUrl() {
+	auto* relativePath = url.c_str();
+	auto* scheme = strstr(url.c_str(), "://");
+	if (scheme) {
+		// absolution path
+		relativePath = strchr(scheme + 3, '/');
+	}
+
+	auto* query = strchr(relativePath, '?');
+	if (query) {
+		urlPath.assign(relativePath, query);
+		urlQuery = query + 1;
+	}else{
+		urlPath = relativePath;
+	}
+}

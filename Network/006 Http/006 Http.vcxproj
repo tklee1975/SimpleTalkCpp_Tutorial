@@ -137,22 +137,20 @@
   <ItemGroup>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MyClient.cpp" />
-    <ClCompile Include="MyFilePath.cpp" />
     <ClCompile Include="MyFileStream.cpp" />
     <ClCompile Include="MyServer.cpp" />
     <ClCompile Include="MySocket.cpp" />
-    <ClCompile Include="MyStrUtil.cpp" />
+    <ClCompile Include="MyUtil.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Makefile" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MyClient.h" />
-    <ClInclude Include="MyFilePath.h" />
     <ClInclude Include="MyFileStream.h" />
     <ClInclude Include="MyServer.h" />
     <ClInclude Include="MySocket.h" />
-    <ClInclude Include="MyStrUtil.h" />
+    <ClInclude Include="MyUtil.h" />
     <ClInclude Include="my_common.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
