@@ -20,9 +20,9 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
-    <ProjectGuid>{C2FB1139-C580-40B7-99AA-C680E23E4FA2}</ProjectGuid>
+    <ProjectGuid>{9CE47CBB-BD26-4B0C-871E-8E8D82B958A1}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>My004SMTP</RootNamespace>
+    <RootNamespace>My006Http</RootNamespace>
     <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -136,10 +136,21 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="MyClient.cpp" />
+    <ClCompile Include="MyFilePath.cpp" />
+    <ClCompile Include="MyFileStream.cpp" />
+    <ClCompile Include="MyServer.cpp" />
     <ClCompile Include="MySocket.cpp" />
     <ClCompile Include="MyStrUtil.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Makefile" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="MyClient.h" />
+    <ClInclude Include="MyFilePath.h" />
+    <ClInclude Include="MyFileStream.h" />
+    <ClInclude Include="MyServer.h" />
     <ClInclude Include="MySocket.h" />
     <ClInclude Include="MyStrUtil.h" />
     <ClInclude Include="my_common.h" />

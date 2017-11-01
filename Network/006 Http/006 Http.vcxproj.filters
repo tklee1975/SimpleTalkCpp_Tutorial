@@ -24,6 +24,23 @@
     <ClCompile Include="MyStrUtil.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="MyServer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MyClient.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MyFileStream.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MyFilePath.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Makefile">
+      <Filter>Source Files</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="my_common.h">
@@ -33,6 +50,18 @@
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="MyStrUtil.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MyClient.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MyServer.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MyFileStream.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MyFilePath.h">
       <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -1,4 +1,5 @@
 #include "MySocket.h"
+#include "MyStrUtil.h"
 
 class MyClient : public MyNonCopyable {
 public:
@@ -13,44 +14,6 @@ public:
 	};
 
 	State state = State::None;
-
-	const char* getToken(std::string& token, const char* input, const char* sep) {
-		auto* p = input;
-
-		//trim
-		for (;*p; p++) {
-			if (*p != ' ')
-				break;
-		}
-
-		auto* start = p;
-		
-		// find sep
-		for(; *p; p++) {
-			if (strchr(sep, *p)) {
-				break;
-			}
-		}
-
-		token.assign(start, p);
-
-		printf("token = [%s]\n", token.c_str());
-		return p;
-	}
-
-	bool getLine(std::string& outLine, const char* input) {
-		auto* e = strstr(input, "\r\n");
-		if (!e)
-			return false;
-		outLine.assign(input, e);
-		return true;
-	}
-
-	void toUpper(std::string& s) {
-		for (auto& c : s) {
-			c = toupper(c);
-		}
-	}
 
 	void onConnected() {
 		printf("client %p: connected\n", this);
@@ -83,7 +46,8 @@ public:
 			if (state == State::Data) {
 				onRecvData();
 			} else {
-				if (!getLine(lineBuf, recvBuf.data() + recvOffset))
+				MyStrUtil::getLine(lineBuf, recvBuf.data() + recvOffset);
+				if (!lineBuf.size())
 					return;
 
 				recvOffset += lineBuf.size() + 2; // +2 \r\n
@@ -97,13 +61,12 @@ public:
 	void onRecvCommand() {
 		auto* line = lineBuf.c_str();
 
-		line = getToken(token, line, " ");
+		line = MyStrUtil::getUpperToken(token, line, ' ');
 		if (!line) {
 			sendSyntaxError();
 			return;
 		}
 
-		toUpper(token);
 		if (token == "HELO" || token == "EHLO") {
 			state = State::Ready;
 			sendOK();
@@ -118,13 +81,12 @@ public:
 		if (token == "MAIL") {
 			mail.clear();
 
-			line = getToken(token, line, ":");
+			line = MyStrUtil::getUpperToken(token, line, ':');
 			if (!line || *line != ':') {
 				sendSyntaxError();
 				return;
 			}
 
-			toUpper(token);
 			if (token != "FROM") {
 				sendSyntaxError();
 				return;
@@ -143,14 +105,13 @@ public:
 				return;
 			}
 
-			line = getToken(token, line, ":");
+			line = MyStrUtil::getUpperToken(token, line, ':');
 			if (!line || *line != ':' ) {
 				sendSyntaxError();
 				return;
 			}
 			line++; // remove ':'
 
-			toUpper(token);
 			if (token != "TO") {
 				sendSyntaxError();
 				return;
