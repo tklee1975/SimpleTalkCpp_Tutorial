@@ -167,7 +167,7 @@ void MySocket::setNonBlocking(bool b)
 {
 	u_long v = b ? 0 : 1;
 	if (0 != ::ioctlsocket(_sock, FIONBIO, &v))
-		throw MyError("availableBytesToRead");
+		throw MyError("setNonBlocking");
 }
 
 void MySocket::recv(std::vector<char> & buf, size_t bytesToRecv) {

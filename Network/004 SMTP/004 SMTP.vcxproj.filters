@@ -21,7 +21,7 @@
     <ClCompile Include="MySocket.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="MyStrUtil.cpp">
+    <ClCompile Include="MyUtil.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -32,7 +32,7 @@
     <ClInclude Include="MySocket.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="MyStrUtil.h">
+    <ClInclude Include="MyUtil.h">
       <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>

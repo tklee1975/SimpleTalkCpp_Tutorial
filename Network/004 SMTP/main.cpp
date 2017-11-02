@@ -1,5 +1,5 @@
 #include "MySocket.h"
-#include "MyStrUtil.h"
+#include "MyUtil.h"
 
 class MyClient : public MyNonCopyable {
 public:
@@ -46,7 +46,7 @@ public:
 			if (state == State::Data) {
 				onRecvData();
 			} else {
-				MyStrUtil::getLine(lineBuf, recvBuf.data() + recvOffset);
+				MyUtil::getLine(lineBuf, recvBuf.data() + recvOffset);
 				if (!lineBuf.size())
 					return;
 
@@ -61,7 +61,7 @@ public:
 	void onRecvCommand() {
 		auto* line = lineBuf.c_str();
 
-		line = MyStrUtil::getUpperToken(token, line, ' ');
+		line = MyUtil::getUpperStringToken(token, line, ' ');
 		if (!line) {
 			sendSyntaxError();
 			return;
@@ -81,7 +81,7 @@ public:
 		if (token == "MAIL") {
 			mail.clear();
 
-			line = MyStrUtil::getUpperToken(token, line, ':');
+			line = MyUtil::getUpperStringToken(token, line, ':');
 			if (!line || *line != ':') {
 				sendSyntaxError();
 				return;
@@ -105,7 +105,7 @@ public:
 				return;
 			}
 
-			line = MyStrUtil::getUpperToken(token, line, ':');
+			line = MyUtil::getUpperStringToken(token, line, ':');
 			if (!line || *line != ':' ) {
 				sendSyntaxError();
 				return;

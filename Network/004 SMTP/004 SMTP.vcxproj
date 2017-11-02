@@ -137,11 +137,11 @@
   <ItemGroup>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MySocket.cpp" />
-    <ClCompile Include="MyStrUtil.cpp" />
+    <ClCompile Include="MyUtil.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MySocket.h" />
-    <ClInclude Include="MyStrUtil.h" />
+    <ClInclude Include="MyUtil.h" />
     <ClInclude Include="my_common.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

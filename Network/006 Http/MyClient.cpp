@@ -11,7 +11,7 @@ void MyClient::onRecv()
 	{
 		size_t n = sock.availableBytesToRead();
 		if (!n) {
-			close();
+			close(); // <------------ closed from the other side
 			return;
 		}
 
@@ -30,7 +30,8 @@ void MyClient::onRecv()
 	}
 
 	switch (action) {
-		case Action::WaitRequest: onRecv_WaitRequest();			break;
+		case Action::WaitRequest: onRecv_WaitRequest();	break;
+		case Action::SendContent: return;
 		default:
 			throw MyError("Unhandled Action");
 	}
@@ -77,7 +78,7 @@ void MyClient::onRecv_ProcessHeader() {
 			request.method = HttpMethod::Head;
 		} else if (token == "POST") {
 			request.method = HttpMethod::Post;
-		} else {		
+		} else {
 			response.begin(405, "Method Not Allowed");
 			response.addHeaderField("Allow", "GET, HEAD, POST");
 			response.setContent("405 - Method Not Allowed");
