@@ -36,21 +36,30 @@ uint64_t MyFileStream::fileSize()
 	return (static_cast<uint64_t>(t.HighPart) << 32) | t.LowPart;
 }
 
-void MyFileStream::read(std::vector<char>& outBuf, size_t bytesToRead) {
-	outBuf.clear();
+void MyFileStream::read(char* outBuf, size_t bytesToRead)
+{
 	if (bytesToRead > std::numeric_limits<DWORD>::max()) {
 		throw MyError("bytesToRead is too big");
 	}
 
-	outBuf.resize(bytesToRead);
-
 	DWORD bytesRead = 0;
-	if (!ReadFile(_h, outBuf.data(), bytesToRead, &bytesRead, nullptr)) {
+	if (!ReadFile(_h, outBuf, bytesToRead, &bytesRead, nullptr)) {
 		throw MyError("MyFileStream::read");
 	}
-
-	outBuf.resize(bytesRead);
 }
+
+void MyFileStream::read(std::vector<char>& outBuf, size_t bytesToRead) {
+	outBuf.clear();
+	outBuf.resize(bytesToRead);
+
+	try{
+		read(outBuf.data(), bytesToRead);
+	}catch(...){
+		outBuf.clear();
+		throw;
+	}
+}
+
 
 #else
 

@@ -1,5 +1,80 @@
 #include "MyUtil.h"
 
+void MyUtil::utfConvert(std::wstring & o, const char* src, size_t srcLen)
+{
+	auto* p = src;
+	auto* e = p + srcLen;
+	while (p < e) {
+		auto c = (uint8_t)*p;
+		if (c < 0xC0) {
+			o.push_back(c & 0x7F);
+			p++;
+		}
+		else if (c < 0xE0) {
+			if (p + 2 > e) throw MyError("decodeUtf8");
+			auto a = (wchar_t)*p; p++;
+			auto b = (wchar_t)*p; p++;
+			wchar_t v = ((a & 0x1F) << 6) | (b & 0x3F);
+			o.push_back(v);
+		}
+		else if (c < 0xF0) {
+			if (p + 3 > e) throw MyError("decodeUtf8");
+			auto a = (wchar_t)*p; p++;
+			auto b = (wchar_t)*p; p++;
+			auto c = (wchar_t)*p; p++;
+			wchar_t v = ((a & 0x0F) << 12) | ((b & 0x3F) << 6) | (c & 0x3F);
+			o.push_back(v);
+		}
+		else {
+			if (p + 4 > e) throw MyError("decodeUtf8");
+			auto a = (wchar_t)*p; p++;
+			auto b = (wchar_t)*p; p++;
+			auto c = (wchar_t)*p; p++;
+			auto d = (wchar_t)*p; p++;
+			wchar_t v = ((a & 0x07) << 18) | ((b & 0x3F) << 12) | ((c & 0x3F) << 6) | (c & 0x3F);
+			o.push_back(v);
+		}
+	}
+}
+
+void MyUtil::utfConvert(std::string & o, const wchar_t* src, size_t srcLen)
+{
+	auto* p = src;
+	auto* e = p + srcLen;
+	for (; p < e; p++) {
+		auto c = (uint32_t)*p;
+		if (c < 0x80) {
+			// 1 byte
+			o.push_back(static_cast<char>(c));
+		}
+		else if (c < 0x800) {
+			// 2 bytes
+			char t[] = {
+				static_cast<char>((c >> 6) & 0x1F | 0xC0),
+				static_cast<char>(c & 0x3F | 0x80)
+			};
+			o.append(t, t + 2);
+		}
+		else if (c < 0x10000) {
+			char t[] = {
+				static_cast<char>((c >> 12) & 0x0F | 0xE0),
+				static_cast<char>((c >> 6) & 0x3F | 0x80),
+				static_cast<char>(c & 0x3F | 0x80)
+			};
+			o.append(t, t + 3);
+		}
+		else {
+			char t[] = {
+				static_cast<char>((c >> 18) & 0x07 | 0xF0),
+				static_cast<char>((c >> 12) & 0x3F | 0x80),
+				static_cast<char>((c >> 6) & 0x3F | 0x80),
+				static_cast<char>(c & 0x3F | 0x80)
+			};
+			o.append(t, t + 4);
+		}
+	}
+}
+
 const char* MyUtil::getStringToken(std::string& token, const char* input, char separator) {
 	token.clear();
 
@@ -41,18 +116,6 @@ const char* MyUtil::getLine(std::string& outLine, const char* input) {
 	}
 	outLine.assign(input, e);
 	return e + 2;
-}
-
-void MyUtil::utfConvert(std::string& o, const wchar_t* s)
-{
-	std::wstring_convert<std::codecvt<wchar_t, char, std::mbstate_t>> co;
-	o = co.to_bytes(s);
-}
-
-void MyUtil::utfConvert(std::wstring& o, const char* s)
-{
-	std::wstring_convert<std::codecvt<wchar_t, char, std::mbstate_t>> co;
-	o = co.from_bytes(s);
 }
 
 bool MyUtil::stringStartsWith(const char* s, const char* prefix)
@@ -99,6 +162,37 @@ void MyUtil::toUnixPath(std::string& s)
 	for (auto& c : s) {
 		if (c == '\\')
 			c = '/';
+	}
+}
+
+int MyUtil::valueOfHex(char v) {
+	if (v >= '0' && v <= '9')
+		return v - '0';
+	if (v >= 'A' && v <= 'F')
+		return v - 'A' + 10;
+	if (v >= 'a' && v <= 'f')
+		return v - 'a' + 10;
+	return 0; // error ?
+}
+
+void MyUtil::decodeURI(std::string& outStr, const char* sz) {
+	outStr.clear();
+	if (!sz)
+		return;
+
+	auto* p = sz;
+	for (;*p; p++) {
+		if (*p == '%') {
+			if (!p[1] || !p[2]) {
+				throw MyError("invalid URI");
+			}
+
+			char v = (valueOfHex(p[1]) << 4) | valueOfHex (p[2]);
+			outStr.push_back(v);
+			p+=2;
+		}else{
+			outStr.push_back(*p);
+		}
 	}
 }
 

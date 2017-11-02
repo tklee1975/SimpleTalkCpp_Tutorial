@@ -6,8 +6,12 @@ struct MyUtil {
 
 // string 
 static void toUpperString(std::string& s);
-static void utfConvert(std::string&  o, const wchar_t* s);
-static void utfConvert(std::wstring& o, const char*    s);
+
+static void utfConvert(std::string  & o, const wchar_t* src, size_t srcLen);
+static void utfConvert(std::wstring & o, const char*    src, size_t srcLen);
+
+inline static void utfConvert(std::wstring & o, const char*    src) { utfConvert(o, src, strlen(src)); }
+inline static void utfConvert(std::string  & o, const wchar_t* src) { utfConvert(o, src, wcslen(src)); }
 
 static const char* getStringToken(std::string& token, const char* input, char separator);
 static const char* getUpperStringToken(std::string& token, const char* input, char separator);
@@ -22,5 +26,9 @@ static void getCurrentDir(std::string& outPath);
 static void getAbsPath(std::string& outPath, const char* inPath);
 
 static void toUnixPath(std::string& s);
+
+static void decodeURI(std::string& outStr, const char* sz);
+
+static int valueOfHex(char v);
 
 };

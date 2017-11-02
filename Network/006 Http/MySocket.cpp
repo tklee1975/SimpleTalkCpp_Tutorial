@@ -125,7 +125,7 @@ void MySocket::sendto(const MySocketAddr& addr, const char* data, size_t dataSiz
 	}
 }
 
-void MySocket::send(const char* data, size_t dataSize) {
+size_t MySocket::send(const char* data, size_t dataSize) {
 	if (dataSize > INT_MAX)
 		throw MyError("send dataSize is too big");
 
@@ -133,6 +133,7 @@ void MySocket::send(const char* data, size_t dataSize) {
 	if (ret < 0) {
 		throw MyError("send");
 	}
+	return ret;
 }
 
 size_t MySocket::availableBytesToRead() {
@@ -160,6 +161,13 @@ void MySocket::recvfrom(MySocketAddr& addr, std::vector<char> & buf, size_t byte
 	if (ret < 0) {
 		throw MyError("recv");
 	}
+}
+
+void MySocket::setNonBlocking(bool b)
+{
+	u_long v = b ? 0 : 1;
+	if (0 != ::ioctlsocket(_sock, FIONBIO, &v))
+		throw MyError("availableBytesToRead");
 }
 
 void MySocket::recv(std::vector<char> & buf, size_t bytesToRecv) {

@@ -7,14 +7,19 @@
 class MyServer;
 class MyClient : public MyNonCopyable {
 public:
-	const size_t kHeaderSizeLimit = 16 * 1024;
+	static const size_t kHeaderSizeLimit = 16 * 1024;
+	static const size_t kFileBufSize = 4 * 1024;
 
 	void onConnected();
 
 	void onRecv();
-
 	void onRecv_WaitRequest();
 	void onRecv_ProcessHeader();
+
+	bool needSend() const { return sendBufOffset < sendBuf.size(); }
+	bool needRecv() const { return !needSend(); }
+
+	void onSend();
 
 	void close();
 
@@ -52,7 +57,7 @@ public:
 		std::string localPath;
 
 		void reset();
-		void parseUrl();
+		void setUrl(const char* sz);
 	};
 
 	class Response {
@@ -67,8 +72,6 @@ public:
 
 		MyFileStream		fileContent;
 		uint64_t			fileContentSent;
-		std::vector<char>	fileBuf;
-		size_t				fileBufOffset;
 
 		void reset();
 
@@ -89,6 +92,9 @@ public:
 	std::string recvBuf;
 	std::string lineBuf;
 	std::string token;
+
+	std::string sendBuf;
+	size_t sendBufOffset = 0;
 
 	Request		request;
 	Response	response;

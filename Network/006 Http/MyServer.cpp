@@ -23,8 +23,11 @@ void MyServer::run()
 
 	while (!s_quit) {
 		fd_set readfds;
+		fd_set writefds;
 		FD_ZERO(&readfds);
+		FD_ZERO(&writefds);
 		FD_SET(_listenSock.sock(), &readfds);
+		FD_SET(_listenSock.sock(), &writefds);
 		int n = 1;
 
 		removeClosedClients();
@@ -38,7 +41,12 @@ void MyServer::run()
 				break;
 			}
 
-			FD_SET(client->sock.sock(), &readfds);
+			auto cs = client->sock.sock();
+			if (client->needRecv())
+				FD_SET(cs, &readfds);
+
+			if (client->needSend())
+				FD_SET(cs, &writefds);
 			n++;
 		}
 
@@ -46,7 +54,7 @@ void MyServer::run()
 		tv.tv_sec = 1;
 		tv.tv_usec = 0;
 
-		int ret = ::select(n, &readfds, nullptr, nullptr, &tv);
+		int ret = ::select(n, &readfds, &writefds, nullptr, &tv);
 		if (ret < 0) {
 			throw MyError("select");
 		}
@@ -62,6 +70,7 @@ void MyServer::run()
 
 				try {
 					_listenSock.accept(client->sock);
+					client->sock.setNonBlocking(true); // !!! Set Non-Blocking Mode
 					client->onConnected();
 				}
 				catch (...) {
@@ -74,13 +83,15 @@ void MyServer::run()
 			if (!client || !client->sock.isValid())
 				continue;
 
-			if (!FD_ISSET(client->sock.sock(), &readfds))
-				continue;
-
+			auto cs = client->sock.sock();
 			try {
-				client->onRecv();
-			}
-			catch (...) {
+				if (FD_ISSET(cs, &readfds))
+					client->onRecv();
+
+				if (FD_ISSET(cs, &writefds))
+					client->onSend();
+
+			} catch (...) {
 				client->close();
 			}
 		}

@@ -86,8 +86,8 @@ void MyClient::onRecv_ProcessHeader() {
 		}
 
 		//-- get url
-		input = MyUtil::getStringToken(request.url, input, ' ');
-		request.parseUrl();
+		input = MyUtil::getStringToken(token, input, ' ');
+		request.setUrl(token.c_str());
 
 		// get local absolute file path
 		std::string tmp = server->documentRoot();
@@ -132,10 +132,15 @@ void MyClient::onRecv_ProcessHeader() {
 
 	if (request.method == HttpMethod::Get || request.method == HttpMethod::Head) {
 		try {
-			response.begin(200, "OK");
-			response.fileContent.openRead(request.localPath.c_str());
-			response.send(this);
 			action = Action::SendContent;
+
+			response.begin(200, "OK");
+
+			if (request.method == HttpMethod::Get)
+				response.fileContent.openRead(request.localPath.c_str());
+
+			response.send(this);
+
 		} catch(...) {
 			response.begin(404, "File Not Found");
 			response.setContent("404 - File Not Found");
@@ -152,19 +157,37 @@ void MyClient::onRecv_ProcessHeader() {
 	}
 }
 
-void MyClient::close()
-{
+void MyClient::onSend() {
+	if (sendBufOffset < sendBuf.size()) {
+		size_t n = sendBuf.size() - sendBufOffset;
+		size_t ret = sock.send(sendBuf.data() + sendBufOffset, n);
+
+		printf("> client %p: send to socket %u\n", this, (uint16_t)ret);
+		sendBufOffset += ret;
+	}
+
+	if (sendBufOffset < sendBuf.size())
+		return;
+
+	sendBuf.clear();
+	sendBufOffset = 0;
+
+	if (action == Action::SendContent) {
+		response.sendContent(this);
+	}
+}
+
+void MyClient::close() {
 	printf("> client %p: close\n", this);
 	sock.close();
 }
 
-void MyClient::send(const char* s, size_t n)
-{
+void MyClient::send(const char* s, size_t n) {
 	printf("> client %p: send\n", this);
 	fwrite(s, n, 1, stdout);
 	printf("\n\n");
 
-	sock.send(s, n);
+	sendBuf.append(s, n);
 }
 
 void MyClient::Response::reset() {
@@ -176,8 +199,6 @@ void MyClient::Response::reset() {
 
 	fileContent.close();
 	fileContentSent = 0;
-	fileBuf.clear();
-	fileBufOffset = 0;
 }
 
 void MyClient::Response::begin(int status, const char* reason) {
@@ -213,33 +234,28 @@ void MyClient::Response::send(MyClient* client) {
 
 void MyClient::Response::sendContent(MyClient* client) {
 	if (fileContent.isOpened()) {
-		// send file content
+		// fill sendBuf from File
 
 		auto fileSize = fileContent.fileSize();
 		if (fileContentSent >= fileSize) {
+			fileContent.close();
 			client->action = Action::WaitRequest;
 			return;
 		}
 
-		if (fileBufOffset >= fileBuf.size()) {
-			// read file to buffer
+		if (client->sendBuf.size())
+			return;
 
-			const size_t kFileBufSize = 16 * 1024;
+		auto n = fileSize - fileContentSent;
+		if (n > MyClient::kFileBufSize)
+			n = MyClient::kFileBufSize;
 
-			auto n = fileSize - fileContentSent;
-			if (n > kFileBufSize)
-				n = kFileBufSize;
-
-			fileContent.read(fileBuf, (size_t)n);
-			fileBufOffset = 0;
-		}
-
-
-		// send buffer
-		client->sock.send(fileBuf.data(), fileBuf.size());
-
+		client->sendBuf.resize(static_cast<size_t>(n));
+		fileContent.read(&*client->sendBuf.begin(), (size_t)n);
+		fileContentSent += n;
+		
 	} else {
-		client->sock.send(content.data(), content.size());
+		client->sendBuf.append(content.data(), content.size());
 	}
 }
 
@@ -254,7 +270,9 @@ void MyClient::Request::reset() {
 	localPath.clear();
 }
 
-void MyClient::Request::parseUrl() {
+void MyClient::Request::setUrl(const char* sz) {
+	MyUtil::decodeURI(url, sz); // !!! decode URI 
+
 	auto* relativePath = url.c_str();
 	auto* scheme = strstr(url.c_str(), "://");
 	if (scheme) {

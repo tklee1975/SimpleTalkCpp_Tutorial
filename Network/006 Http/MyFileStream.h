@@ -14,6 +14,7 @@ public:
 
 	uint64_t fileSize();
 
+	void read(char* outBuf, size_t bytesToRead);
 	void read(std::vector<char>& outBuf, size_t bytesToRead);
 
 private:
