@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <None Include="proto\Makefile" />
     <None Include="proto\test.proto" />
   </ItemGroup>
   <ItemGroup>
@@ -104,6 +105,10 @@
       <SubSystem>Console</SubSystem>
       <AdditionalLibraryDirectories>external/_prebuild/$(PlatformName)/protobuf/$(ConfigurationName)</AdditionalLibraryDirectories>
     </Link>
+    <PreBuildEvent>
+      <Command>
+      </Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -117,6 +122,10 @@
       <SubSystem>Console</SubSystem>
       <AdditionalLibraryDirectories>external/_prebuild/$(PlatformName)/protobuf/$(ConfigurationName)</AdditionalLibraryDirectories>
     </Link>
+    <PreBuildEvent>
+      <Command>
+      </Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -134,6 +143,10 @@
       <SubSystem>Console</SubSystem>
       <AdditionalLibraryDirectories>external/_prebuild/$(PlatformName)/protobuf/$(ConfigurationName)</AdditionalLibraryDirectories>
     </Link>
+    <PreBuildEvent>
+      <Command>
+      </Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -151,6 +164,10 @@
       <SubSystem>Console</SubSystem>
       <AdditionalLibraryDirectories>external/_prebuild/$(PlatformName)/protobuf/$(ConfigurationName)</AdditionalLibraryDirectories>
     </Link>
+    <PreBuildEvent>
+      <Command>
+      </Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

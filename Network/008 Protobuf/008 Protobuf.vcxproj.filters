@@ -13,23 +13,29 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="proto">
+      <UniqueIdentifier>{6a474ce5-ece6-449a-a109-a655a2395f68}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <None Include="proto\test.proto">
-      <Filter>Source Files</Filter>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="proto\test.pb.cc">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="proto\test.pb.cc">
+      <Filter>proto</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="proto\test.pb.h">
-      <Filter>Source Files</Filter>
+      <Filter>proto</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="proto\test.proto">
+      <Filter>proto</Filter>
+    </None>
+    <None Include="proto\Makefile">
+      <Filter>proto</Filter>
+    </None>
   </ItemGroup>
 </Project>
