@@ -1,8 +1,9 @@
 .vs
+*.vcxproj.user
 Debug
 Release
 x64
-/Win32/Win32 004/Win32 004.vcxproj.user
 /Win32/Win32 008/Win32 008.aps
-/Win32/Win32 008/Win32 008.vcxproj.user
 /Database/downloads
+/Network/008 Protobuf/external/protobuf-master
+
