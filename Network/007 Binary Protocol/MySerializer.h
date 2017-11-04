@@ -133,6 +133,12 @@ inline float  my_ntoh(float  v) { auto t = my_ntoh(*(uint32_t*)&v); return *(flo
 inline double my_ntoh(double v) { auto t = my_ntoh(*(uint64_t*)&v); return *(double*)&t; }
 
 
+class MySerializer;
+class MyDeserializer;
+
+template<typename SE, typename T>
+void my_serializer_io(SE& se, T& v);
+
 class MySerializer {
 public:
 	MySerializer(std::vector<char>& buf)
@@ -153,12 +159,16 @@ public:
 	void io(float    v) { _io_fixed_number(v); }
 	void io(double   v) { _io_fixed_number(v); }
 
+	template<typename T>
+	void io(T& v) {
+		my_serializer_io(*this, v);
+	}
+	
 	void io_raw(const void* p, size_t n) {
 		const auto s = _buf.size();
 		_buf.resize(s + n);
 		memcpy(&_buf[s], p, n);
 	}
-
 //-----------------------
 	void io_fixed(int8_t   v) { _io_fixed_number(v); }
 	void io_fixed(int16_t  v) { _io_fixed_number(v); }
@@ -205,11 +215,8 @@ public:
 	void io_var(int64_t  v) { io_var(my_zigzag_encode(v)); }
 
 //-----------------------
-	void io(const std::string& v) {
-		uint64_t n = v.size();
-		io_var(n);
-		io_raw(v.c_str(), v.size());
-	}
+
+	std::vector<char>& buf() { return _buf; }
 
 private:
 	template<typename T>
@@ -264,6 +271,18 @@ public:
 	void io(float    & v) { _io_fixed_number(v); }
 	void io(double   & v) { _io_fixed_number(v); }
 
+	void io_raw(void* dst, size_t n) {
+		if (_r + n > _end)
+			throw MyError("unexpected end");
+		memcpy(dst, _r, n);
+		_r += n;
+	}
+
+	template<typename T>
+	void io(T& v) {
+		my_serializer_io(*this, v);
+	}
+
 //-----------------------
 	void io_fixed(int8_t   & v) { _io_fixed_number(v); }
 	void io_fixed(int16_t  & v) { _io_fixed_number(v); }
@@ -299,7 +318,7 @@ private:
 	void _io_var(T& value) {
 		T v = 0;
 		size_t bit = 0;
-		for (size_t i = 0;  ; _r++, i++) {
+		for (size_t i = 0;  ; i++) {
 			if (_r >= _end)
 				throw MyError("MyDeserializer::io_var - unexpected end");
 
@@ -307,6 +326,8 @@ private:
 				throw MyError("MyDeserializer::io_var - excess number limit");
 
 			auto t = *_r;
+			_r++;
+
 			v |= (t & 0x7F) << bit;
 			if ((t & 0x80) == 0)
 				break;
@@ -320,3 +341,48 @@ private:
 	const char* _end;
 };
 
+//-------------------------------
+template<typename SE, typename T> inline 
+void my_serializer_io(SE& se, T& v) {
+	v.io(se);
+}
+
+template<> inline
+void my_serializer_io(MySerializer& se, std::string& v) {
+	uint64_t n = v.size();
+	se.io_var(n);
+	se.io_raw(v.c_str(), v.size());
+}
+
+template<> inline
+void my_serializer_io(MyDeserializer& se, std::string& v) {
+	uint64_t n64;
+	se.io_var(n64);
+	if (n64 > std::numeric_limits<size_t>::max())
+		throw MyError("string is too big");
+	auto n = static_cast<size_t>(n64);
+	v.resize(n);
+	se.io_raw(&*v.begin(), n);
+}
+
+template<typename T> inline
+void my_serializer_io(MySerializer& se, std::vector<T>& v) {
+	uint64_t n = v.size();
+	se.io_var(n);
+	for (auto& e : v) {
+		se.io(e);
+	}
+}
+
+template<typename T> inline
+void my_serializer_io(MyDeserializer& se, std::vector<T>& v) {
+	uint64_t n64;
+	se.io_var(n64);
+	if (n64 > std::numeric_limits<size_t>::max())
+		throw MyError("array is too big");
+	auto n = static_cast<size_t>(n64);
+	v.resize(n);
+	for (auto& e : v) {
+		se.io(e);
+	}
+}

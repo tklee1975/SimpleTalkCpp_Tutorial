@@ -183,11 +183,20 @@ void MySocket::setNonBlocking(bool b)
 
 void MySocket::recv(std::vector<char> & buf, size_t bytesToRecv) {
 	buf.clear();
+	appendRecv(buf, bytesToRecv);
+}
+
+void MySocket::appendRecv(std::vector<char> & buf, size_t bytesToRecv) {
 	if (bytesToRecv > INT_MAX)
 		throw MyError("recv bytesToRecv is too big");
 
-	buf.resize(bytesToRecv);
-	recv(buf.data(), bytesToRecv);
+	auto oldSize = buf.size();
+	auto newSize = oldSize + bytesToRecv;
+	if (newSize < oldSize)
+		throw MyError("vector size > size_t");
+
+	buf.resize(newSize);
+	recv(&buf[oldSize], bytesToRecv);
 }
 
 void MySocket::recv(char* buf, size_t bytesToRecv) {

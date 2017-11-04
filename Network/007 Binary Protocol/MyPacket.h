@@ -1,40 +1,72 @@
 #pragma once
 #include "MySerializer.h"
 
-enum class MyPacketType : uint16_t;
-
-class MyPacket : public MyNonCopyable {
-public:
-	using Type = MyPacketType;
-
-	static const uint16_t kMaxPacketSize = 32 * 1024;
-
-	struct Header {
-		uint32_t packetSize = 0;
-		Type	 type       = (Type)0;
-	};
-	Header header;
-
-	template<typename SE>
-	void io(SE& se) {
-	}
-};
-
 enum class MyPacketType : uint16_t {
 	None,
 	Hello,
 	Chat,
-	Chat2,
+};
+
+class MyPacket : public MyNonCopyable {
+public:
+	using Type = MyPacketType;
+	using PacketSize = uint32_t;
+
+	static const size_t kMaxPacketSize = 32 * 1024;
+
+	void toBuffer(std::vector<char> & buf) {
+		buf.clear();
+		MySerializer se(buf);
+		onToBuffer(se);
+
+		auto packetSize = se.buf().size();
+		if (packetSize > kMaxPacketSize)
+			throw MyError("excess MaxPacketSize");
+		
+		// update the header size in buf
+		*reinterpret_cast<PacketSize*>(se.buf().data()) = my_hton(packetSize);
+	}
+
+	void fromBuffer(const std::vector<char> & buf) {
+		MyDeserializer de(buf);
+		onFromBuffer(de);
+	}
+
+	Type type() const { return onType(); }
+
+protected:
+	virtual Type onType() const = 0;
+	virtual void onToBuffer  (MySerializer&   se) = 0;
+	virtual void onFromBuffer(MyDeserializer& se) = 0;
+
+	void io(MySerializer&   se) {
+		PacketSize size = 0;
+		se.io_fixed(size);
+
+		Type t = type();
+		se.io_fixed(my_enum_to_int(t));
+	}
+
+	void io(MyDeserializer& se) {
+		PacketSize	size = 0;
+		se.io_fixed(size);
+
+		Type		t = Type::None;
+		se.io_fixed(my_enum_to_int(t));
+		if (t != type())
+			throw MyError("Packet type mismatch");
+	}
 };
 
 class MyPacket_Hello : public MyPacket {
 	using Base = MyPacket;
 public:
-	MyPacket_Hello() {
-		header.type = Type::Hello;
-	}
-
 	uint32_t version;
+
+protected:
+	virtual Type onType() const { return Type::Hello; }
+	virtual void onToBuffer  (MySerializer&   se) override { io(se); }
+	virtual void onFromBuffer(MyDeserializer& se) override { io(se); }
 
 	template<typename SE>
 	void io(SE& se) {
@@ -46,29 +78,19 @@ public:
 class MyPacket_Chat : public MyPacket {
 	using Base = MyPacket;
 public:
-	MyPacket_Chat() {
-		header.type = Type::Chat;
-	}
-
 	std::string msg;
+	std::vector< std::string > toUser;
+
+
+protected:
+	virtual Type onType() const { return Type::Chat; }
+	virtual void onToBuffer  (MySerializer&   se) override { io(se); }
+	virtual void onFromBuffer(MyDeserializer& se) override { io(se); }
+
 	template<typename SE>
 	void io(SE& se) {
 		Base::io(se);
 		se.io(msg);
-	}
-};
-
-class MyPacket_Chat2 : public MyPacket_Chat {
-	using Base = MyPacket_Chat;
-public:
-	MyPacket_Chat2() {
-		header.type = Type::Chat2;
-	}
-
-	std::vector< std::string > extra;
-	template<typename SE>
-	void io(SE& se) {
-		Base::io(se);
-		se.io(extra);
+		se.io(toUser);
 	}
 };

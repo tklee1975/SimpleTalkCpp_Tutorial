@@ -60,6 +60,9 @@ public:
 
 	void recv(char* buf, size_t bytesToRecv);
 	void recv(std::vector<char> & buf, size_t bytesToRecv);
+
+	void appendRecv(std::vector<char> & buf, size_t bytesToRecv);
+
 	void recvfrom(MySocketAddr& addr, std::vector<char> & buf, size_t bytesToRecv);
 
 	void setNonBlocking(bool b);

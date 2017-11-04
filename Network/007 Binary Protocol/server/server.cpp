@@ -6,7 +6,40 @@ class MyServer : public MyNonCopyable {
 public:
 	class Client : public MyBufSocket {
 	public:
+		virtual void onRecvPacket(MyPacketType packetType, const std::vector<char>& buf) override {
+			switch (packetType) {
+				case MyPacketType::Hello: {
+					MyPacket_Hello pkt;
+					pkt.fromBuffer(buf);
+				}break;
+
+				case MyPacketType::Chat:{
+					MyPacket_Chat pkt;
+					 pkt.fromBuffer(buf);
+					printf("chat: \"%s\"\n", pkt.msg.c_str());
+					for (auto& t : pkt.toUser) {
+						printf("  to: \"%s\"\n", t.c_str());
+					}
+
+					// toupper and send to all
+					for(auto& ch : pkt.msg) {
+						ch = toupper(ch);
+					}
+
+					_server->sendToAll(pkt);
+				}break;
+			}
+		}
+
+		MyServer* _server = nullptr;
 	};
+
+
+	void sendToAll(MyPacket& pkt) {		
+		for(auto& c : _clients) {
+			c->sendPacket(pkt);
+		}
+	}
 
 	void run() {
 		_listenSock.createTCP();
@@ -56,6 +89,7 @@ public:
 			if (_pollfds[n].canRead()) {
 				_clients.emplace_back(new Client);
 				auto& newClient = _clients.back();
+				newClient->_server = this;
 				newClient->acceptFromListenSock(_listenSock);
 				printf("accepted\n");
 			}
@@ -77,7 +111,62 @@ void my_singal_handler(int sig) {
 	}
 }
 
+void test_serializer_int() {
+	int s = -500;
+	int d;
+
+	std::vector<char> buf;
+	{
+		MySerializer se(buf);
+		se.io(s);
+	}
+	{
+		MyDeserializer de(buf);
+		de.io(d);
+	}
+
+	assert(s == d);
+}
+
+void test_serializer_string() {
+	std::string s = "testing";
+	std::string d;
+
+	std::vector<char> buf;
+	{
+		MySerializer se(buf);
+		se.io(s);
+	}
+	{
+		MyDeserializer de(buf);
+		de.io(d);
+	}
+
+	assert(s == d);
+}
+
+void test_serializer_vector() {
+	std::vector<int> s = {1,2,3,4};
+	std::vector<int> d;
+
+	std::vector<char> buf;
+	{
+		MySerializer se(buf);
+		se.io(s);
+	}
+	{
+		MyDeserializer de(buf);
+		de.io(d);
+	}
+
+	assert(s == d);
+}
+
 int main(int argv, const char* argc[]) {
+	test_serializer_int();
+	test_serializer_string();
+	test_serializer_vector();
+
 	signal(SIGTERM, my_singal_handler); // kill process
 	signal(SIGINT,  my_singal_handler); // Ctrl + C
 
