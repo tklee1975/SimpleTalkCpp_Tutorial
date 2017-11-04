@@ -53,7 +53,10 @@ void MyServer::run()
 		tv.tv_sec = 1;
 		tv.tv_usec = 0;
 
-		int ret = ::select(n, &readfds, &writefds, nullptr, &tv);
+		// select( nfds <--
+		//            Linux - nfds should be set to the highest-numbered file descriptor in any of the three sets, plus 1
+		//            Windows - Ignored. The nfds parameter is included only for compatibility with Berkeley sockets
+		int ret = ::select(n+1, &readfds, &writefds, nullptr, &tv);
 		if (ret < 0) {
 			throw MyError("select");
 		}
@@ -108,7 +111,8 @@ void MyServer::removeClosedClients()
 		}
 
 		try {
-			std::swap(c, _clients.back());
+			if (_clients.size() > 1)
+				std::swap(c, _clients.back());
 			_clients.resize(_clients.size() - 1);
 		}
 		catch (...) {

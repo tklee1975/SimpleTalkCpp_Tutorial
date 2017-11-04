@@ -90,7 +90,7 @@ void MySocket::listen(int backlog) {
 void MySocket::connect(const MySocketAddr& addr) {
 	int ret = ::connect(_sock, &addr._addr, sizeof(addr._addr));
 	if (ret < 0) {
-		throw MyError("listen");		
+		throw MyError("connect");		
 	}
 	printf("connect\n");
 }

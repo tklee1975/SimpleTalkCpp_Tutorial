@@ -90,7 +90,7 @@ void MySocket::listen(int backlog) {
 void MySocket::connect(const MySocketAddr& addr) {
 	int ret = ::connect(_sock, &addr._addr, sizeof(addr._addr));
 	if (ret < 0) {
-		throw MyError("listen");		
+		throw MyError("connect");		
 	}
 //	printf("connect\n");
 }
@@ -165,7 +165,7 @@ void MySocket::recvfrom(MySocketAddr& addr, std::vector<char> & buf, size_t byte
 
 void MySocket::setNonBlocking(bool b)
 {
-	u_long v = b ? 0 : 1;
+	u_long v = b ? 1 : 0;
 	if (0 != ::ioctlsocket(_sock, FIONBIO, &v))
 		throw MyError("setNonBlocking");
 }
