@@ -30,6 +30,7 @@
 #include <signal.h>
 #include <codecvt>
 #include <io.h>
+#include <cassert>
 
 class MyNonCopyable {
 public:
