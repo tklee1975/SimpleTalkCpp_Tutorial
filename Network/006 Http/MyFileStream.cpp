@@ -3,6 +3,8 @@
 
 #ifdef _WIN32
 
+const HANDLE MyFileStream::kInvalidHandle = INVALID_HANDLE_VALUE;
+
 void MyFileStream::openRead(const char* filename)
 {
 	close();

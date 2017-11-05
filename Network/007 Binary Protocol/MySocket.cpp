@@ -127,7 +127,7 @@ bool MySocket::accept(MySocket & acceptedSocket) {
 }
 
 void MySocket::sendto(const MySocketAddr& addr, const char* data, size_t dataSize) {
-	if (dataSize > std::numeric_limits<int>::max())
+	if (dataSize > static_cast<size_t>(std::numeric_limits<int>::max()))
 		throw MyError("send dataSize is too big");
 
 	int ret =::sendto(_sock, data, (int)dataSize, 0, &addr._addr, sizeof(addr._addr));
@@ -137,7 +137,7 @@ void MySocket::sendto(const MySocketAddr& addr, const char* data, size_t dataSiz
 }
 
 size_t MySocket::send(const char* data, size_t dataSize) {
-	if (dataSize > std::numeric_limits<int>::max())
+	if (dataSize > static_cast<size_t>(std::numeric_limits<int>::max()))
 		throw MyError("send dataSize is too big");
 
 	int ret =::send(_sock, data, (int)dataSize, 0);
@@ -163,7 +163,7 @@ size_t MySocket::availableBytesToRead() {
 
 void MySocket::recvfrom(MySocketAddr& addr, std::vector<char> & buf, size_t bytesToRecv) {
 	buf.clear();
-	if (bytesToRecv > std::numeric_limits<int>::max())
+	if (bytesToRecv > static_cast<size_t>(std::numeric_limits<int>::max()))
 		throw MyError("recv bytesToRecv is too big");
 
 	buf.resize(bytesToRecv);
@@ -193,7 +193,7 @@ void MySocket::recv(std::vector<char> & buf, size_t bytesToRecv) {
 }
 
 void MySocket::appendRecv(std::vector<char> & buf, size_t bytesToRecv) {
-	if (bytesToRecv > std::numeric_limits<int>::max())
+	if (bytesToRecv > static_cast<size_t>(std::numeric_limits<int>::max()))
 		throw MyError("recv bytesToRecv is too big");
 
 	auto oldSize = buf.size();
@@ -206,7 +206,7 @@ void MySocket::appendRecv(std::vector<char> & buf, size_t bytesToRecv) {
 }
 
 void MySocket::recv(char* buf, size_t bytesToRecv) {
-	if (bytesToRecv > std::numeric_limits<int>::max())
+	if (bytesToRecv > static_cast<size_t>(std::numeric_limits<int>::max()))
 		throw MyError("recv bytesToRecv is too big");
 	int ret = ::recv(_sock, buf, (int)bytesToRecv, 0);
 	if (ret < 0) {
