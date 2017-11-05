@@ -10,12 +10,15 @@
 
 	#undef max
 	#undef min
+	
+	#include <io.h>
 #else
 	#include <unistd.h> // sleep()
 	#include <arpa/inet.h> // htons
 	#include <sys/socket.h>
 	#include <netdb.h> // struct addrinfo
 	#include <sys/ioctl.h>
+	#include <poll.h>
 #endif
 
 #include <stdint.h>
@@ -25,12 +28,11 @@
 #include <vector>
 #include <stdio.h>
 #include <string.h>
-#include <climits>
 #include <memory>
 #include <signal.h>
 #include <codecvt>
-#include <io.h>
 #include <cassert>
+#include <limits>
 
 class MyNonCopyable {
 public:
@@ -61,6 +63,6 @@ inline typename std::underlying_type<T>::type& my_enum_to_int(T& v) {
 }
 
 template<typename T>
-inline typename  const std::underlying_type<T>::type& my_enum_to_int(const T& v) {
+inline const typename std::underlying_type<T>::type& my_enum_to_int(const T& v) {
 	return *reinterpret_cast<const typename std::underlying_type<T>::type*>(&v);
 }

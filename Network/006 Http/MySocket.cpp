@@ -165,9 +165,15 @@ void MySocket::recvfrom(MySocketAddr& addr, std::vector<char> & buf, size_t byte
 
 void MySocket::setNonBlocking(bool b)
 {
+#ifdef _WIN32
 	u_long v = b ? 1 : 0;
 	if (0 != ::ioctlsocket(_sock, FIONBIO, &v))
 		throw MyError("setNonBlocking");
+#else
+	long v = b ? 1 : 0;
+	if (0 != ::ioctl(_sock, FIONBIO, &v))
+		throw MyError("setNonBlocking");
+#endif		
 }
 
 void MySocket::recv(std::vector<char> & buf, size_t bytesToRecv) {

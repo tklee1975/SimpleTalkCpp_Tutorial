@@ -10,20 +10,16 @@ void MyFileStream::openRead(const char* filename)
 	MyUtil::utfConvert(filenameW, filename);
 
 	_h = CreateFile(filenameW.c_str(), GENERIC_READ, FILE_SHARE_READ, nullptr, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr);
-	if (_h == INVALID_HANDLE_VALUE)
+	if (_h == kInvalidHandle)
 		throw MyError("MyFileStream::openRead");
 }
 
 void MyFileStream::close()
 {
-	if (_h != INVALID_HANDLE_VALUE) {
+	if (_h != kInvalidHandle) {
 		CloseHandle(_h);
-		_h = INVALID_HANDLE_VALUE;
+		_h = kInvalidHandle;
 	}
-}
-
-bool MyFileStream::isOpened() const {
-	return _h != INVALID_HANDLE_VALUE;
 }
 
 uint64_t MyFileStream::fileSize()
@@ -36,8 +32,7 @@ uint64_t MyFileStream::fileSize()
 	return (static_cast<uint64_t>(t.HighPart) << 32) | t.LowPart;
 }
 
-void MyFileStream::read(char* outBuf, size_t bytesToRead)
-{
+void MyFileStream::read(char* outBuf, size_t bytesToRead) {
 	if (bytesToRead > std::numeric_limits<DWORD>::max()) {
 		throw MyError("bytesToRead is too big");
 	}
@@ -47,6 +42,41 @@ void MyFileStream::read(char* outBuf, size_t bytesToRead)
 		throw MyError("MyFileStream::read");
 	}
 }
+
+#else
+
+void MyFileStream::openRead(const char* filename) {
+	close();
+	_h = ::open(filename, 0);
+	if (_h == kInvalidHandle)
+		throw MyError("MyFileStream::openRead");
+}
+
+void MyFileStream::close() {
+	if (_h != kInvalidHandle) {
+		::close(_h);
+		_h = kInvalidHandle;
+	}
+}
+
+void MyFileStream::read(char* outBuf, size_t bytesToRead) {
+	int ret = ::read(_h, outBuf, bytesToRead);
+	if (ret < 0) {
+		throw MyError("MyFileStream::read");
+	}
+}
+
+uint64_t MyFileStream::fileSize() {
+	struct stat s;
+	int ret = fstat(_h, &s);
+	if (ret < 0)
+		throw MyError("fstat");
+	return s.st_size;
+}
+
+#endif
+
+//---------------- Common ---------------
 
 void MyFileStream::read(std::vector<char>& outBuf, size_t bytesToRead) {
 	outBuf.clear();
@@ -59,8 +89,3 @@ void MyFileStream::read(std::vector<char>& outBuf, size_t bytesToRead) {
 		throw;
 	}
 }
-
-
-#else
-
-#endif

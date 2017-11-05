@@ -104,8 +104,7 @@ struct MyPollFD : MyPollFD_Base {
 static_assert(sizeof(MyPollFD) == sizeof(MyPollFD_Base), "cannot add member in MyPollFD");
 
 #ifdef _WIN32
-inline
-int my_poll(MyPollFD* pollfd, size_t pollfdCount, int timeoutMillisecond) {
+inline int my_poll(MyPollFD* pollfd, size_t pollfdCount, int timeoutMillisecond) {
 	int ret = WSAPoll(pollfd, pollfdCount, timeoutMillisecond);
 	if (ret < 0) {
 		throw MyError("poll");
@@ -115,13 +114,8 @@ int my_poll(MyPollFD* pollfd, size_t pollfdCount, int timeoutMillisecond) {
 
 #else
 
-inline
-int my_poll(MyPollFD* pollfd, size_t pollfdCount, int timeoutMillisecond) {
-	struct timespec ts;
-	ts.tv_sec  = timeoutMillisecond / 1000;
-	ts.tv_nsec = (timeoutMillisecond % 1000) * 1000000;
-
-	int ret = ::poll(pollfd, pollfdCount, timeoutMillisecond < 0 ? nullptr : &ts, nullptr);
+inline int my_poll(MyPollFD* pollfd, size_t pollfdCount, int timeoutMillisecond) {
+	int ret = ::poll(pollfd, pollfdCount, timeoutMillisecond);
 	if (ret < 0)
 		throw MyError("poll");
 	return ret;

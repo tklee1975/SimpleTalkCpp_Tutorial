@@ -15,6 +15,8 @@
 	#include <sys/socket.h>
 	#include <netdb.h> // struct addrinfo
 	#include <sys/ioctl.h>
+	#include <sys/stat.h>
+	#include <fcntl.h>
 #endif
 
 #include <stdint.h>

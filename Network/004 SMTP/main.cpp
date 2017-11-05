@@ -247,7 +247,7 @@ public:
 			// select( nfds <--
 			//            Linux - nfds should be set to the highest-numbered file descriptor in any of the three sets, plus 1
 			//            Windows - Ignored. The nfds parameter is included only for compatibility with Berkeley sockets
-			int ret = ::select(n+1, &readfds, nullptr, nullptr, &tv);
+			int ret = ::select(1024, &readfds, nullptr, nullptr, &tv);
 			if (ret < 0) {
 				throw MyError("select");
 			}

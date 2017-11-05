@@ -224,7 +224,7 @@ void MyClient::Response::send(MyClient* client) {
 	uint64_t contentLength = fileContent.isOpened() ? fileContent.fileSize() : content.size();
 
 	char tmp[256 + 1];
-	snprintf(tmp, 256, "Content-Length: %llu\r\n\r\n", contentLength);
+	snprintf(tmp, 256, "Content-Length: %llu\r\n\r\n", (unsigned long long)contentLength);
 	tmp[256] = 0;
 
 	header.append(tmp);

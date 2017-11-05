@@ -7,7 +7,7 @@ public:
 	MyFileStream() = default;
 	~MyFileStream() { close(); }
 
-	bool isOpened() const;
+	bool isOpened() const { return _h != kInvalidHandle; }
 
 	void openRead(const char* filename);
 	void close();
@@ -17,12 +17,19 @@ public:
 	void read(char* outBuf, size_t bytesToRead);
 	void read(std::vector<char>& outBuf, size_t bytesToRead);
 
+#ifdef _WIN32
+	static const HANDLE kInvalidHandle = INVALID_HANDLE_VALUE;
+#else
+	static const int    kInvalidHandle = -1;
+#endif
+
+
 private:
 
 #ifdef _WIN32
-	HANDLE _h = INVALID_HANDLE_VALUE;
+	HANDLE _h = kInvalidHandle;
 #else
-
+	int _h = kInvalidHandle;
 #endif
 
 };

@@ -139,14 +139,23 @@ void MyUtil::toUpperString(std::string& s) {
 }
 
 void MyUtil::getCurrentDir(std::string& outPath) {
+#ifdef _WIN32
 	wchar_t tmp[MAX_PATH + 1];
 	GetCurrentDirectory(MAX_PATH, tmp);
 	tmp[MAX_PATH] = 0;
 	utfConvert(outPath, tmp);
 	toUnixPath(outPath);
+#else
+	char tmp[PATH_MAX+1];
+	if (!getcwd(tmp, PATH_MAX))
+		throw MyError("getcwd");
+	tmp[PATH_MAX] = 0;
+	outPath = tmp;
+#endif	
 }
 
 void MyUtil::getAbsPath(std::string& outPath, const char* inPath) {
+#ifdef _WIN32
 	std::wstring inPathW;
 	utfConvert(inPathW, inPath);
 
@@ -155,6 +164,13 @@ void MyUtil::getAbsPath(std::string& outPath, const char* inPath) {
 	tmp[MAX_PATH] = 0;
 	utfConvert(outPath, tmp);
 	toUnixPath(outPath);
+#else
+	char tmp[PATH_MAX+1];
+	if (!realpath(inPath, tmp))
+		throw MyError("realpath");
+	tmp[PATH_MAX] = 0;
+	outPath = tmp;
+#endif
 }
 
 void MyUtil::toUnixPath(std::string& s)

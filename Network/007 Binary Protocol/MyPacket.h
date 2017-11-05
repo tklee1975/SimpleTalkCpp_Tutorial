@@ -19,12 +19,19 @@ public:
 		MySerializer se(buf);
 		onToBuffer(se);
 
-		auto packetSize = se.buf().size();
-		if (packetSize > kMaxPacketSize)
-			throw MyError("excess MaxPacketSize");
+		PacketSize packetSize = 0;
+		{
+			auto s = se.buf().size();
+			if (s > kMaxPacketSize)
+				throw MyError("excess MaxPacketSize");
+			packetSize = static_cast<PacketSize>(s);
+		}
 		
-		// update the header size in buf
-		*reinterpret_cast<PacketSize*>(se.buf().data()) = my_hton(packetSize);
+		{
+			// update the header size in buf
+			auto* p = reinterpret_cast<PacketSize*>(se.buf().data());
+			*p = my_hton(packetSize);
+		}
 	}
 
 	void fromBuffer(const std::vector<char> & buf) {
