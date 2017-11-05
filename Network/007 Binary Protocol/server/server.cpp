@@ -72,7 +72,7 @@ public:
 
 			_pollfds[n].reset(_listenSock, true, false);
 
-			int ret = my_poll(_pollfds.data(), n + 1, 1000);
+			int ret = my_poll(_pollfds.data(), _pollfds.size(), 1000);
 
 			{
 				int i = 0;
