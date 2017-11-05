@@ -135,12 +135,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\MyBufSocket.cpp" />
+    <ClCompile Include="..\MyClientBase.cpp" />
     <ClCompile Include="..\MySocket.cpp" />
+    <ClCompile Include="..\test_serializer.cpp" />
     <ClCompile Include="server.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\MyBufSocket.h" />
+    <ClInclude Include="..\MyClientBase.h" />
     <ClInclude Include="..\MyPacket.h" />
     <ClInclude Include="..\MySerializer.h" />
     <ClInclude Include="..\MySocket.h" />

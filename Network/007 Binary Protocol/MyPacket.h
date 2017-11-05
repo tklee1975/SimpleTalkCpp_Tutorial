@@ -61,7 +61,7 @@ protected:
 class MyPacket_Hello : public MyPacket {
 	using Base = MyPacket;
 public:
-	uint32_t version;
+	uint32_t version = 100;
 
 protected:
 	virtual Type onType() const { return Type::Hello; }
@@ -79,8 +79,7 @@ class MyPacket_Chat : public MyPacket {
 	using Base = MyPacket;
 public:
 	std::string msg;
-	std::vector< std::string > toUser;
-
+	std::vector< std::string > toUsers;
 
 protected:
 	virtual Type onType() const { return Type::Chat; }
@@ -91,6 +90,6 @@ protected:
 	void io(SE& se) {
 		Base::io(se);
 		se.io(msg);
-		se.io(toUser);
+		se.io(toUsers);
 	}
 };

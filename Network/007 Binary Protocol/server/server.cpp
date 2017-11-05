@@ -1,10 +1,10 @@
-#include "../MyBufSocket.h"
+#include "../MyClientBase.h"
 
 bool g_quit = false;
 
 class MyServer : public MyNonCopyable {
 public:
-	class Client : public MyBufSocket {
+	class Client : public MyClientBase {
 	public:
 		virtual void onRecvPacket(MyPacketType packetType, const std::vector<char>& buf) override {
 			switch (packetType) {
@@ -15,9 +15,9 @@ public:
 
 				case MyPacketType::Chat:{
 					MyPacket_Chat pkt;
-					 pkt.fromBuffer(buf);
+					pkt.fromBuffer(buf);
 					printf("chat: \"%s\"\n", pkt.msg.c_str());
-					for (auto& t : pkt.toUser) {
+					for (auto& t : pkt.toUsers) {
 						printf("  to: \"%s\"\n", t.c_str());
 					}
 
@@ -111,61 +111,10 @@ void my_singal_handler(int sig) {
 	}
 }
 
-void test_serializer_int() {
-	int s = -500;
-	int d;
-
-	std::vector<char> buf;
-	{
-		MySerializer se(buf);
-		se.io(s);
-	}
-	{
-		MyDeserializer de(buf);
-		de.io(d);
-	}
-
-	assert(s == d);
-}
-
-void test_serializer_string() {
-	std::string s = "testing";
-	std::string d;
-
-	std::vector<char> buf;
-	{
-		MySerializer se(buf);
-		se.io(s);
-	}
-	{
-		MyDeserializer de(buf);
-		de.io(d);
-	}
-
-	assert(s == d);
-}
-
-void test_serializer_vector() {
-	std::vector<int> s = {1,2,3,4};
-	std::vector<int> d;
-
-	std::vector<char> buf;
-	{
-		MySerializer se(buf);
-		se.io(s);
-	}
-	{
-		MyDeserializer de(buf);
-		de.io(d);
-	}
-
-	assert(s == d);
-}
+void test_serializer();
 
 int main(int argv, const char* argc[]) {
-	test_serializer_int();
-	test_serializer_string();
-	test_serializer_vector();
+	test_serializer();
 
 	signal(SIGTERM, my_singal_handler); // kill process
 	signal(SIGINT,  my_singal_handler); // Ctrl + C

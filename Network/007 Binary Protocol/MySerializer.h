@@ -169,6 +169,7 @@ public:
 		_buf.resize(s + n);
 		memcpy(&_buf[s], p, n);
 	}
+
 //-----------------------
 	void io_fixed(int8_t   v) { _io_fixed_number(v); }
 	void io_fixed(int16_t  v) { _io_fixed_number(v); }
@@ -227,14 +228,15 @@ private:
 		*reinterpret_cast<T*>(&_buf[s]) = my_hton(v);
 	}
 
-	template<typename T, size_t N> // !! using Tempalte size_t N, so compiler might unroll for loop
+	template<typename T, size_t N> // !! using Template size_t N, so compiler might unroll for loop
 	void _io_var(T& value) {
 		auto s = _buf.size();
 		_buf.resize(s + N);
 		auto* dst = &_buf[s];
 		auto* end = dst + N;
 		auto v = value;
-		for (; dst < end; dst++) {
+
+		for (size_t i = 0; i < N; i++, dst++) {
 			*dst = v & 0x7F;
 			v >>= 7;
 			if (!v)

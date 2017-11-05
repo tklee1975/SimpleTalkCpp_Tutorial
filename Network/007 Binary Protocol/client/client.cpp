@@ -1,8 +1,8 @@
-#include "../MyBufSocket.h"
+#include "../MyClientBase.h"
 
 bool g_quit = false;
 
-class MyClient : public MyBufSocket {
+class MyClient : public MyClientBase {
 public:
 	void update() {
 		MyPollFD pf;
@@ -27,9 +27,9 @@ public:
 		switch (packetType) {
 			case MyPacketType::Chat:{
 				MyPacket_Chat pkt;
-					pkt.fromBuffer(buf);
+				pkt.fromBuffer(buf);
 				printf("chat: \"%s\"\n", pkt.msg.c_str());
-				for (auto& t : pkt.toUser) {
+				for (auto& t : pkt.toUsers) {
 					printf("  to: \"%s\"\n", t.c_str());
 				}
 			}break;
@@ -80,8 +80,8 @@ int main(int argv, const char* argc[]) {
 
 				MyPacket_Chat pkt;
 				pkt.msg = sz;
-				pkt.toUser.emplace_back("Tom");
-				pkt.toUser.emplace_back("John");
+				pkt.toUsers.emplace_back("Tom");
+				pkt.toUsers.emplace_back("John");
 				client.sendPacket(pkt);
 			}
 		}
