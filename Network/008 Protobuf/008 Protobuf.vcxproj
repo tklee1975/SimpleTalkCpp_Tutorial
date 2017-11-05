@@ -20,7 +20,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="proto\Makefile" />
-    <None Include="proto\test.proto" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />

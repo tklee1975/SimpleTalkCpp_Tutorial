@@ -31,9 +31,6 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="proto\test.proto">
-      <Filter>proto</Filter>
-    </None>
     <None Include="proto\Makefile">
       <Filter>proto</Filter>
     </None>
