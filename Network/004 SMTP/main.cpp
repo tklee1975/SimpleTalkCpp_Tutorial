@@ -224,7 +224,7 @@ public:
 			FD_ZERO(&readfds);
 			FD_SET(_listenSock.sock(), &readfds);
 			int n = 1;
-			int max_fd = _listenSock.sock();
+			auto max_fd = _listenSock.sock();
 
 			removeClosedClients();
 

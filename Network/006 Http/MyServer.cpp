@@ -28,7 +28,7 @@ void MyServer::run()
 		FD_ZERO(&writefds);
 		FD_SET(_listenSock.sock(), &readfds);
 		int n = 1;
-		int max_fd = _listenSock.sock();
+		auto max_fd = _listenSock.sock();
 
 		removeClosedClients();
 
