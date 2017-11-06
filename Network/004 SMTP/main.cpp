@@ -224,6 +224,7 @@ public:
 			FD_ZERO(&readfds);
 			FD_SET(_listenSock.sock(), &readfds);
 			int n = 1;
+			int max_fd = _listenSock.sock();
 
 			removeClosedClients();
 
@@ -236,7 +237,11 @@ public:
 					break;
 				}
 
-				FD_SET(client->sock.sock(), &readfds);
+				auto cs = client->sock.sock();
+				if (cs > max_fd)
+					max_fd = cs;
+
+				FD_SET(cs, &readfds);
 				n++;
 			}
 
@@ -247,7 +252,7 @@ public:
 			// select( nfds <--
 			//            Linux - nfds should be set to the highest-numbered file descriptor in any of the three sets, plus 1
 			//            Windows - Ignored. The nfds parameter is included only for compatibility with Berkeley sockets
-			int ret = ::select(1024, &readfds, nullptr, nullptr, &tv);
+			int ret = ::select(max_fd + 1, &readfds, nullptr, nullptr, &tv);
 			if (ret < 0) {
 				throw MyError("select");
 			}
