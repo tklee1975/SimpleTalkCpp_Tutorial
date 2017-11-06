@@ -18,7 +18,7 @@ public:
 	void read(std::vector<char>& outBuf, size_t bytesToRead);
 
 #ifdef _WIN32
-	static const HANDLE kInvalidHandle = INVALID_HANDLE_VALUE;
+	static const HANDLE kInvalidHandle;
 #else
 	static const int    kInvalidHandle = -1;
 #endif
