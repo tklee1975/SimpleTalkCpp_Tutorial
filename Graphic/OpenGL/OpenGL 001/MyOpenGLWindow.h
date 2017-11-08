@@ -19,6 +19,10 @@ public:
 	void makeCurrent();
 	void swapBuffers();
 
+	int canvasWidth () const { return m_canvasWidth;  }
+	int canvasHeight() const { return m_canvasHeight; }
+	
+
 private:
 
 	static LRESULT WINAPI WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
@@ -27,4 +31,6 @@ private:
 	HWND	m_hwnd = nullptr;
 	HDC		m_dc = nullptr;
 	HGLRC	m_rc = nullptr;
+	int m_canvasWidth = 0;
+	int m_canvasHeight = 0;
 };

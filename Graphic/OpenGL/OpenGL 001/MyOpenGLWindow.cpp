@@ -31,7 +31,7 @@ void MyOpenGLWindow::create() {
 		wndClassName(),
 		L"My OpenGL Window",
 		WS_OVERLAPPEDWINDOW,
-		CW_USEDEFAULT, CW_USEDEFAULT, 1024, 768,
+		CW_USEDEFAULT, CW_USEDEFAULT, 800, 800 + 32,
 		nullptr, nullptr, hInstance, 
 		this); //!! <----- pass this to WM_CREATE
 
@@ -70,8 +70,8 @@ void MyOpenGLWindow::create() {
 }
 
 void MyOpenGLWindow::destroy() {
-	if (m_rc) { wglDeleteContext(m_rc);	m_rc = nullptr; }
-	if (m_dc) { ReleaseDC(m_hwnd, m_dc);	m_dc = nullptr; }
+	if (m_rc)   { wglDeleteContext(m_rc);	m_rc = nullptr; }
+	if (m_dc)   { ReleaseDC(m_hwnd, m_dc);	m_dc = nullptr; }
 	if (m_hwnd) { DestroyWindow(m_hwnd);	m_hwnd = nullptr; }
 }
 
@@ -106,6 +106,14 @@ LRESULT WINAPI MyOpenGLWindow::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARA
 
 		case WM_DESTROY: {
 			getThis(hwnd)->onDestroy();
+		}break;
+
+		case WM_SIZE: {
+			auto* thisObj = getThis(hwnd);
+			auto w = GET_X_LPARAM(lParam);
+			auto h = GET_Y_LPARAM(lParam);
+			thisObj->m_canvasWidth  = w;
+			thisObj->m_canvasHeight = h;
 		}break;
 
 		case WM_CLOSE: {

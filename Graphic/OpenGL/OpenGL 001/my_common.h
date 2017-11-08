@@ -49,6 +49,41 @@ inline void my_sleep(int sec) {
 #endif
 }
 
+inline
+uint64_t my_to_uint64(const LARGE_INTEGER& v) {
+	return ((uint64_t)v.HighPart) << 32 | v.LowPart;
+}
+
+class MyTimer {
+public:
+	MyTimer() { 
+		LARGE_INTEGER f;
+		QueryPerformanceFrequency(&f);
+		m_freq = my_to_uint64(f);
+		reset(); 
+	}
+
+	void reset() {
+		m_start = getTick();
+	}
+
+	double get() {
+		auto c = getTick();
+		return (double)(c - m_start) / m_freq;
+	}
+
+private:
+
+	uint64_t getTick() { 
+		LARGE_INTEGER v;
+		QueryPerformanceCounter(&v);
+		return my_to_uint64(v);
+	}
+
+	uint64_t m_freq;
+	uint64_t m_start;
+};
+
 template<typename T>
 inline typename std::underlying_type<T>::type& my_enum_to_int(T& v) {
 	return *reinterpret_cast<typename std::underlying_type<T>::type*>(&v);
