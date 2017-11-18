@@ -2,6 +2,8 @@
 *.vcxproj.user
 Debug
 Release
+Debug Library
+Release Library
 x64
 /Win32/Win32 008/Win32 008.aps
 /Database/downloads
