@@ -12,8 +12,6 @@ void checkGLError() {
 class MyDemoWindow : public MyOpenGLWindow {
 public:
 	virtual void onGLinit() override {
-		//m_tex.loadPngFile("test.png", true);
-
 		m_mesh.loadObjFile("models/test.obj");
 		m_mesh.doubleSided = true;
 		m_mesh.wireframe = true;
@@ -138,13 +136,6 @@ public:
 	float m_mouseLastPosY;
 
 	MyMesh m_mesh;
-	MyMesh m_mesh2;
-	MyMesh m_mesh3;
-
-	MyMesh m_mesh4;
-	MyMesh m_mesh5;
-
-	MyTexture2D m_tex;
 };
 
 int main() {

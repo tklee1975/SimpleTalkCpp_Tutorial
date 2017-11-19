@@ -143,7 +143,6 @@ public:
 
 		//---- opaque pass
 		glDisable(GL_BLEND);
-		m_tex.bind();
 		m_mesh4.draw();
 
 		//---- transparent pass
@@ -183,8 +182,8 @@ public:
 		drawGrid();
 		drawOriginAxis();
 
-		//example1(uptime);
-		example2(uptime);
+		example1(uptime);
+		//example2(uptime);
 
 		swapBuffers();
 	}
