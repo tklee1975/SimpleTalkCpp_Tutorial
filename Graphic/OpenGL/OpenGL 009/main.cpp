@@ -51,8 +51,6 @@ public:
 //		m_mesh.loadObjFile("models/sphere_flat.obj");
 //		m_mesh.loadObjFile("models/sphere_high.obj");
 
-//		m_mesh.wireframe = true;
-
 		createDisplayNormals();
 	}
 
@@ -68,7 +66,6 @@ public:
 			*dst = v.pos + v.normal * normalLength; dst++;
 		}
 	}
-
 
 	virtual void onDestroy() override {
 		PostQuitMessage(0);
@@ -161,19 +158,26 @@ public:
 	}
 
 	void example1(float uptime) {
+		m_mesh.wireframe = true;
+		m_mesh.draw();
+		drawDisplayNormals();
+	}
+
+	void example2(float uptime) {
 		{
-			bool directionalLight = true;
+			bool directionalLight = false;
+			bool isPointLight = true;
 
 			float globalAmbient[4] = {0.2f, 0.2f, 0.2f, 1};
 
-			float lightPos[4] = {0, 2, 0, directionalLight ? 0.0f : 1.0f};
+			float lightPos[4] = {0, 3, 0, directionalLight ? 0.0f : 1.0f};
 			float ambient[4]  = {0,0,0,1};
 			float diffuse[4]  = {1,1,1,1};
 			float specular[4] = {1,1,1,1};
 
-			float spotDir[3] = {0,0,1};
-			float spotExponent = 0;
-			float cutoff = 180;
+			float spotDir[3] = {0,0,-1};
+			float spotExponent = 5;
+			float spotCutoff = isPointLight ? 180.0f : 60.0f;
 
 			glPointSize(12);
 			Scoped_glColor color(1,0,0,1);
@@ -183,21 +187,22 @@ public:
 			glEnd();
 			glColor4f(1,1,1,1);
 
-//			Scoped_glPushMatrix pushMatrix;
-//			glRotatef(uptime * 180, 0, 1, 0);
+			Scoped_glPushMatrix pushMatrix;
+			glRotatef(uptime * 180, 0, 1, 0);
 
 			glLightfv(GL_LIGHT0, GL_POSITION, lightPos);
+
 			glLightfv(GL_LIGHT0, GL_AMBIENT,  ambient);
 			glLightfv(GL_LIGHT0, GL_DIFFUSE,  diffuse);
 			glLightfv(GL_LIGHT0, GL_SPECULAR, specular);
 
 			glLightfv(GL_LIGHT0, GL_SPOT_DIRECTION, spotDir);
 			glLightfv(GL_LIGHT0, GL_SPOT_EXPONENT, &spotExponent);
-			glLightfv(GL_LIGHT0, GL_SPOT_CUTOFF, &cutoff);
+			glLightfv(GL_LIGHT0, GL_SPOT_CUTOFF, &spotCutoff);
 
-//			glLightf(GL_LIGHT0, GL_CONSTANT_ATTENUATION,  1);
+//			glLightf(GL_LIGHT0, GL_CONSTANT_ATTENUATION,  0);
 //			glLightf(GL_LIGHT0, GL_LINEAR_ATTENUATION,    0);
-//			glLightf(GL_LIGHT0, GL_QUADRATIC_ATTENUATION, 0);
+//			glLightf(GL_LIGHT0, GL_QUADRATIC_ATTENUATION, 1);
 
 			glLightModelfv(GL_LIGHT_MODEL_AMBIENT, globalAmbient);
 		}
@@ -209,7 +214,7 @@ public:
 			float ambient[4]  = {0,0,1,1};
 			float diffuse[4]  = {0,1,0,1};
 			float specular[4] = {1,0,0,1};
-			float shininess = 20;
+			float shininess = 64;
 			float emission[4] = {0,0,0,0};
 
 			glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT,   ambient);
@@ -241,7 +246,6 @@ public:
 			}
 		}
 
-		//drawDisplayNormals();
 	}
 
 	virtual void onPaint() override {
@@ -268,7 +272,8 @@ public:
 		drawGrid();
 		drawOriginAxis();
 
-		example1(uptime);
+		//example1(uptime);
+		example2(uptime);
 
 		swapBuffers();
 	}
