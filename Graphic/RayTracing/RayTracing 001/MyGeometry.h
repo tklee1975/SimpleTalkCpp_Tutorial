@@ -22,12 +22,12 @@ public:
 	MyPlane() = default;
 
 	MyPlane(const MyVec3f& normal_, float distance_) 
-		: normal(normal_)
+		: normal(normal_.normalize())
 		, distance(distance_)
 	{}
 
 	MyPlane(const MyVec3f& normal_, const MyVec3f& point_)
-		: normal(normal_)
+		: normal(normal_.normalize())
 		, distance(normal_.dot(point_))
 	{}
 
@@ -39,4 +39,16 @@ public:
 
 	MyVec3f normal;
 	float distance;
+};
+
+class MySphere {
+public:
+	MySphere() = default;
+	MySphere(const MyVec3f& center_, float radius_) 
+		: center(center_)
+		, radius(radius_)
+	{}
+
+	MyVec3f center;
+	float radius;
 };

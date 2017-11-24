@@ -171,36 +171,35 @@ MyMatrix4f MyMatrix4f::operator*(const MyMatrix4f& r) const {
 	return o;	
 }
 
-MyVec3f MyMatrix4f::mulPoint(const MyVec3f& v) {
+MyVec3f MyMatrix4f::mulPoint(const MyVec3f& v) const {
 	// mul 4x3
 	return MyVec3f(	v.x * cx.x + v.y * cy.x + v.z * cz.x + cw.x,
-					v.y * cx.y + v.y * cy.y + v.z * cz.y + cw.y,
-					v.z * cx.z + v.y * cy.z + v.z * cz.z + cw.z);
+					v.x * cx.y + v.y * cy.y + v.z * cz.y + cw.y,
+					v.x * cx.z + v.y * cy.z + v.z * cz.z + cw.z);
 }
 
-MyVec4f MyMatrix4f::mulPoint(const MyVec4f& v)
-{
+MyVec4f MyMatrix4f::mulPoint(const MyVec4f& v) const {
 	// mul 4x4
-	return MyVec4f(	v.x * cx.x + v.y * cy.x + v.z * cz.x + cw.x,
-					v.y * cx.y + v.y * cy.y + v.z * cz.y + cw.y,
-					v.z * cx.z + v.y * cy.z + v.z * cz.z + cw.z,
-					v.w * cx.w + v.y * cy.w + v.z * cz.w + cw.w);
+	return MyVec4f(	v.x * cx.x + v.y * cy.x + v.z * cz.x + v.w * cw.x,
+					v.x * cx.y + v.y * cy.y + v.z * cz.y + v.w * cw.y,
+					v.x * cx.z + v.y * cy.z + v.z * cz.z + v.w * cw.z,
+					v.x * cx.w + v.y * cy.w + v.z * cz.w + v.w * cw.w);
 }
 
-MyVec3f MyMatrix4f::mulVector(const MyVec3f& v) {
+MyVec3f MyMatrix4f::mulVector(const MyVec3f& v) const {
 	// mul 3x3
 	return MyVec3f(	v.x * cx.x + v.y * cy.x + v.z * cz.x,
-					v.y * cx.y + v.y * cy.y + v.z * cz.y,
-					v.z * cx.z + v.y * cy.z + v.z * cz.z);
+					v.x * cx.y + v.y * cy.y + v.z * cz.y,
+					v.x * cx.z + v.y * cy.z + v.z * cz.z);
 }
 
-MyVec3f MyMatrix4f::mulNormal(const MyVec3f& v) {
+MyVec3f MyMatrix4f::mulNormal(const MyVec3f& v) const {
 	// mul inverse transpose
 
 	auto invM = inverse();
 	return MyVec3f(	v.x * cx.x + v.y * cx.y + v.z * cx.z,
-					v.y * cy.x + v.y * cy.y + v.z * cy.z,
-					v.z * cz.x + v.y * cz.y + v.z * cz.z);
+					v.x * cy.x + v.y * cy.y + v.z * cy.z,
+					v.x * cz.x + v.y * cz.y + v.z * cz.z);
 }
 
 MyRay3f MyMatrix4f::mul(const MyRay3f& ray) {

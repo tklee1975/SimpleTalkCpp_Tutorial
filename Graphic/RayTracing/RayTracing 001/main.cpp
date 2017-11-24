@@ -48,7 +48,7 @@ public:
 class MyDemoWindow : public MyOpenGLWindow {
 public:
 	virtual void onGLinit() override {
-		m_mesh.loadObjFile("models/test.obj");
+		m_mesh.loadObjFile("../models/sphere_smooth.obj");
 		createDisplayNormals();
 	}
 
@@ -114,15 +114,13 @@ public:
 
 		m_debugRay = ray;
 
-		MyTriangle tri(	MyVec3f( 0,0,1),
-						MyVec3f( 1,0,0),
-						MyVec3f(-1,0,0));
+		m_result.reset();
 
-		MyRay3f::HitResult result;
-		if (ray.raycast(result, tri, result.distance)) {
-			m_debugPoint = result.point;
-			std::cout << "debug Point " << m_debugPoint << "\n";
-		}
+		MyPlane plane(MyVec3f(0,1,0), 0.0f);
+		ray.raycast(m_result, plane, m_result.distance);
+
+		MySphere sphere(MyVec3f(0,0,0), 1.0f);
+		ray.raycast(m_result, sphere, m_result.distance);
 	}
 
 	void drawGrid() {
@@ -188,11 +186,15 @@ public:
 		m_mesh.draw();
 		//drawDisplayNormals();
 
-		{
+		if (m_result.hasResult) {
 			glPointSize(10);
 			glColor4f(1,0,0,1);
 			glBegin(GL_POINTS);
-				glVertex3fv(m_debugPoint.data);
+				glVertex3fv(m_result.point.data);
+			glEnd();
+			glBegin(GL_LINES);
+				glVertex3fv(m_result.point.data);
+				glVertex3fv((m_result.point + m_result.normal).data);
 			glEnd();
 		}
 		{
@@ -253,7 +255,8 @@ public:
 	std::vector<MyVec3f> m_displayNormals;
 
 	MyRayTracer m_rayTracer;
-	MyVec3f m_debugPoint;
+
+	MyRay3f::HitResult m_result;
 	MyRay3f m_debugRay;
 };
 

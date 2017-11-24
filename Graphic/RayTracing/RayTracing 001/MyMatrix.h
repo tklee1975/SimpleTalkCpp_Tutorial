@@ -39,11 +39,11 @@ public:
 
 	MyMatrix4f operator*(const MyMatrix4f& r) const;
 
-	MyVec4f mulPoint(const MyVec4f& v);
+	MyVec4f mulPoint(const MyVec4f& v) const;
 
-	MyVec3f mulPoint(const MyVec3f& v);
-	MyVec3f mulVector(const MyVec3f& v);
-	MyVec3f mulNormal(const MyVec3f& v);
+	MyVec3f mulPoint(const MyVec3f& v) const;
+	MyVec3f mulVector(const MyVec3f& v) const;
+	MyVec3f mulNormal(const MyVec3f& v) const;
 
 	MyRay3f mul(const MyRay3f& ray);
 };
