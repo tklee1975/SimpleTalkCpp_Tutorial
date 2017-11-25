@@ -1,6 +1,7 @@
 #include "precompiledHeader.h"
 #include "MyRay.h"
 #include "MyMatrix.h"
+#include "MyMesh.h"
 
 MyRay3f MyRay3f::unprojectFromInverseMatrix(const MyMatrix4f& invProj, const MyMatrix4f& invModelview, const MyVec2f& pointOnScreen, const MyVec2f& screenSize) {
 
@@ -30,10 +31,10 @@ bool MyRay3f::raycast(HitResult& outResult, const MySphere& sphere, float maxDis
 
 	float d2 = v.dot(v) - (t * t); // squared distance between closest point to sphere center
 	float r2 =  sphere.radius * sphere.radius;
-
+	 
 	if (d2 > r2)
 		return false;
-
+	 
 	auto q = std::sqrt(r2 - d2);
 
 	auto t0 = t + q;
@@ -48,8 +49,7 @@ bool MyRay3f::raycast(HitResult& outResult, const MySphere& sphere, float maxDis
 	}
 	
 	if (t1 >= 0 && t1 < maxDistance) {
-		if (!hasResult || t1 < dis)
-		{
+		if (!hasResult || t1 < dis) {
 			dis = t1;
 			hasResult = true;
 		}
@@ -62,7 +62,7 @@ bool MyRay3f::raycast(HitResult& outResult, const MySphere& sphere, float maxDis
 	auto pt = origin + direction * dis;
 
 	outResult.point = pt;
-	outResult.normal = pt - sphere.center;
+	outResult.normal = (pt - sphere.center).normalize();
 	outResult.distance = dis;
 	outResult.hasResult = true;
 	return true;
@@ -70,7 +70,7 @@ bool MyRay3f::raycast(HitResult& outResult, const MySphere& sphere, float maxDis
 
 bool MyRay3f::raycast(HitResult& outResult, const MyPlane& plane, float maxDistance) {
 	auto s = direction.dot(plane.normal);
-	
+
 	if (my_math_eq(s,0))
 		return false; // parallel to the plane
 
@@ -107,6 +107,28 @@ bool MyRay3f::raycast(HitResult& outResult, const MyTriangle& tri, float maxDist
 	if (e0.cross(t0).dot(plane.normal) < 0) return false;
 	if (e1.cross(t1).dot(plane.normal) < 0) return false;
 	if (e2.cross(t2).dot(plane.normal) < 0) return false;
+
+	outResult = r;
+	return true;
+}
+
+bool MyRay3f::raycast(HitResult& outResult, const MyMesh& mesh, float maxDistance) {
+	auto triCount = mesh.indices.size() / 3;
+	
+	auto* indices = mesh.indices.data();
+
+	HitResult r;
+
+	MyTriangle tri;
+	for (size_t i = 0; i < triCount; i++) {
+		tri.v0 = mesh.vertices[*indices].pos; indices++;
+		tri.v1 = mesh.vertices[*indices].pos; indices++;
+		tri.v2 = mesh.vertices[*indices].pos; indices++;
+		raycast(r, tri, r.distance);
+	}
+
+	if (!r.hasResult)
+		return false;
 
 	outResult = r;
 	return true;

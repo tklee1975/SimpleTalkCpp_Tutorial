@@ -4,6 +4,7 @@
 #include "MyGeometry.h"
 
 class MyMatrix4f;
+class MyMesh;
 
 class MyRay3f {
 public:
@@ -21,7 +22,7 @@ public:
 		}
 
 		void reset() {
-			distance = std::numeric_limits<float>::max();
+			distance = std::numeric_limits<float>::infinity();
 			hasResult = false;
 		}
 
@@ -31,9 +32,11 @@ public:
 		bool	hasResult;
 	};
 
-	bool raycast(HitResult& outResult, const MySphere&   sphere, float maxDistance);
 	bool raycast(HitResult& outResult, const MyPlane&    plane,  float maxDistance);
+
+	bool raycast(HitResult& outResult, const MySphere&   sphere, float maxDistance);
 	bool raycast(HitResult& outResult, const MyTriangle& tri,    float maxDistance);
+	bool raycast(HitResult& outResult, const MyMesh&     mesh,   float maxDistance);
 
 	static MyRay3f unprojectFromInverseMatrix(const MyMatrix4f& invProj, const MyMatrix4f& invModelview, const MyVec2f& pointOnScreen, const MyVec2f& screenSize);
 

@@ -6,7 +6,9 @@
 class MyDemoWindow : public MyOpenGLWindow {
 public:
 	virtual void onGLinit() override {
-		m_mesh.loadObjFile("../models/sphere_smooth.obj");
+		m_mesh.loadObjFile("../models/test.obj");
+//		m_mesh.loadObjFile("../models/sphere_smooth.obj");
+		m_mesh.wireframe = true;
 
 		m_debugTriangle.v0.set(1,1,1);
 		m_debugTriangle.v1.set(2,2,1);
@@ -64,13 +66,15 @@ public:
 		m_debugRay = ray;
 
 		m_result.reset();
-		MyPlane plane(MyVec3f(0,1,0), 0.0f);
+
+		MyPlane plane(MyVec3f(0,1,0), 0.5f);
 		ray.raycast(m_result, plane, m_result.distance);
 
-		MySphere sphere(MyVec3f(0,0,0), 1.0f);
-		ray.raycast(m_result, sphere, m_result.distance);
+//		MySphere sphere(MyVec3f(0,0,0), 1.0f);
+//		ray.raycast(m_result, sphere, m_result.distance);
 
 		ray.raycast(m_result, m_debugTriangle, m_result.distance);
+		ray.raycast(m_result, m_mesh, m_result.distance);
 	}
 
 	void drawGrid() {
@@ -119,13 +123,10 @@ public:
 
 	void example1(float uptime) {
 		glPointSize(10);
-
-		m_mesh.wireframe = true;
-		m_mesh.draw();
-
-		drawDebugTriangle();
-
 		drawDebugRay();
+
+		m_mesh.draw();
+		drawDebugTriangle();
 		drawRaycastResult();
 	}
 
@@ -203,7 +204,7 @@ public:
 	MyHiResTimer m_uptime;
 	float m_cameraX = 30;
 	float m_cameraY = 30;
-	float m_cameraDistance = 4.0f;
+	float m_cameraDistance = 6.0f;
 
 	float m_fovy = 60;
 
