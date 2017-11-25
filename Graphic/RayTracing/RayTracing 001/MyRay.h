@@ -1,7 +1,6 @@
 #pragma once
 
 #include "MyVec.h"
-#include "MyGeometry.h"
 
 class MyMatrix4f;
 
@@ -11,7 +10,7 @@ public:
 
 	MyRay3f(const MyVec3f& origin_, const MyVec3f& direction_) 
 		: origin(origin_)
-		, direction(direction_.normalize())
+		, direction(direction_)
 	{}
 
 	class HitResult {
@@ -31,12 +30,7 @@ public:
 		bool	hasResult;
 	};
 
-	bool raycast(HitResult& outResult, const MySphere&   sphere, float maxDistance);
-	bool raycast(HitResult& outResult, const MyPlane&    plane,  float maxDistance);
-	bool raycast(HitResult& outResult, const MyTriangle& tri,    float maxDistance);
-
 	static MyRay3f unprojectFromInverseMatrix(const MyMatrix4f& invProj, const MyMatrix4f& invModelview, const MyVec2f& pointOnScreen, const MyVec2f& screenSize);
-
 
 	MyVec3f origin;
 	MyVec3f direction;

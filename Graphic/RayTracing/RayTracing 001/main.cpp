@@ -3,66 +3,10 @@
 #include "MyMesh.h"
 #include "MyRayTracer.h"
 
-void checkGLError() {
-	auto e = glGetError();
-	if (e != GL_NO_ERROR) {
-		printf("glGetError %d\n", e);
-	}	
-}
-
-class Scoped_glEnable {
-public:
-	Scoped_glEnable(GLenum v) {
-		m_v = v;
-		glEnable(m_v);
-	}
-
-	~Scoped_glEnable() {
-		glDisable(m_v);
-	}
-
-private:
-	GLenum m_v;
-};
-
-class Scoped_glColor {
-public:
-	Scoped_glColor(float r, float g, float b, float a) {
-		glColor4f(r,g,b,a);
-	}
-	~Scoped_glColor() {
-		glColor4f(1,1,1,1);
-	}
-};
-
-class Scoped_glPushMatrix {
-public:
-	Scoped_glPushMatrix() {
-		glPushMatrix();
-	}
-	~Scoped_glPushMatrix() {
-		glPopMatrix();
-	}
-};
-
 class MyDemoWindow : public MyOpenGLWindow {
 public:
 	virtual void onGLinit() override {
 		m_mesh.loadObjFile("../models/sphere_smooth.obj");
-		createDisplayNormals();
-	}
-
-	void createDisplayNormals() {
-		float normalLength = 0.2f;
-
-		auto n = m_mesh.vertices.size();
-		m_displayNormals.resize(n * 2);
-		auto* dst = m_displayNormals.data();
-		int i = 0;
-		for (auto& v : m_mesh.vertices) {
-			*dst = v.pos; dst++;
-			*dst = v.pos + v.normal * normalLength; dst++;
-		}
 	}
 
 	virtual void onDestroy() override {
@@ -86,6 +30,7 @@ public:
 					m_fovy += dx * 0.025f;
 				}
 			}break;
+
 			case MouseEventType::MouseWheel: {
 				m_cameraDistance += ev.zDelta * 0.01f;
 				if (m_cameraDistance < 0.01f)
@@ -113,14 +58,6 @@ public:
 		auto ray = m_rayTracer.getRay(x, y);
 
 		m_debugRay = ray;
-
-		m_result.reset();
-
-		MyPlane plane(MyVec3f(0,1,0), 0.0f);
-		ray.raycast(m_result, plane, m_result.distance);
-
-		MySphere sphere(MyVec3f(0,0,0), 1.0f);
-		ray.raycast(m_result, sphere, m_result.distance);
 	}
 
 	void drawGrid() {
@@ -167,47 +104,25 @@ public:
 		glRotatef(m_cameraY, 0,1,0);
 	}
 
-	void drawDisplayNormals() {
-		if (!m_displayNormals.size())
-			return;
-
-		Scoped_glColor color(1,1,0,1);
-
-		glEnableClientState(GL_VERTEX_ARRAY);
-		glVertexPointer(3, GL_FLOAT, 0, m_displayNormals[0].data);
-
-		glDrawArrays(GL_LINES, 0, m_displayNormals.size());
-
-		glDisableClientState(GL_VERTEX_ARRAY);
-	}
-
 	void example1(float uptime) {
+		glPointSize(10);
+
 		m_mesh.wireframe = true;
 		m_mesh.draw();
-		//drawDisplayNormals();
 
-		if (m_result.hasResult) {
-			glPointSize(10);
-			glColor4f(1,0,0,1);
-			glBegin(GL_POINTS);
-				glVertex3fv(m_result.point.data);
-			glEnd();
-			glBegin(GL_LINES);
-				glVertex3fv(m_result.point.data);
-				glVertex3fv((m_result.point + m_result.normal).data);
-			glEnd();
-		}
-		{
-			glColor4f(1,0,1,1);
-			glBegin(GL_POINTS);
-				glVertex3fv(m_debugRay.origin.data);
-			glEnd();
-			glBegin(GL_LINES);
-				glVertex3fv(m_debugRay.origin.data);
-				auto v = m_debugRay.origin + m_debugRay.direction;
-				glVertex3fv(v.data);
-			glEnd();
-		}
+		drawDebugRay();
+	}
+
+	void drawDebugRay() {
+		glColor4f(1,0,1,1);
+		glBegin(GL_POINTS);
+			glVertex3fv(m_debugRay.origin.data);
+		glEnd();
+		glBegin(GL_LINES);
+			glVertex3fv(m_debugRay.origin.data);
+			auto v = m_debugRay.origin + m_debugRay.direction;
+			glVertex3fv(v.data);
+		glEnd();
 	}
 
 	virtual void onPaint() override {
@@ -252,8 +167,6 @@ public:
 
 	MyMesh m_mesh;
 
-	std::vector<MyVec3f> m_displayNormals;
-
 	MyRayTracer m_rayTracer;
 
 	MyRay3f::HitResult m_result;
@@ -266,24 +179,10 @@ int main() {
 
     MSG msg;
 
-#if 0 // using PeekMessage
-	for(;;) {
-		if (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE)) {
-			if (msg.message == WM_QUIT)
-				break;
-
-			TranslateMessage(&msg);  
-			DispatchMessage(&msg);  
-		}else{
-			w.onPaint();
-		}
-	}
-#else
 	while(GetMessage(&msg, nullptr, 0, 0)) {
 		TranslateMessage(&msg);  
 		DispatchMessage(&msg);  
 	}	
-#endif
 
 	return msg.wParam;
 }
