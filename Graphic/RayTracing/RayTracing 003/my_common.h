@@ -196,7 +196,7 @@ inline
 int32_t my_next_pow2(int32_t v) { 
 	if (v <= 0)
 		return 0; 
-	v--; 
+	v--;
 	v|=v>>1; 
 	v|=v>>2; 
 	v|=v>>4; 

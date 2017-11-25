@@ -3,7 +3,7 @@
 #include "MyMesh.h"
 
 MyRayTracer::MyRayTracer() {
-	m_lightPos.set(-1.5f,2,1);
+	m_lightPos.set(-1.5f, 2, 1);
 }
 
 void MyRayTracer::init(int canvasWidth, int canvasHeight, const MyMatrix4f& projMatrix, const MyMatrix4f& modelview) {
@@ -17,7 +17,6 @@ void MyRayTracer::init(int canvasWidth, int canvasHeight, const MyMatrix4f& proj
 	m_canvasHeight = canvasHeight;
 
 	m_pixels.resize(m_canvasWidth * m_canvasHeight);
-	memset(m_pixels.data(), 0, sizeof(m_pixels[0]) * m_pixels.size());
 }
 
 MyRay3f MyRayTracer::getRay(float x, float y) {
@@ -36,6 +35,7 @@ void MyRayTracer::render(const MyMesh& mesh) {
 
 		for (int x = 0; x < m_canvasWidth; x++) {
 			auto ray = getRay(x + 0.5f, y + 0.5f);
+
 			hit.reset();
 
 //			MySphere sphere(MyVec3f(0,0,0), 1);
@@ -51,9 +51,10 @@ void MyRayTracer::render(const MyMesh& mesh) {
 
 				color = onPixelShading(hit);
 				if (shadowRay.raycast(shadowHit, mesh, shadowHit.distance)) {
-					color.r *= 0.5f;
-					color.g *= 0.5f;
-					color.b *= 0.5f;
+					float s = 0.25f;
+					color.r *= s;
+					color.g *= s;
+					color.b *= s;
 				}
 			}
 
@@ -64,8 +65,6 @@ void MyRayTracer::render(const MyMesh& mesh) {
 }
 
 MyColor4f MyRayTracer::onPixelShading(const MyRay3f::HitResult& hit) {
-	// return MyColor4f(1,0,0,1);
-
 	auto lightDir = (m_lightPos - hit.point).normalize();
 	auto c = hit.normal.dot(lightDir);
 	return MyColor4f(c,c,c,1);

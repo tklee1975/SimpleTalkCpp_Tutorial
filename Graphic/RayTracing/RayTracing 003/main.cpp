@@ -10,10 +10,6 @@ public:
 		m_mesh.loadObjFile("../models/test.obj");
 //		m_mesh.loadObjFile("../models/test2.obj");
 		m_mesh.wireframe = true;
-
-		m_debugTriangle.v0.set(1,1,1);
-		m_debugTriangle.v1.set(2,2,1);
-		m_debugTriangle.v2.set(1,2,0);
 	}
 
 	virtual void onDestroy() override {
@@ -82,7 +78,6 @@ public:
 		MySphere sphere(MyVec3f(0,0,0), 1);
 		ray.raycast(m_result, sphere, m_result.distance);
 
-		ray.raycast(m_result, m_debugTriangle, m_result.distance);
 		ray.raycast(m_result, m_mesh, m_result.distance);
 
 		m_rayTracer.render(m_mesh);
@@ -148,9 +143,7 @@ public:
 		m_mesh.draw();
 		m_mesh.aabb.draw();
 
-		m_debugTriangle.draw();
 		drawRaycastResult();
-
 		drawTextureOnScreen();
 	}
 
@@ -165,13 +158,12 @@ public:
 		glPushMatrix();
 		glLoadIdentity();
 
-		Scoped_glDisable disableDepthTest(GL_DEPTH_TEST);
-
 		glMatrixMode(GL_MODELVIEW);
+		glPushMatrix();
+		glLoadIdentity();
 	
+		Scoped_glDisable disableDepthTest(GL_DEPTH_TEST);
 		{
-			Scoped_glPushMatrix pushMatrix;
-			glLoadIdentity();
 
 			float tw = cw / m_tex.width();
 			float th = ch / m_tex.height();
@@ -185,7 +177,9 @@ public:
 			m_tex.unbind();
 		}
 
+		glPopMatrix();
 		glMatrixMode(GL_PROJECTION);
+
 		glPopMatrix();
 		glMatrixMode(GL_MODELVIEW);
 	}
@@ -259,8 +253,6 @@ public:
 
 	MyRay3f::HitResult m_result;
 	MyRay3f m_debugRay;
-	MyTriangle m_debugTriangle;
-
 	MyTexture2D m_tex;
 };
 

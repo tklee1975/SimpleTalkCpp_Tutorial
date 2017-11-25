@@ -32,7 +32,7 @@ void MyOpenGLWindow::create() {
 		wndClassName(),
 		L"My OpenGL Window",
 		WS_OVERLAPPEDWINDOW,
-		CW_USEDEFAULT, CW_USEDEFAULT, 1024, 768,
+		CW_USEDEFAULT, CW_USEDEFAULT, 1280, 768,
 		nullptr, nullptr, hInstance, 
 		this); //!! <----- pass this to WM_CREATE
 

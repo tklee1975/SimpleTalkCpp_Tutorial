@@ -91,9 +91,10 @@ public:
 		if (empty()) {
 			minPt = pt;
 			maxPt = pt;
+		}else{
+			minPt = minPt.min(pt);
+			maxPt = maxPt.max(pt);
 		}
-		minPt = minPt.min(pt);
-		maxPt = maxPt.max(pt);
 	}
 
 	bool empty() const { return minPt.x > maxPt.x; }
@@ -148,9 +149,7 @@ public:
 
 		glEnableClientState(GL_VERTEX_ARRAY);
 		glVertexPointer(3, GL_FLOAT, 0, v[0].data);
-
 		glDrawElements(GL_LINES, 24, GL_UNSIGNED_SHORT, indices);
-
 		glDisableClientState(GL_VERTEX_ARRAY);
 
 	}
