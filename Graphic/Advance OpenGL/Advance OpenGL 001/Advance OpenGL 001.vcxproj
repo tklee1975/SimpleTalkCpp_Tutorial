@@ -151,6 +151,7 @@
     <ClInclude Include="MyMatrix.h" />
     <ClInclude Include="MyMesh.h" />
     <ClInclude Include="MyOpenGLWindow.h" />
+    <ClInclude Include="MyShader.h" />
     <ClInclude Include="MyTexture2D.h" />
     <ClInclude Include="MyVec.h" />
     <ClInclude Include="MyVertex.h" />
@@ -168,6 +169,7 @@
     <ClCompile Include="MyMatrix.cpp" />
     <ClCompile Include="MyMesh.cpp" />
     <ClCompile Include="MyOpenGLWindow.cpp" />
+    <ClCompile Include="MyShader.cpp" />
     <ClCompile Include="MyTexture2D.cpp" />
     <ClCompile Include="precompiledHeader.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

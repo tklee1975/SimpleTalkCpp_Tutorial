@@ -2,6 +2,7 @@
 #include "MyOpenGLWindow.h"
 #include "MyMesh.h"
 #include "MyTexture2D.h"
+#include "MyShader.h"
 
 class MyDemoWindow : public MyOpenGLWindow {
 public:
@@ -9,6 +10,8 @@ public:
 		m_mesh.loadObjFile("../models/test.obj");
 //		m_mesh.loadObjFile("../models/test2.obj");
 		m_mesh.wireframe = true;
+
+		m_shader.loadFile("../shaders/test001");
 	}
 
 	virtual void onDestroy() override {
@@ -37,6 +40,10 @@ public:
 				m_cameraDistance += ev.zDelta * 0.01f;
 				if (m_cameraDistance < 0.01f)
 					m_cameraDistance = 0.01f;
+			}break;
+
+			case MouseEventType::MButtonDown: {
+				m_shader.reload();
 			}break;
 		}
 
@@ -87,7 +94,20 @@ public:
 	}
 
 	void example1(float uptime) {
+		m_shader.bind();
+
+		MyMatrix4f proj, modelview;
+
+		glGetFloatv(GL_PROJECTION_MATRIX, proj.data);
+		glGetFloatv(GL_MODELVIEW_MATRIX,  modelview.data);
+
+		auto matMVP = proj * modelview;
+
+		m_shader.setUniform("matMVP", matMVP);
+
 		m_mesh.draw();
+
+		m_shader.unbind();
 	}
 
 	virtual void onPaint() override {
@@ -133,6 +153,7 @@ public:
 	float m_mouseLastPosY;
 
 	MyMesh m_mesh;
+	MyShader m_shader;
 };
 
 int main() {
