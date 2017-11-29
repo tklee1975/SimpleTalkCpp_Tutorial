@@ -186,7 +186,7 @@ void MyOpenGLWindow::destroy() {
 
 void MyOpenGLWindow::makeCurrent() {
 	if (m_rc)
-		wglMakeCurrent(m_dc, m_rc);
+		wglMakeContextCurrentARB(m_dc, m_dc, m_rc);
 }
 
 void MyOpenGLWindow::swapBuffers() {
