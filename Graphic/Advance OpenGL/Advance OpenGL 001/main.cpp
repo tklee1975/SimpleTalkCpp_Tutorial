@@ -8,7 +8,6 @@ class MyDemoWindow : public MyOpenGLWindow {
 public:
 	virtual void onGLinit() override {
 		m_mesh.loadObjFile("../models/test.obj");
-//		m_mesh.loadObjFile("../models/test2.obj");
 		m_mesh.wireframe = true;
 
 		m_shader.loadFile("../shaders/test001");
@@ -102,7 +101,6 @@ public:
 		glGetFloatv(GL_MODELVIEW_MATRIX,  modelview.data);
 
 		auto matMVP = proj * modelview;
-
 		m_shader.setUniform("matMVP", matMVP);
 
 		m_mesh.draw();

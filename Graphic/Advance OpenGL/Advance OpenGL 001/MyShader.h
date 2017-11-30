@@ -18,6 +18,7 @@ public:
 	void setUniform(const char* name, const MyVec3f& value);
 	void setUniform(const char* name, const MyVec4f& value);
 	void setUniform(const char* name, const MyMatrix4f& value);
+	void setUniformCg(const char* name, const MyMatrix4f& value);
 
 	void reload();
 

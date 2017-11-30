@@ -28,14 +28,10 @@ void MyShader::unbind() {
 
 GLint MyShader::getUniformLoc(const char* name) {
 	auto loc = glGetUniformLocation(m_program, name);
-	if (loc < 0)
-		throw MyError("cannot find shader uniform variable");
+	if (loc < 0) {
+		printf("cannot find shader uniform variable %s\n", name);
+	}
 	return loc;
-}
-
-void MyShader::setUniform(const char* name, const MyMatrix4f& value) {
-	auto loc = getUniformLoc(name);
-	glUniformMatrix4fv(loc, 1, false, value.data);
 }
 
 void MyShader::setUniform(const char* name, float value) {
@@ -56,6 +52,16 @@ void MyShader::setUniform(const char* name, const MyVec3f& value) {
 void MyShader::setUniform(const char* name, const MyVec4f& value) {
 	auto loc = getUniformLoc(name);
 	glUniform4fv(loc, 1, value.data);
+}
+
+void MyShader::setUniform(const char* name, const MyMatrix4f& value) {
+	auto loc = getUniformLoc(name);
+	glUniformMatrix4fv(loc, 1, false, value.data);
+}
+
+void MyShader::setUniformCg(const char* name, const MyMatrix4f& value) {
+	auto loc = getUniformLoc(name);
+	glUniform4fv(loc, 4, value.data);
 }
 
 void MyShader::reload() {
