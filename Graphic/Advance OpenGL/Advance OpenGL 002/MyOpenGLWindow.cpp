@@ -146,7 +146,7 @@ void MyOpenGLWindow::create() {
 		WGL_CONTEXT_MAJOR_VERSION_ARB, 3,
 		WGL_CONTEXT_MINOR_VERSION_ARB, 3,
 
-	#if 0 // disable deprecated function, such as glBegin, glColor, glLoadMatrix
+	#if 0 // disable deprecated function, such as glBegin, glColor, glLoadMatrix, glPushMatrix
 		WGL_CONTEXT_PROFILE_MASK_ARB, WGL_CONTEXT_CORE_PROFILE_BIT_ARB,
 	#else
 		WGL_CONTEXT_PROFILE_MASK_ARB, WGL_CONTEXT_COMPATIBILITY_PROFILE_BIT_ARB,

@@ -10,7 +10,7 @@ public:
 		m_gridMesh.createGrid(20, 20, 1, MyColor4b(128, 128, 128, 255));
 		m_orignMesh.createOrigin();
 
-		m_mesh.loadObjFile("../models/test.obj");
+		m_mesh.loadObjFile("../models/test2.obj");
 		//m_mesh.wireframe = true;
 
 		m_simpleColorShader.loadFile(   "../shaders/simpleColor");
@@ -56,31 +56,31 @@ public:
 	}
 
 	void drawGrid() {
-		glColor4f(0.5f, 0.5f, 0.5f, 1);
-		glLineWidth(1);
-		glBegin(GL_LINES);
-			for (float x = -10; x <= 10; x++) {
-				glVertex3f( x, 0,-10);
-				glVertex3f( x, 0, 10);
-			}
-
-			for (float z = -10; z <= 10; z++) {
-				glVertex3f(-10, 0, z);
-				glVertex3f( 10, 0, z);
-			}
-		glEnd();
-		glColor4f(1,1,1,1);
+//		glColor4f(0.5f, 0.5f, 0.5f, 1);
+//		glLineWidth(1);
+//		glBegin(GL_LINES);
+//			for (float x = -10; x <= 10; x++) {
+//				glVertex3f( x, 0,-10);
+//				glVertex3f( x, 0, 10);
+//			}
+//
+//			for (float z = -10; z <= 10; z++) {
+//				glVertex3f(-10, 0, z);
+//				glVertex3f( 10, 0, z);
+//			}
+//		glEnd();
+//		glColor4f(1,1,1,1);
 	}
 
 	void drawOriginAxis() {
-		glLineWidth(2);
-		glBegin(GL_LINES);
-			glColor4f(1,0,0,1); glVertex3f(0,0,0); glVertex3f(1,0,0);
-			glColor4f(0,1,0,1); glVertex3f(0,0,0); glVertex3f(0,1,0);
-			glColor4f(0,0,1,1); glVertex3f(0,0,0); glVertex3f(0,0,1);
-		glEnd();
-		glColor4f(1,1,1,1);
-		glLineWidth(1);
+//		glLineWidth(2);
+//		glBegin(GL_LINES);
+//			glColor4f(1,0,0,1); glVertex3f(0,0,0); glVertex3f(1,0,0);
+//			glColor4f(0,1,0,1); glVertex3f(0,0,0); glVertex3f(0,1,0);
+//			glColor4f(0,0,1,1); glVertex3f(0,0,0); glVertex3f(0,0,1);
+//		glEnd();
+//		glColor4f(1,1,1,1);
+//		glLineWidth(1);
 	}
 
 	void initCamera() {
@@ -89,7 +89,7 @@ public:
 //		glMatrixMode(GL_PROJECTION);
 //			glLoadIdentity();
 //			gluPerspective(m_fovy, aspect, 0.01, 1000.0);
-		m_matProj.setPerspective(my_rad_to_deg(m_fovy), aspect, 0.01f, 1000.0f);
+		m_matProj.setPerspective(my_deg_to_rad(m_fovy), aspect, 0.01f, 1000.0f);
 
 //		glMatrixMode(GL_MODELVIEW);
 //		glLoadIdentity();
@@ -99,8 +99,8 @@ public:
 //		glRotatef(m_cameraY, 0,1,0);
 
 		m_matModelview.setTranslate(0, 0, -m_cameraDistance);
-		m_matModelview.rotateX(my_rad_to_deg(m_cameraX));
-		m_matModelview.rotateY(my_rad_to_deg(m_cameraY));	
+		m_matModelview.rotateX(my_deg_to_rad(m_cameraX));
+		m_matModelview.rotateY(my_deg_to_rad(m_cameraY));
 	}
 
 	void example1(float uptime) {
@@ -123,7 +123,7 @@ public:
 
 		{
 			m_simpleLightingShader.bind();
-			m_simpleLightingShader.setUniform("matMV", m_matModelview);
+			m_simpleLightingShader.setUniform("uptime", uptime);
 			m_simpleLightingShader.setUniform("matMVP", matMVP);
 			m_simpleLightingShader.setUniform("lightPos", MyVec3f(1, 2, 2));
 

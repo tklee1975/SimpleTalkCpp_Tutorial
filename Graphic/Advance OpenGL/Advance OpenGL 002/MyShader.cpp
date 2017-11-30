@@ -246,6 +246,7 @@ void MyShader::draw(const MyMesh& mesh) {
 
 	m_vertexArray.create();
 	m_vertexArray.bind();
+
 	mesh.vertexBuffer.bind();
 	mesh.indexBuffer.bind();
 

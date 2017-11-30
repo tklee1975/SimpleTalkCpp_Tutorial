@@ -229,7 +229,7 @@ void my_sincos(float rad, float& outSin, float& outCos) {
 }
 
 inline
-float my_rad_to_deg(float v) {
+float my_deg_to_rad(float v) {
 	return v * (my_PI / 180.0f);
 }
 
@@ -294,6 +294,6 @@ public:
 template< typename Obj, typename Member >
 inline intptr_t my_offsetof(Member Obj::*ptrToMember) {
 	auto* c = reinterpret_cast<Obj*>(0);
-	auto* m = &(c->*ptrToMember );
+	auto* m = &(c->*ptrToMember);
 	return reinterpret_cast<intptr_t>(m);
 }

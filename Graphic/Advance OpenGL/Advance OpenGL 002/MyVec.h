@@ -122,10 +122,10 @@ std::ostream& operator << (std::ostream& s, const MyVec3f& v) {
 }
 
 inline
-MyVec3f my_rad_to_deg(const MyVec3f& v) {
-	return MyVec3f(	my_rad_to_deg(v.x),
-					my_rad_to_deg(v.y),
-					my_rad_to_deg(v.z));
+MyVec3f my_deg_to_rad(const MyVec3f& v) {
+	return MyVec3f(	my_deg_to_rad(v.x),
+					my_deg_to_rad(v.y),
+					my_deg_to_rad(v.z));
 }
 
 class MyVec4f {
