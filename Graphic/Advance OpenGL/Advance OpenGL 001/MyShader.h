@@ -35,5 +35,6 @@ private:
 	GLuint m_program = 0;
 	GLuint m_vertexShader = 0;
 	GLuint m_pixelShader = 0;
+
 	std::string m_filename;
 };

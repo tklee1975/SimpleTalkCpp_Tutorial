@@ -41,7 +41,7 @@ public:
 					m_cameraDistance = 0.01f;
 			}break;
 
-			case MouseEventType::MButtonDown: {
+			case MouseEventType::LButtonDown: {
 				m_shader.reload();
 			}break;
 		}
