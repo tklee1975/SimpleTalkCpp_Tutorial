@@ -10,10 +10,9 @@
 
 		Pass
 		{
-			Cull Off
-			
-			ZWrite Off
+			Cull Off			
 			ZTest Always
+			Offset -1, 0.01
 
 		//---------------
 			CGPROGRAM

@@ -55,23 +55,22 @@
 
 			float4 getLayer(float2 uv, float t) 
 			{
-				float4 f = tex2D(flowMap, uv);
-				f = f * 2 - 1;
+				float4 f = tex2D(flowMap, uv) * 2 - 1;
 				return tex2D(testTex, uv - f.xy * t * flowIntensity);
 			}
 
 			float4 ps_main (v2f i) : SV_Target {
-
 				float t = _Time.y / duration;
 				float t0 =  t    % 2;
 				float t1 = (t+1) % 2;
+
 				float w  = abs(t % 2 - 1);
 
 				float4 c0 = getLayer(i.uv, t0);
 				float4 c1 = getLayer(i.uv, t1);
 
-				//c0 = float4(1,0,0,1);
-				//c1 = float4(0,0,1,1);
+//				c0 = float4(1,0,0,1);
+//				c1 = float4(0,0,1,1);
 
 				return lerp(c0, c1, w);
 			}

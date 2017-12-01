@@ -151,4 +151,4 @@ Material:
       second: {r: 0, g: 0, b: 0, a: 1}
     - first:
         name: testColor
-      second: {r: 0.36551714, g: 0, b: 1, a: 1}
+      second: {r: 0.297, g: 0.253, b: 1, a: 1}

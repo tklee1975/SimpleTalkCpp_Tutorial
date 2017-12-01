@@ -30,7 +30,7 @@ Material:
     m_Floats:
     - first:
         name: flowIntensity
-      second: 0.0181
+      second: 0.0549
     m_Colors:
     - first:
         name: testColor

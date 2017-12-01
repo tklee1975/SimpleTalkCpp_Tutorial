@@ -12,7 +12,7 @@
 		Pass
 		{
 			Cull Off
-			//ZWrite Off
+			ZWrite Off
 			//ZTest Always
 
 			Blend SrcAlpha OneMinusSrcAlpha, SrcAlpha OneMinusSrcAlpha
@@ -53,6 +53,9 @@
 
 			float4 ps_main (v2f i) : SV_Target
 			{
+				if (testColor.a < 0.1)
+					discard;
+
 				return testColor;
 			}
 			ENDCG

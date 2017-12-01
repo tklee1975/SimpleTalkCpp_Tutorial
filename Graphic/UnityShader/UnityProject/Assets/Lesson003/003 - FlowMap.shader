@@ -51,10 +51,8 @@
 			float flowIntensity;
 
 			float4 ps_main (v2f i) : SV_Target {
-				float4 f = tex2D(flowMap, i.uv);
-				f = f * 2 - 1;
-
-				float4 t = tex2D(testTex, i.uv + float2(f.xy) * flowIntensity + float2(0, _Time.y * 0.1));
+				float4 f = tex2D(flowMap, i.uv) * 2 + 1;
+				float4 t = tex2D(testTex, i.uv + f.xy * flowIntensity + float2(0, _Time.y * 0.1));
 				return t;
 			}
 			ENDCG
