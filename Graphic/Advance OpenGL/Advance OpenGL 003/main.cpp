@@ -53,6 +53,7 @@ public:
 			case MouseEventType::LButtonDown: {
 				m_simpleColorShader.reload();
 				m_simpleLightingShader.reload();
+				m_simpleTextureShader.reload();
 			}break;
 		}
 
@@ -87,6 +88,9 @@ public:
 		{
 			auto& s = m_simpleTextureShader;
 			s.bind();
+
+//			s.dumpActiveAttrib();
+
 			s.setUniform("uptime", uptime);
 			s.setUniform("matMVP", matMVP);
 			s.setUniform("sampler0", m_tex0);

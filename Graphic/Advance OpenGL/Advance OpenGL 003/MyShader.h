@@ -80,8 +80,8 @@ private:
 	int m_boundTexCount = 0;
 
 	struct TextureUnit {
-		MySampler		sampler;
-		MyTexture2D*	tex = nullptr;
+		MySampler sampler;
+		const MyTexture2D*	tex = nullptr;
 	};
 	TextureUnit m_texUnits[kMaxSamplers];
 

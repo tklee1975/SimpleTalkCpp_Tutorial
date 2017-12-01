@@ -14,6 +14,8 @@ uniform float uptime;
 void main() {	
 	vec4 texColor0 = texture(sampler0, p_uv);
 	vec4 texColor1 = texture(sampler1, p_uv + vec2(uptime * 0.2,0));
+//	vec4 texColor1 = texture(sampler1, p_uv + vec2(texColor0.r + uptime));
 
-	outColor = p_color * texColor0 * texColor1;	
+	vec4 t = texColor0 * texColor1;
+	outColor = p_color * t;
 }

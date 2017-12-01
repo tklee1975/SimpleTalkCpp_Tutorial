@@ -85,13 +85,14 @@ void MyShader::setUniform(const char* name, const MyTexture2D& tex) {
 
 	auto loc = getUniformLoc(name);
 	glUniform1i(loc, m_boundTexCount);
+
 	glActiveTexture(GL_TEXTURE0 + m_boundTexCount);	
+	tex.bind();
 
 	auto& t = m_texUnits[m_boundTexCount];
 	t.sampler.create();
 	t.sampler.bind(m_boundTexCount);
-
-	tex.bind();
+	t.tex = &tex;
 
 	m_boundTexCount++;
 }
