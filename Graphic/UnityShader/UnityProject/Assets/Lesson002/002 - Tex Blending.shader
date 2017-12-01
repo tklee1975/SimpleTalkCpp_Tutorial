@@ -1,4 +1,4 @@
-﻿Shader "MyShader/002 - Tex Effects"
+﻿Shader "MyShader/002 - Tex Blending"
 {
 	Properties {
 		testFloat("testFloat", range(0, 0.1)) = 0

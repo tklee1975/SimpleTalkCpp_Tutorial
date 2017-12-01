@@ -1,4 +1,4 @@
-﻿Shader "MyShader/002"
+﻿Shader "MyShader/002 - Tex Offset Animation"
 {
 	Properties {
 		testTex("testTex", 2D) = "white" // "black"
