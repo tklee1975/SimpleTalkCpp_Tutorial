@@ -5,6 +5,8 @@
 
 class MyVertexArray {
 public:
+	~MyVertexArray() { destroy(); }
+
 	void create();
 	void destroy();
 
