@@ -132,10 +132,10 @@ Material:
       second: 1
     - first:
         name: duration
-      second: 3
+      second: 2.13
     - first:
         name: flowIntensity
-      second: 0.027
+      second: 0.017
     m_Colors:
     - first:
         name: _Color
