@@ -36,5 +36,8 @@ Reference:
 	Siggraph2010 - Water Flow in Portal2 by Alex Vlachos Valve
 		http://www.valvesoftware.com/publications/2010/siggraph2010_vlachos_waterflow.pdf
 	
+	Normal Transformation
+		https://paroj.github.io/gltut/Illumination/Tut09%20Normal%20Transformation.html
+	
 tags:
 	廣東話 C++ 教學, 簡單黎講 C++, C++ in Cantonese, Unity, Shader, 廣東話 程式設計
