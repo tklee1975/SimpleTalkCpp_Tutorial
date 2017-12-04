@@ -186,7 +186,6 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 395361885}
-  - component: {fileID: 395361884}
   - component: {fileID: 395361881}
   m_Layer: 0
   m_Name: MyLocator
@@ -207,13 +206,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mat: {fileID: 2100000, guid: d73db152208389947a1706413735e6ae, type: 2}
---- !u!33 &395361884
-MeshFilter:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 395361880}
-  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!4 &395361885
 Transform:
   m_ObjectHideFlags: 0
