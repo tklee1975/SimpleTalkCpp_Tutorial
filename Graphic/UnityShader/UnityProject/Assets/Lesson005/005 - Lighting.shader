@@ -4,7 +4,7 @@
 		ambientColor		("Ambient Color", Color) = (0,0,0,0)
 		diffuseColor		("Diffuse Color", Color) = (1,1,1,1)
 		specularColor		("Specular Color", Color) = (1,1,1,1)
-		specularShininess	("Specular Shininess", Range(0,128)) = 10
+		specularShininess	("Specular Shininess", Range(1,128)) = 10
 	}
 
 	SubShader

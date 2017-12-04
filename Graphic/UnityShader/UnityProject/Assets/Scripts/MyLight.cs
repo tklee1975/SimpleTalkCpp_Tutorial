@@ -5,10 +5,6 @@ using UnityEngine;
 [ExecuteInEditMode]
 public class MyLight : MonoBehaviour {
 	void Update () {
-
-		var p = gameObject.GetComponent<Light>();
-		if (p == null)
-			return;
-		Shader.SetGlobalVector("MyLightPos", p.transform.position);
+		Shader.SetGlobalVector("MyLightPos", transform.position);
 	}
 }

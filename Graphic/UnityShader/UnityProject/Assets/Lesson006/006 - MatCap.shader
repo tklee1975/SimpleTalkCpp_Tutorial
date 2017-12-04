@@ -44,7 +44,7 @@
 				o.normal = v.normal;
 
 				o.viewDir  = normalize( mul( UNITY_MATRIX_MV, v.pos ) );
-				o.viewNormal = mul( (float3x3)UNITY_MATRIX_MV, v.normal );
+				o.viewNormal = mul((float3x3)UNITY_MATRIX_MV, v.normal );
 
 				return o;
 			}

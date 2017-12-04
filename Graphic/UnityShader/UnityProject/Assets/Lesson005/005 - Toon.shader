@@ -28,8 +28,6 @@
 			CGPROGRAM
 			#pragma vertex vert
 			#pragma fragment frag
-			// make fog work
-			#pragma multi_compile_fog
 			
 			#include "UnityCG.cginc"
 
@@ -123,7 +121,7 @@
 				float3 N = normalize(normal);
 				float3 L = normalize(MyLightPos - pos);
 
-				float angle = dot(N,L);
+				float angle = max(0, dot(N,L));
 
 				if (angle > toonAngle2) 
 					return toonColor2;
