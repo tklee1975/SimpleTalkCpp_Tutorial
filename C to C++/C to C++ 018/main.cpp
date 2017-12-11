@@ -134,6 +134,31 @@ void test_constexp() {
 	my_dumpvar(sizeof(a));
 }
 
+void test_range_based_for_loop() {
+	std::vector<int> v;
+	for (int i = 0; i < 10; i++) {
+		v.push_back(i);
+	}
+
+	// C++ 03
+	for (std::vector<int>::iterator it = v.begin(); it != v.end(); ++it) {
+		std::cout << *it << " ";
+	}
+	std::cout << "\n";
+
+	// auto
+	for (auto& it = v.begin(); it != v.end(); ++it) {
+		std::cout << *it << " ";
+	}
+	std::cout << "\n";
+
+	// range based for loop
+	for (const auto& e : v) {
+		std::cout << e << " ";
+	}
+	std::cout << "\n";
+}
+
 void test_initializer_list() {
 	Point a = {1,2,3,4};
 	my_dumpvar(a);
@@ -219,6 +244,7 @@ void test_template_using() {
 int main(int argv, const char* argc[]) {
 	run_test(test_move());
 	run_test(test_constexp());
+	run_test(test_range_based_for_loop());
 	run_test(test_initializer_list());
 	run_test(test_lambda());
 	run_test(test_delegation_constructor());
