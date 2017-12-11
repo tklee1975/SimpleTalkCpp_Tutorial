@@ -3,6 +3,7 @@
 #include <ostream>
 #include <iostream>
 #include <functional>
+#include <vector>
 
 #ifdef _MSC_VER
 	#include <conio.h>
@@ -204,6 +205,17 @@ void test_variadic_templates() {
 	my_print(1, 2, 3, "a", "b");
 }
 
+// no template typedef !!!!
+//template<typename T>
+//typedef std::vector< std::unique_ptr<T> > UPtrVector;
+
+template<typename T>
+using UPtrVector = std::vector< std::unique_ptr<T> >;
+
+void test_template_using() {
+	UPtrVector<int> a;
+}
+
 int main(int argv, const char* argc[]) {
 	run_test(test_move());
 	run_test(test_constexp());
@@ -213,6 +225,7 @@ int main(int argv, const char* argc[]) {
 	run_test(test_nullptr_t());
 	run_test(test_enum_class());
 	run_test(test_variadic_templates());
+	run_test(test_template_using());
 
 	std::cout << "\n==== Ended ====\n";
 #ifdef _MSC_VER
