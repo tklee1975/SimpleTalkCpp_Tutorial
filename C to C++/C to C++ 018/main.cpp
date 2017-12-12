@@ -40,8 +40,14 @@ public:
 	int y = 0;
 };
 
+class Point3D : public Point {
+public:
+	int z;
+};
+
 static_assert(sizeof(Point) == sizeof(int) * 2, "some error message");
 static_assert(std::is_same<decltype(Point::x), int>::value, "Point x must be int");
+static_assert(std::is_base_of<Point, Point3D>::value, "Point3D must based on Point");
 
 std::ostream& operator << (std::ostream& s, const Point& v) {
 	s << "Point(" << v.x << ", " << v.y << ")";
@@ -121,16 +127,12 @@ void test_move() {
 	my_dumpvar(b);
 }
 
-constexpr int MxN(int m, int n) { 
-	int o = 0;
-	for (int i = 0; i < n; i++) {
-		o += m;
-	}
-	return o;
+constexpr int div2(int m) { 
+	return m / 2;
 }
 
 void test_constexp() {
-	char a[MxN(2,3)];
+	char a[div2(4)];
 	my_dumpvar(sizeof(a));
 }
 
@@ -215,7 +217,7 @@ void test_explicit_constructor() {
 template<typename FIRST, typename... ARGS>
 void my_print_impl(const FIRST& first, const ARGS&... args) {
 	std::cout << first << " ";
-	my_print(args...);
+	my_print_impl(args...);
 }
 
 void my_print_impl() {
@@ -223,11 +225,12 @@ void my_print_impl() {
 
 template<typename... ARGS>
 void my_print(const ARGS&... args) {
+	my_dumpvar(sizeof...(args));
 	my_print_impl(args...);
 }
 
 void test_variadic_templates() {
-	my_print(1, 2, 3, "a", "b");
+	my_print (1, 2, 3, "a", "b");
 }
 
 // no template typedef !!!!
