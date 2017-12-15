@@ -7,10 +7,31 @@
 
 #ifdef _MSC_VER
 	#include <conio.h>
+	#define MY_CPP_VERSION _MSVC_LANG
+#else
+	#define MY_CPP_VERSION __cplusplus
+#endif
+
+#if MY_CPP_VERSION >= 201103L
+	#define MY_CPP11 1
+#endif
+
+// C++ 14 - require /std:c++14
+#if MY_CPP_VERSION >= 201402L
+	#define MY_CPP14 1
+#endif
+
+// C++17 - require /std:c++17
+#if MY_CPP_VERSION >= 201703L
+	#define MY_CPP17 1
 #endif
 
 #define my_dumpvar(E) std::cout << #E << " = " << E << "\n";
 #define run_test(E) std::cout << "\n==== " << #E << " ====\n"; E;
+
+//====================================
+
+#if MY_CPP11
 
 class alignas(8) Point {
 public:
@@ -358,25 +379,32 @@ void test_tuple() {
 	my_dumpvar(std::get<2>(t));
 }
 
-int main(int argv, const char* argc[]) {
-//	run_test(test_auto());
-//	run_test(test_move());
-//	run_test(test_constexpr());
-//	run_test(test_range_based_for_loop());
-//	run_test(test_initializer_list());
-//	run_test(test_explicit_constructor());
-//	run_test(test_lambda());
-//	run_test(test_delegation_constructor());
-//	run_test(test_nullptr_t());
-//	run_test(test_enum_class());
-//	run_test(test_variadic_templates());
-//	run_test(test_template_using());
-//	run_test(test_explicit_operator_bool());
-//	run_test(test_string_literal());
-	run_test(test_tuple());
+#endif // MY_CPP11
 
-	std::cout << "\n==== Ended ====\n";
+int main(int argv, const char* argc[]) {
+	my_dumpvar(MY_CPP_VERSION);
+
+#if MY_CPP11
+	run_test(test_auto());
+	run_test(test_move());
+	run_test(test_constexpr());
+	run_test(test_range_based_for_loop());
+	run_test(test_initializer_list());
+	run_test(test_explicit_constructor());
+	run_test(test_lambda());
+	run_test(test_delegation_constructor());
+	run_test(test_nullptr_t());
+	run_test(test_enum_class());
+	run_test(test_variadic_templates());
+	run_test(test_template_using());
+	run_test(test_explicit_operator_bool());
+	run_test(test_string_literal());
+	run_test(test_tuple());
+#endif
+
+	std::cout << "\n==== Program Ended ====\n";
 #ifdef _MSC_VER
+	std::cout << "press any key to exit !!\n";
 	_getch();
 #endif
 	return 0;
