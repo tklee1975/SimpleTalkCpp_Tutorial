@@ -104,7 +104,7 @@ void test_lambda_capture_expression() {
 	call_lambda_int(f);
 }
 
-// [[deprecated]]
+[[deprecated]] // warning
 void test_deprecated() {
 	my_dumpvar("deprecated");
 }
@@ -150,6 +150,30 @@ void test_fallthrough() {
 			my_dumpvar("case 1");
 			break;
 	}
+}
+
+[[nodiscard]]
+int nodiscard_example(int a) {
+	return a + 1;
+}
+
+void test_nodiscard() {
+	int a = nodiscard_example(10);
+	nodiscard_example(11); // warning for nodiscard
+	my_dumpvar(a);
+}
+
+#define my_unused(X) (void)(X)
+
+// enable warning level 4
+void test_maybe_unused() {
+	int a = 0; //warning unused
+	
+	int b = 0;
+	my_unused(b);
+	
+	[[maybe_unused]]
+	int c = 10;
 }
 
 void test_if_constexpr() {
@@ -322,7 +346,7 @@ void test_any() {
 
 #endif // MY_CPP_VERSION >= 201703L
 
-int main(int argv, const char* argc[]) {
+int main() {
 	my_dumpvar(MY_CPP_VERSION);
 
 #if MY_CPP14
@@ -341,6 +365,8 @@ int main(int argv, const char* argc[]) {
 	run_test(test_static_assert());
 	run_test(test_auto_deduction_from_braced_init_list());
 	run_test(test_fallthrough());
+	run_test(test_nodiscard());
+	run_test(test_maybe_unused());
 	run_test(test_if_constexpr());
 	run_test(test_structured_binding());
 	run_test(test_initializer_in_if());
