@@ -60,7 +60,7 @@ void test_constexpr2() {
 	my_dumpvar(constexpr_loop(4));
 
 	switch (v) {
-		case  constexpr_loop(4):
+		case constexpr_loop(4):
 			std::cout << "works";
 		default:
 			std::cout << "fail";
@@ -104,7 +104,7 @@ void test_lambda_capture_expression() {
 	call_lambda_int(f);
 }
 
-[[deprecated]] // warning
+[[deprecated]] // issue warning
 void test_deprecated() {
 	my_dumpvar("deprecated");
 }
@@ -121,15 +121,15 @@ void test_tuple_addressing_via_type() {
 #if MY_CPP17
 
 void test_static_assert() {
-	static_assert(true, "message");
+	static_assert(true, "message"); // C++11
 	static_assert(true); // new in C++17 without message
 }
 
 void test_auto_deduction_from_braced_init_list() {
 	auto a = { 1, 2 };	// a is std::initializer_list<int>
 	auto b = { 3 };		// b is std::initializer_list<int>
-	auto i { 3 };		// c is int
-	auto j = { 3, 4 };	// c is int
+	auto i { 3 };		// i is int
+	auto j = { 3, 4 };	// j is std::initializer_list<int>
 
 	my_dumpvar(typeid(decltype(a)).name());
 	my_dumpvar(typeid(decltype(b)).name());
@@ -137,12 +137,22 @@ void test_auto_deduction_from_braced_init_list() {
 	my_dumpvar(typeid(decltype(j)).name());
 }
 
+//namespace MyLib::UI {
+//namespace UI {
+//}
+//}
+
+// Nested Namespace definitions
+namespace MyLib::UI {
+}
+
 void test_fallthrough() {
-	int i = 1;
+	int i = 0;
 	switch(i) {
 		case 0:
 			my_dumpvar("case 0");
 			// gcc -Wimplicit-fallthrough
+			//break; // forgot break
 		case 1:
 			my_dumpvar("case 1");
 			[[fallthrough]]; // against the fallthrough warning
@@ -153,13 +163,16 @@ void test_fallthrough() {
 }
 
 [[nodiscard]]
-int nodiscard_example(int a) {
-	return a + 1;
+int plus_one(int a) {
+	a = a + 1;
+	return a;
 }
 
 void test_nodiscard() {
-	int a = nodiscard_example(10);
-	nodiscard_example(11); // warning for nodiscard
+	int a = 10;
+	plus_one(a); // warning for nodiscard
+
+	a = plus_one(a);
 	my_dumpvar(a);
 }
 
@@ -170,18 +183,24 @@ void test_maybe_unused() {
 	int a = 0; //warning unused
 	
 	int b = 0;
-	my_unused(b);
+	my_unused(b);  // stop warning unused
 	
-	[[maybe_unused]]
+	[[maybe_unused]] // stop warning unused
 	int c = 10;
 }
 
-void test_if_constexpr() {
-	if constexpr (false) {
-		return 0; // no return for void, but if_constexpr (false) will skip this
-	} else {
+template<typename T>
+void if_constexpr_func() {
+	if constexpr (std::is_same<T, int>::value) {
 		my_dumpvar("OK");
+	} else {
+		return 0; // no return for void, but if_constexpr (false) will skip this
 	}
+}
+
+void test_if_constexpr() {
+	if_constexpr_func<int>();
+	//if_constexpr_func<float>(); error
 }
 
 struct Point {
@@ -224,10 +243,12 @@ void test_initializer_in_if() {
 	std::shared_ptr<MyObject> obj(new MyObject(100));
 	std::weak_ptr<MyObject> wp(obj);
 
-//	auto sp = wp.lock();
-//	if (sp) {
-//		my_dumpvar(sp->v);
-//	}
+	{
+		auto sp = wp.lock();
+		if (sp) {
+			my_dumpvar(sp->v);
+		}
+	}
 
 	// put 'sp' inside 'if' scope
 	if (auto sp = wp.lock()) {
@@ -250,6 +271,7 @@ MyTData<T> make_MyTData(T i) {
 void test_constructor_template_deduction() {
 	auto a = MyTData<int>(10);
 	auto b = make_MyTData(10);
+
 //	auto c = MyTData(10);  // doesn't support in Visual C++ yet, but gcc does
 
 	my_dumpvar(a.v);
@@ -327,6 +349,7 @@ std::ostream& operator << (std::ostream& s, const std::any& v) {
 
 void test_any() {
 	std::any a;
+	my_dumpvar(a);
 
 	a = 1;
 	my_dumpvar(a);
