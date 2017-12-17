@@ -26,7 +26,7 @@
 /* Begin PBXFileReference section */
 		9638547E1FE706C500F77CEB /* my_test.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = my_test.xcconfig; sourceTree = "<group>"; };
 		9638547F1FE706E900F77CEB /* main.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = main.mm; sourceTree = "<group>"; };
-		963854801FE706E900F77CEB /* TestClass.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TestClass.cpp; sourceTree = "<group>"; };
+		963854801FE706E900F77CEB /* TestClass.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = TestClass.cpp; sourceTree = "<group>"; };
 		963854811FE706E900F77CEB /* TestClass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestClass.h; sourceTree = "<group>"; };
 		965A74C31FE644C000FB17E8 /* MacOSX 001 */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "MacOSX 001"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */

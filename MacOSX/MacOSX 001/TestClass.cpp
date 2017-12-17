@@ -7,5 +7,5 @@ TestClass::TestClass() {
 void TestClass::testPrint() {
 	auto desc = [m_date description];
 	const char* sz = [desc UTF8String];
-	std::cout << "Time is " << sz << "\n";
+	std::cout << "Date is " << sz << "\n";
 }
