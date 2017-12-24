@@ -11,9 +11,11 @@ public class Ex007_RenderToTexture : MonoBehaviour {
 
 	private void Update() {
 		if (renderTex == null || renderTex.width != Screen.width || renderTex.height != Screen.height) {
-			if (renderTex)
-				renderTex.Release();
-			renderTex = new RenderTexture(Screen.width, Screen.height, 24, RenderTextureFormat.ARGB32);
+			MyUtil.Destroy(ref renderTex);
+
+			Debug.Log("create RenderTexture");
+			renderTex = new RenderTexture(Screen.width, Screen.height, 0, RenderTextureFormat.ARGB32);
+			renderTex.name = "MyRenderTex";
 		}
 
 		if (renderTexCamera)
@@ -29,5 +31,10 @@ public class Ex007_RenderToTexture : MonoBehaviour {
 
 		mat.SetTexture("inputTex", renderTex);
 		Graphics.Blit(src, dst, mat);
+	}
+
+
+	private void OnDestroy() {
+		MyUtil.Destroy(ref renderTex);
 	}
 }

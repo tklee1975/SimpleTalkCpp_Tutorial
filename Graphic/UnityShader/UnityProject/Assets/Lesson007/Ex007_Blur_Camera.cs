@@ -58,16 +58,16 @@ public class Ex007_Blur_Camera : MonoBehaviour {
 	}
 
 	void OnRenderImage(RenderTexture src, RenderTexture dst) {
-
 		if (renderTex == null || renderTex.width != src.width || renderTex.height != src.height) {
-			MyDestroyObject(ref renderTex);
-			Debug.Log("create renderTex");
+			MyUtil.Destroy(ref renderTex);
 			renderTex = new RenderTexture(src.width, src.height, 0);
+			renderTex.name = "MyRenderTex1";
 		}
 
 		if (renderTex2 == null || renderTex2.width != src.width || renderTex2.height != src.height) {
-			MyDestroyObject(ref renderTex2);
+			MyUtil.Destroy(ref renderTex2);
 			renderTex2 = new RenderTexture(src.width, src.height, 0);
+			renderTex2.name = "MyRenderTex2";
 		}
 
 		switch (example) {
@@ -121,33 +121,19 @@ public class Ex007_Blur_Camera : MonoBehaviour {
 		}
 	}
 
-	void MyDestroyObject(ref Material m) {
-		if (m) {
-			Object.Destroy(m);
-			m = null;
-		}
-	}
-
-	void MyDestroyObject(ref RenderTexture m) {
-		if (m) {
-			Object.Destroy(m);
-			m = null;
-		}
-	}
-
 	private void OnDestroy() {
-		MyDestroyObject(ref blur3x3Mat1);
-		MyDestroyObject(ref blur3x3Mat2);
+		MyUtil.Destroy(ref blur3x3Mat1);
+		MyUtil.Destroy(ref blur3x3Mat2);
 
-		MyDestroyObject(ref blur5x5Mat1);
-		MyDestroyObject(ref blur5x5Mat2);
+		MyUtil.Destroy(ref blur5x5Mat1);
+		MyUtil.Destroy(ref blur5x5Mat2);
 
-		MyDestroyObject(ref blur7x7Mat1H);
-		MyDestroyObject(ref blur7x7Mat1V);
-		MyDestroyObject(ref blur7x7Mat2H);
-		MyDestroyObject(ref blur7x7Mat2V);
+		MyUtil.Destroy(ref blur7x7Mat1H);
+		MyUtil.Destroy(ref blur7x7Mat1V);
+		MyUtil.Destroy(ref blur7x7Mat2H);
+		MyUtil.Destroy(ref blur7x7Mat2V);
 
-		MyDestroyObject(ref renderTex);
-		MyDestroyObject(ref renderTex2);
+		MyUtil.Destroy(ref renderTex);
+		MyUtil.Destroy(ref renderTex2);
 	}
 }
