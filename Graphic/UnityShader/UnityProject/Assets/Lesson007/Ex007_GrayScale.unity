@@ -253,16 +253,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 14eacfba4ce47044987e6551a2100312, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  example: 0
   grayScaleMat: {fileID: 2100000, guid: f80047084af4608488a6f2cbb2c1f8a5, type: 2}
-  blur3x3Shader: {fileID: 4800000, guid: 9bb9538939e8def458836886c966d3de, type: 3}
-  blur5x5Shader: {fileID: 4800000, guid: 4b77d977cbbffdf428827c3e52c2e4a9, type: 3}
-  blur7x7Shader: {fileID: 4800000, guid: fde874140a9450e4d96d4e226f8872e0, type: 3}
-  intensity: 1
-  blur1: 1
-  blur2: 1.6
-  renderTex: {fileID: 0}
-  renderTex2: {fileID: 0}
 --- !u!1 &886535015
 GameObject:
   m_ObjectHideFlags: 0
@@ -294,7 +285,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 7c2c86e899de410449dffba462d6729d, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
