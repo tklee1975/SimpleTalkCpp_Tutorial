@@ -60,10 +60,13 @@ public class Ex007_Blur_Camera : MonoBehaviour {
 	void OnRenderImage(RenderTexture src, RenderTexture dst) {
 
 		if (renderTex == null || renderTex.width != src.width || renderTex.height != src.height) {
+			MyDestroyObject(ref renderTex);
+			Debug.Log("create renderTex");
 			renderTex = new RenderTexture(src.width, src.height, 0);
 		}
 
 		if (renderTex2 == null || renderTex2.width != src.width || renderTex2.height != src.height) {
+			MyDestroyObject(ref renderTex2);
 			renderTex2 = new RenderTexture(src.width, src.height, 0);
 		}
 
