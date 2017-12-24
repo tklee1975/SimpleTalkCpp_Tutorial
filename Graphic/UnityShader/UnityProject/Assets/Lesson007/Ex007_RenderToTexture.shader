@@ -2,7 +2,10 @@
 {
 	Properties
 	{
-		_MainTex ("Base (RGB)", 2D) = "white" {}
+		intensity("intensity", Range(0,100)) = 0
+		ratio("ratio", float) = 1
+		_MainTex("MainTex", 2D) = "black"
+		inputTex("InputTex", 2D) = "black"
 	}
 
 	SubShader
@@ -35,6 +38,7 @@
 			};
 
 			sampler2D _MainTex;
+			sampler2D inputTex;
 			float intensity;
 
 			v2f vert (appdata v)
@@ -45,12 +49,29 @@
 				return o;
 			}
 
+			float ratio; // _ScreenParams doesn't avaliable in OnRenderImage()
+
 			float4 frag (v2f i) : SV_Target
 			{
-				float2 uv = i.pos.xy / _ScreenParams.y;
-				uv.y = 1-uv.y;
+			#if UNITY_UV_STARTS_AT_TOP
+				// DirectX
+				float2 uv = float2(i.uv.x, 1 - i.uv.y);
+			#else
+				// OpenGL
+				float2 uv = i.uv;
+			#endif
 
-				float4 c = tex2D(_MainTex, uv);
+				float4 t = tex2D(inputTex, uv);
+
+				float2 nl = (t.xy * 255 - 128) / 255; // instead of '* 2 - 1'
+
+			#if UNITY_UV_STARTS_AT_TOP
+				nl.y = -nl.y;
+			#endif
+
+				nl /= _ScreenParams.xy;
+
+				float4 c = tex2D(_MainTex, i.uv + nl * intensity);
 				return c;
 			}
 			ENDCG
