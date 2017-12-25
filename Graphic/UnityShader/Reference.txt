@@ -39,5 +39,12 @@ Reference:
 	Normal Transformation
 		https://paroj.github.io/gltut/Illumination/Tut09%20Normal%20Transformation.html
 	
+	opengl-tutorial.org - Tutorial 16 : Shadow mapping
+		http://www.opengl-tutorial.org/intermediate-tutorials/tutorial-16-shadow-mapping/
+
+	Real-Time Shadows 
+		https://www.amazon.com/Real-Time-Shadows-Elmar-Eisemann/dp/1568814380/ref=sr_1_1?ie=UTF8&qid=1514168370&sr=8-1&keywords=real+time+shadow
+		ISBN-13: 978-1568814384
+	
 tags:
 	廣東話 C++ 教學, 簡單黎講 C++, C++ in Cantonese, Unity, Shader, 廣東話 程式設計
