@@ -48,7 +48,7 @@
 			float intensity;
 
 			float4 blur3x3(v2f i) {
-				float2 d = intensity / _ScreenParams;
+				float2 d = intensity / _ScreenParams.xy;
 				float4 c = 0;
 		
 				c += tex2D(_MainTex, i.uv + float2(-1,-1) * d) * 0.077847;

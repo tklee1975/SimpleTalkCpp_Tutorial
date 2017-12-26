@@ -47,8 +47,8 @@
 
 			float4 intensity;
 
-			float4 blur5x5(v2f i) {
-				float2 d = intensity.xy / _ScreenParams;
+			float4 blur7x7(v2f i) {
+				float2 d = intensity.xy / _ScreenParams.xy;
 				float4 c = 0;
 
 				c += tex2D(_MainTex, i.uv + float2(-3,-3) * d) * 0.106288522;
@@ -65,7 +65,7 @@
 
 			float4 frag (v2f i) : SV_Target
 			{
-				return blur5x5(i);
+				return blur7x7(i);
 			}
 			ENDCG
 		}
