@@ -132,7 +132,7 @@ Material:
       second: -0.033
     - first:
         name: intensity
-      second: 0.441
+      second: 1
     m_Colors:
     - first:
         name: _Color

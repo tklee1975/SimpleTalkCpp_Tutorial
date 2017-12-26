@@ -3746,7 +3746,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bloomMat: {fileID: 2100000, guid: 7ad626e4049279545914b957eb0b8896, type: 2}
-  bloomIntensity: 0.441
+  bloomIntensity: 1
   blurIntensity: 2.85
   blur2Factor: 0
   blurShader: {fileID: 4800000, guid: fde874140a9450e4d96d4e226f8872e0, type: 3}

@@ -62,7 +62,11 @@
 
 				float4 blur = tex2D(blurTex, uv);
 				float4 c = tex2D(_MainTex, i.uv);
-				return lerp(c, blur, intensity);
+
+				//soft lens
+				//return lerp(c, blur, intensity);
+
+				return max(c, blur * intensity);
 			}
 			ENDCG
 		}
