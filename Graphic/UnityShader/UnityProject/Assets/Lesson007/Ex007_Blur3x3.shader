@@ -63,7 +63,7 @@
 				c += tex2D(_MainTex, i.uv + float2( 0, 1) * d) * 0.123317;
 				c += tex2D(_MainTex, i.uv + float2( 1, 1) * d) * 0.077847;
 
-				c.a = 0;
+				c.a = 1;
 
 				return c;
 			}

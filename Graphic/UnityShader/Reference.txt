@@ -39,6 +39,9 @@ Reference:
 	Normal Transformation
 		https://paroj.github.io/gltut/Illumination/Tut09%20Normal%20Transformation.html
 	
+	Gaussian Kernel Calculator
+		- http://dev.theomader.com/gaussian-kernel-calculator/
+	
 	opengl-tutorial.org - Tutorial 16 : Shadow mapping
 		http://www.opengl-tutorial.org/intermediate-tutorials/tutorial-16-shadow-mapping/
 

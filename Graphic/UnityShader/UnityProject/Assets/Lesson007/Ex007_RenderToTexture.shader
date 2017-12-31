@@ -2,7 +2,7 @@
 {
 	Properties
 	{
-		intensity("intensity", Range(0,100)) = 0
+		intensity("intensity", Range(0,300)) = 0
 		ratio("ratio", float) = 1
 		_MainTex("MainTex", 2D) = "black"
 		inputTex("InputTex", 2D) = "black"

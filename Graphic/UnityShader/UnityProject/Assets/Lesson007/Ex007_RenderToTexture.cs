@@ -20,9 +20,6 @@ public class Ex007_RenderToTexture : MonoBehaviour {
 
 		if (renderTexCamera)
 			renderTexCamera.targetTexture = renderTex;
-
-		if (mat)
-			mat.SetTexture("_MainTex", renderTex);
 	}
 
 	private void OnRenderImage(RenderTexture src, RenderTexture dst) {
@@ -32,7 +29,6 @@ public class Ex007_RenderToTexture : MonoBehaviour {
 		mat.SetTexture("inputTex", renderTex);
 		Graphics.Blit(src, dst, mat);
 	}
-
 
 	private void OnDestroy() {
 		MyUtil.Destroy(ref renderTex);
