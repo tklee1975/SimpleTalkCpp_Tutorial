@@ -38,6 +38,15 @@ public class Ex009 : MonoBehaviour {
 		var a = Quaternion.Euler(rotA);
 		var b = Quaternion.Euler(rotB);
 
+		var q = Quaternion.Lerp(a, b, w);
+		var v = q * new Vector3(0,0,1);
+		return v;
+	}
+
+	Vector3 slerp_quat(float w) {
+		var a = Quaternion.Euler(rotA);
+		var b = Quaternion.Euler(rotB);
+
 		var q = Quaternion.Slerp(a, b, w);
 		var v = q * new Vector3(0,0,1);
 		return v;
@@ -67,6 +76,7 @@ public class Ex009 : MonoBehaviour {
 
 	void example1() {
 		var lines_quat   = new Vector3[steps + 1];
+		var lines_quat_s = new Vector3[steps + 1];
 		var lines_euler  = new Vector3[steps + 1];
 		var lines_matrix = new Vector3[steps + 1];
 
@@ -78,11 +88,13 @@ public class Ex009 : MonoBehaviour {
 		}
 
 		drawVector(lerp_quat(weight),   new Color(1,0,0));
+		drawVector(slerp_quat(weight),  new Color(1,0,1));
 		drawVector(lerp_euler(weight),  new Color(0,1,0));
 		drawVector(lerp_matrix(weight), new Color(0,0,1));
 
 		drawLines(lines_quat,   new Color(1,0,0));
-		drawLines(lines_euler,  new Color(0,1,0));
+		drawLines(lines_quat_s, new Color(1,0,1));
+		drawLines(lines_euler,  new Color(0,0,1));
 		drawLines(lines_matrix, new Color(0,0,1));
 	}
 

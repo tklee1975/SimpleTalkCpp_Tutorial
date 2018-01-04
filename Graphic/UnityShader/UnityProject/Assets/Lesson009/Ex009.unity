@@ -232,8 +232,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rotA: {x: 0, y: 0, z: 0}
-  rotB: {x: 143, y: 114, z: -209.4}
-  weight: 0.43
+  rotB: {x: -106.1, y: -176.92, z: 0}
+  weight: 0.452
 --- !u!4 &739486313
 Transform:
   m_ObjectHideFlags: 0
