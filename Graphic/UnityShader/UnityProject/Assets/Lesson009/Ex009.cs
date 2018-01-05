@@ -100,7 +100,7 @@ public class Ex009 : MonoBehaviour {
 
 		drawLines(lines_quat,   new Color(1,0,0));
 		drawLines(lines_quat_s, new Color(1,0,1));
-		drawLines(lines_euler,  new Color(0,0,1));
+		drawLines(lines_euler,  new Color(0,1,0));
 		drawLines(lines_matrix, new Color(0,0,1));
 	}
 
