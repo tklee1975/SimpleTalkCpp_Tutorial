@@ -38,7 +38,8 @@ Shader "MyShader/Ex009 - QuatShaderDemo"
 				float3 normal : NORMAL;
 			};
 
-			sampler2D _QuatTex;
+			sampler2D	_QuatTex;
+			float4		_QuatTex_ST;
 
 			float3 quatMulVector(float4 quat, float3 v) {
 				float3 qv = quat.xyz;
@@ -52,7 +53,7 @@ Shader "MyShader/Ex009 - QuatShaderDemo"
 				v2f o;
 				float3 wpos = mul(unity_ObjectToWorld, v.pos).xyz;
 
-				float2 uv = 1 - v.uv;
+				float2 uv = 1 - (v.uv * _QuatTex_ST.xy + _QuatTex_ST.zw);
 								
 				float4 qTex  = tex2Dlod(_QuatTex, float4(uv.x, uv.y, 0, 0));
 				float4 qIden = float4(0,0,0,1);

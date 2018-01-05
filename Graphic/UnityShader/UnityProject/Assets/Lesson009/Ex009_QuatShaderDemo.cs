@@ -28,7 +28,6 @@ public class Ex009_QuatShaderDemo : MonoBehaviour {
 		}
 		tex = new Texture2D(texWidth, texHeight, TextureFormat.RGBAFloat, false);
 		tex.name = "QuatTexture";
-		tex.wrapMode = TextureWrapMode.Clamp;
 
 		group = new GameObject(groupName).transform;
 		group.SetParent(transform, false);
