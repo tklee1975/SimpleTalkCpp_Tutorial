@@ -32,7 +32,7 @@ Shader "MyShader/Ex008 - Shadow Map"
 
 			struct v2f {
 				float4 pos		: SV_POSITION;
-				float3 wpos		: POSTION;
+				float3 wpos		: TEXCOORD7;
 				float4 color	: COLOR;
 				float2 uv		: TEXCOORD0;
 				float3 normal	: NORMAL;

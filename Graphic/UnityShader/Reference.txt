@@ -48,6 +48,9 @@ Reference:
 	Real-Time Shadows 
 		https://www.amazon.com/Real-Time-Shadows-Elmar-Eisemann/dp/1568814380/ref=sr_1_1?ie=UTF8&qid=1514168370&sr=8-1&keywords=real+time+shadow
 		ISBN-13: 978-1568814384
+		
+	Quaternions
+		https://www.3dgep.com/understanding-quaternions/
 	
 tags:
 	廣東話 C++ 教學, 簡單黎講 C++, C++ in Cantonese, Unity, Shader, 廣東話 程式設計

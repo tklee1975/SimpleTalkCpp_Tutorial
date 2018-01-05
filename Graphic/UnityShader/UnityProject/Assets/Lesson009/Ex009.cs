@@ -14,10 +14,13 @@ public class Ex009 : MonoBehaviour {
 
 	void drawVector(Vector3 v, Color color) {
 		var old_color = Gizmos.color;
+		var old_matrix = Gizmos.matrix;
+		Gizmos.matrix = transform.localToWorldMatrix;
 		Gizmos.color = color;
 		Gizmos.DrawSphere(v, 0.05f);
 		Gizmos.DrawLine(Vector3.zero, v);
 		Gizmos.color = old_color;
+		Gizmos.matrix = old_matrix;
 	}
 	
 	void drawLines(Vector3[] v, Color color) {
@@ -27,11 +30,14 @@ public class Ex009 : MonoBehaviour {
 			return;
 
 		var old_color = Gizmos.color;
+		var old_matrix = Gizmos.matrix;
+		Gizmos.matrix = transform.localToWorldMatrix;
 		Gizmos.color = color;
 		for (int i = 1; i < v.Length; i++) {
 			Gizmos.DrawLine(v[i-1], v[i]);
 		}
 		Gizmos.color = old_color;
+		Gizmos.matrix = old_matrix;
 	}
 
 	Vector3 lerp_quat(float w) {
