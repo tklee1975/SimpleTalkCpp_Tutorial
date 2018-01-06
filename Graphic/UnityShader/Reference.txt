@@ -51,6 +51,14 @@ Reference:
 		
 	Quaternions
 		https://www.3dgep.com/understanding-quaternions/
+		https://www.essentialmath.com/GDC2013/GDC13_quaternions_final.pdf
+		https://en.wikipedia.org/wiki/Quaternion
+		https://en.wikipedia.org/wiki/Quaternions_and_spatial_rotation		
+		http://www.euclideanspace.com/maths/algebra/realNormedAlgebra/quaternions/geometric/axisAngle/index.htm
+		https://en.wikipedia.org/wiki/Slerp
+	
+	How GPU Works
+		https://www.cs.cmu.edu/afs/cs/academic/class/15462-f11/www/lec_slides/lec19.pdf
 	
 tags:
 	廣東話 C++ 教學, 簡單黎講 C++, C++ in Cantonese, Unity, Shader, 廣東話 程式設計
