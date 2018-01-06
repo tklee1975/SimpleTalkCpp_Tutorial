@@ -60,5 +60,8 @@ Reference:
 	How GPU Works
 		https://www.cs.cmu.edu/afs/cs/academic/class/15462-f11/www/lec_slides/lec19.pdf
 	
+	Improve Batching Using Texture Atlases	
+		http://download.nvidia.com/developer/NVTextureSuite/Atlas_Tools/Texture_Atlas_Whitepaper.pdf
+	
 tags:
 	廣東話 C++ 教學, 簡單黎講 C++, C++ in Cantonese, Unity, Shader, 廣東話 程式設計
