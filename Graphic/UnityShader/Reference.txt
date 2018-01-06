@@ -62,6 +62,9 @@ Reference:
 	
 	Improve Batching Using Texture Atlases	
 		http://download.nvidia.com/developer/NVTextureSuite/Atlas_Tools/Texture_Atlas_Whitepaper.pdf
+		
+	Alpha Blending: To Pre or Not To Pre from nVidia
+		https://developer.nvidia.com/content/alpha-blending-pre-or-not-pre
 	
 tags:
 	廣東話 C++ 教學, 簡單黎講 C++, C++ in Cantonese, Unity, Shader, 廣東話 程式設計
