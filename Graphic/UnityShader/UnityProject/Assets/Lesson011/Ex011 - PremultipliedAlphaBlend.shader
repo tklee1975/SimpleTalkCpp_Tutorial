@@ -38,10 +38,10 @@
 			}
 
 			sampler2D	_MainTex;
-			float _alpha;
 
 			float4 ps_main (v2f i) : SV_Target {
-				return tex2D(_MainTex, i.uv);
+				float4 o = tex2D(_MainTex, i.uv);
+				return o;
 			}
 			ENDCG
 		}
