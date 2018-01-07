@@ -46,6 +46,7 @@
 			float _gamma;
 
 			float sRGB_to_Linear(float c) {
+				//#if defined(sRGB_Accurate_Conversion)
 				#ifdef sRGB_Accurate_Conversion
 					if (c <= 0.04045)
 						return c / 12.92;
