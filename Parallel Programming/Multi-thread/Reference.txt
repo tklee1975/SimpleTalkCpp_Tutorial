@@ -122,7 +122,7 @@ tags:
 	- http://en.cppreference.com/w/cpp/language/cv
 	
 - Lock / Mutex (Mutual exclusion)
-	- CreateMutex / EnterCriticalSection
+	- EnterCriticalSection / CreateMutex
 	- pthread_mutex_init
 	- NSLock
 	- C++11 mutex
@@ -231,3 +231,7 @@ Synchronization
 	- Objective-C Dispatch Queues
 	- OpenCL
 	- CUDA	
+	
+	
+	
+	
