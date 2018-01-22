@@ -28,13 +28,32 @@ private:
 
 MyLock g_lock;
 
+//RAII
+class MyLockGuard : public MyNonCopyable {
+public:
+	MyLockGuard(MyLock& lock) {
+		p = &lock;
+		lock.lock();
+	}
+
+	~MyLockGuard() {
+		p->unlock();
+	}
+
+private:
+	MyLock* p;
+};
+
+
 DWORD WINAPI my_example3_thread_func(void* param) {
-	for (int i = 0; i < N; i++) {
-		g_lock.lock();
+	for (int i = 0; i < N * 2; i++) {
+//		g_lock.lock();
+
+		MyLockGuard g(g_lock);
 
 		g_count = g_count + 1;
 
-		g_lock.unlock();
+//		g_lock.unlock();
 	}
 	return 0;
 }
