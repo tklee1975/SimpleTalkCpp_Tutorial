@@ -23,9 +23,11 @@ public:
 		}
 
 		void addResult(int64_t v) {
-			auto r = _result.scopedLock();
-			r->primeNumbers.push_back(v);
-			r.notify_all();
+			{
+				auto r = _result.scopedLock();
+				r->primeNumbers.push_back(v);
+			}
+			_result.notify_all();
 		}
 
 		void finish() {
@@ -34,9 +36,11 @@ public:
 		}
 
 		void threadEnded() {
-			auto r = _result.scopedLock();
-			r->endedThread++;
-			r.notify_all();
+			{
+				auto r = _result.scopedLock();
+				r->endedThread++;
+			}
+			_result.notify_all();
 		}
 
 		bool isDone() {

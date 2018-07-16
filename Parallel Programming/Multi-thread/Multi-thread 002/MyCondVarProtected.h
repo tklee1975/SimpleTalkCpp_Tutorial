@@ -29,12 +29,6 @@ public:
 		}
 	}
 
-	void notify_all() {
-		if (_condvar) {
-			_condvar->notify_all();
-		}
-	}
-
 private:
 	T*		_data  = nullptr;
 	Lock	_lock;
@@ -45,6 +39,10 @@ template<class T>
 class MyCondVarProtected {
 public:
 	MyLockedCV<T> scopedLock() { return MyLockedCV<T>(_data, _mutex, _condvar); }
+
+	void notify_all() {
+		_condvar.notify_all();
+	}
 
 private:
 	T _data;
