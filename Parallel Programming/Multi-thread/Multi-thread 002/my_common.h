@@ -60,5 +60,5 @@ bool primeNumber(int64_t v) {
 
 const int64_t primeStart = 1000000000LL;
 const int64_t threadCount = 4;
-const int64_t batchSize = 50;
+const int64_t batchSize = 25;
 

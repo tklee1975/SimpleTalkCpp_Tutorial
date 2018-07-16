@@ -1,117 +1,121 @@
 #include "precompiledHeader.h"
 
-class Example3_Result {
+class Example3 {
 public:
-	using Lock = std::unique_lock<std::mutex>;
 
-	void init(int64_t start, int64_t count) {
-		_start = start;
-		_count = count;
-		_current = start;
-	}
+	class MyRequest {
+	public:
+		using Lock = std::unique_lock<std::mutex>;
 
-	void add(int64_t v) {
-		Lock lock(mutex);
+		void init(int64_t start, int64_t count) {
+			_start = start;
+			_count = count;
+			_current = start;
+		}
 
-		result.push_back(v);
-	}
+		int64_t getNext() {
+			Lock lock(_mutex);
+			if (_current >= _start + _count)
+				return 0;
 
-	int64_t getNext() {
-		Lock lock(mutex);
+			auto ret = _current;
+			_current++;
+			return ret;
+		}
 
-		if (_current >= _start + _count)
+		void addResult(int64_t v) {
+			Lock lock(_mutex);
+			_primeNumbers.push_back(v);
+		}
+
+		void finish() {
+			Lock lock(_mutex);
+
+			printf("result count: %lld\n", _primeNumbers.size());
+		}
+
+	private:
+		int64_t _start = 0;
+		int64_t _count = 0;
+		int64_t _current = 0;
+
+		std::mutex _mutex;
+		std::vector<int64_t> _primeNumbers;
+	};
+
+	class MyThread {
+	public:
+		~MyThread() {
+			join();
+		}
+
+		void join() {
+			if (_thread) {
+				WaitForSingleObject(_thread, INFINITE);
+			}
+		}
+
+		static DWORD WINAPI _proc(void* p) {
+			reinterpret_cast<MyThread*>(p)->onProc();
 			return 0;
-
-		auto ret = _current;
-		_current++;
-		return ret;
-	}
-
-	void finish() {
-		Lock lock(mutex);
-
-		std::sort(result.begin(), result.end());
-		printf("result count: %lld\n", result.size());
-		//for (auto& e : result) {
-		//	printf("prime: %lld\n", e);
-		//}
-	}
-
-private:
-	int64_t _start = 0;
-	int64_t _count = 0;
-	int64_t _current = 0;
-
-	std::mutex mutex;
-	std::vector<int64_t> result;
-};
-
-class Example3_Thread {
-public:
-	Example3_Thread() {
-		join();
-	}
-
-	void join() {
-		if (_thread) {
-			WaitForSingleObject(_thread, INFINITE);
-		}
-	}
-
-	static DWORD WINAPI _proc(void* p) {
-		reinterpret_cast<Example3_Thread*>(p)->onProc();
-		return 0;
-	}
-
-	void onProc() {
-		printf("Thread %d: start\n", _id);
-		SetThreadAffinityMask(_thread, 1LL << _id);
-
-		for (;;) {
-			int64_t v = _result->getNext();
-			if (v == 0) {
-				break;
-			}
-
-			if (primeNumber(v)) {
-				printf("Thread %d: %lld\n", _id, v);
-				_result->add(v);
-			}
 		}
 
-		printf("Thread %d: ended\n", _id);
+		void onProc() {
+			printf("Thread %d: start\n", _id);
+			SetThreadAffinityMask(_thread, 1LL << _id);
+
+			for (;;) {
+				int64_t v = _req->getNext();
+				if (v == 0) {
+					break;
+				}
+
+				if (primeNumber(v)) {
+					printf("Thread %d: prime %lld\n", _id, v);
+					_req->addResult(v);
+				}
+			}
+
+			printf("Thread %d: ended\n", _id);
+		}
+
+		void run(MyRequest& req, int id) {
+			_req = &req;
+			_id = id;
+			_thread = CreateThread(nullptr, 0, &_proc, this, 0, nullptr);
+		}
+
+		MyRequest* _req = nullptr;
+		HANDLE  _thread = nullptr;
+		int     _id = 0;
+	};
+
+	static void run() {
+		printf("\n========== my_example3 ========\n");
+
+		MyRequest req;
+		MyTimer timer;
+
+		MyThread threads[threadCount];
+
+		req.init(primeStart, threadCount * batchSize);
+
+		for (int i = 0; i < threadCount; i++) {
+			threads[i].run(req, i);
+		}
+
+		for (int64_t i = 0; i < threadCount; i++) {
+			threads[i].join();
+		}
+
+		printf("done\n");
+		timer.print();
+		req.finish();
 	}
 
-	void run(Example3_Result& result, int id) {
-		_result = &result;
-		_id = id;
-		_thread = CreateThread(nullptr, 0, &_proc, this, 0, nullptr);
-	}
-
-	Example3_Result* _result = nullptr;
-	HANDLE  _thread = nullptr;
-	int     _id = 0;
-};
+}; // Example3
 
 void my_example3() {
-	printf("\n========== my_example3 ========\n");
-
-	Example3_Result result;
-	MyTimer timer;
-
-	Example3_Thread threads[threadCount];
-
-	result.init(primeStart, threadCount * batchSize);
-
-	for (int i = 0; i < threadCount; i++) {
-		threads[i].run(result, i);
-	}
-
-	for (int64_t i = 0; i < threadCount; i++) {
-		threads[i].join();
-	}
-
-	printf("done\n");
-	timer.print();
-	result.finish();
+	Example3::run();
 }
+

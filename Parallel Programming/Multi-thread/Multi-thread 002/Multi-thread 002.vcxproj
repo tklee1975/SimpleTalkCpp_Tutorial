@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\Multi-thread 001\my_example4.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="my_example1.cpp" />
     <ClCompile Include="my_example2.cpp" />
