@@ -12,6 +12,8 @@ DWORD WINAPI my_example2_thread_func(void* param) {
 }
 
 void my_example2() {
+	printf("\n======== my_example2 =============\n");
+
 	HANDLE my_thread = CreateThread(nullptr, 0, &my_example2_thread_func, nullptr, 0, nullptr);
 	for (int i = 0; i < N; i++) {
 		g_count = g_count + 1;

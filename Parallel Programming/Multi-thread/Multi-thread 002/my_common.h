@@ -58,7 +58,7 @@ bool primeNumber(int64_t v) {
 	return true;
 }
 
-const int64_t primeStart = 1000000000LL;
-const int64_t threadCount = 4;
-const int64_t batchSize = 25;
+const int64_t kPrimeStart = 1000000000LL;
+const int64_t kThreadCount = 4;
+const int64_t kBatchSize = 25;
 

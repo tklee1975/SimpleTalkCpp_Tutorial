@@ -96,15 +96,15 @@ public:
 		MyRequest req;
 		MyTimer timer;
 
-		MyThread threads[threadCount];
+		MyThread threads[kThreadCount];
 
-		req.init(primeStart, threadCount * batchSize);
+		req.init(kPrimeStart, kThreadCount * kBatchSize);
 
-		for (int i = 0; i < threadCount; i++) {
+		for (int i = 0; i < kThreadCount; i++) {
 			threads[i].run(req, i);
 		}
 
-		for (int64_t i = 0; i < threadCount; i++) {
+		for (int64_t i = 0; i < kThreadCount; i++) {
 			threads[i].join();
 		}
 

@@ -30,7 +30,10 @@
     <ClCompile Include="my_example3.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\Multi-thread 001\my_example4.cpp">
+    <ClCompile Include="my_example4.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="my_example5.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

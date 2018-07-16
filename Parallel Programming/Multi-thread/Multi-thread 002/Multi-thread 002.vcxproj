@@ -19,11 +19,12 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\Multi-thread 001\my_example4.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="my_example1.cpp" />
     <ClCompile Include="my_example2.cpp" />
     <ClCompile Include="my_example3.cpp" />
+    <ClCompile Include="my_example4.cpp" />
+    <ClCompile Include="my_example5.cpp" />
     <ClCompile Include="precompiledHeader.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>

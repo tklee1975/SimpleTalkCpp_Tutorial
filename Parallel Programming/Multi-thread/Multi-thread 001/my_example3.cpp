@@ -59,6 +59,8 @@ DWORD WINAPI my_example3_thread_func(void* param) {
 }
 
 void my_example3() {
+	printf("\n======== my_example3 =============\n");
+
 	HANDLE my_thread = CreateThread(nullptr, 0, &my_example3_thread_func, nullptr, 0, nullptr);
 	for (int i = 0; i < N; i++) {
 		g_lock.lock();

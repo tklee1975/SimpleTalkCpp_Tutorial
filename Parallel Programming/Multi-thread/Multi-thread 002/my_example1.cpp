@@ -9,8 +9,8 @@ void my_example1() {
 	int64_t resultCount = 0;
 	MyTimer timer;
 
-	for (int64_t i = 0; i < batchSize * threadCount; i++) {
-		int64_t v = primeStart + i;
+	for (int64_t i = 0; i < kBatchSize * kThreadCount; i++) {
+		int64_t v = kPrimeStart + i;
 		if (primeNumber(v)) {
 			printf("prime: %lld\n", v);
 			resultCount++;
