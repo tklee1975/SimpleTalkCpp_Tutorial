@@ -1,48 +1,10 @@
 #include "precompiledHeader.h"
+#include "MyMutexProtected.h"
+
+// Ref: https://github.com/facebook/folly/blob/master/folly/docs/Synchronized.md
 
 class Example4 {
 public:
-
-	template<class T, class Mutex = std::mutex>
-	class LockProtected {
-	public:
-
-		class ScopedLock {
-		public:
-			ScopedLock(T& data, Mutex& mutex) {
-				_data  = &data;
-				_mutex = &mutex;
-				_mutex->lock();
-			}
-
-			ScopedLock(ScopedLock && r) {
-				_mutex = r._mutex;
-				_data  = r._data;
-				r._mutex = nullptr;
-				r._data  = nullptr;
-			}
-
-			~ScopedLock() {
-				if (_mutex ) {
-					_mutex->unlock();
-					_mutex = nullptr;
-				}
-			}
-
-			T* operator->() { return _data; }
-
-		private:
-			T*		_data  = nullptr;
-			Mutex*	_mutex = nullptr;
-		};
-
-		ScopedLock scopedLock() { return ScopedLock(_data, _mutex); }
-
-	private:
-		T _data;
-		Mutex _mutex;
-	};
-
 	class MyRequest {
 	public:
 		void init(int64_t start, int64_t count) {
@@ -56,7 +18,6 @@ public:
 			auto r = _request.scopedLock();
 			if (r->current >= r->start + r->count)
 				return 0;
-
 			auto ret = r->current;
 			r->current++;
 			return ret;
@@ -83,8 +44,8 @@ public:
 			std::vector<int64_t> primeNumbers;
 		};
 
-		LockProtected<Request>	_request;
-		LockProtected<Result>	_result;
+		MyMutexProtected<Request>	_request;
+		MyMutexProtected<Result>	_result;
 	};
 
 	class MyThread {

@@ -44,5 +44,11 @@
     <ClInclude Include="my_common.h">
       <Filter>Source Files</Filter>
     </ClInclude>
+    <ClInclude Include="MyMutexProtected.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MyCondVarProtected.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

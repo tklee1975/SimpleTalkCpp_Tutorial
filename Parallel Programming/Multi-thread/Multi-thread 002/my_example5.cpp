@@ -1,66 +1,8 @@
 #include "precompiledHeader.h"
+#include "MyCondVarProtected.h"
 
 class Example5 {
 public:
-
-	template<class T, class Mutex = std::mutex, class CondVar = std::condition_variable>
-	class LockProtected {
-	public:
-
-		class ScopedLock {
-		public:
-			using Lock = std::unique_lock<std::mutex>;
-
-			ScopedLock(T& data, Mutex& mutex, CondVar& condvar) 
-				: _lock(mutex)
-			{
-				_data  = &data;
-				_condvar = &condvar;
-			}
-
-			ScopedLock(ScopedLock && r) 
-				: _lock(std::move(r._lock))
-			{
-				_condvar = r._condvar;
-				_data  = r._data;
-				r._condvar = nullptr;
-				r._data  = nullptr;
-			}
-
-			T* operator->() { return _data; }
-
-			void wait() {
-				if (_condvar) {
-					_condvar->wait(_lock);
-				}
-			}
-
-			void notify_one() {
-				if (_condvar) {
-					_condvar->notify_one();
-				}
-			}
-
-			void notify_all() {
-				if (_condvar) {
-					_condvar->notify_all();
-				}
-			}
-
-		private:
-			T*			_data  = nullptr;
-			Lock		_lock;
-			CondVar*	_condvar = nullptr;
-		};
-
-		ScopedLock scopedLock() { return ScopedLock(_data, _mutex, _condvar); }
-
-	private:
-		T _data;
-		Mutex _mutex;
-		CondVar _condvar;
-	};
-
 	class MyRequest {
 	public:
 		void init(int64_t start, int64_t count) {
@@ -119,8 +61,8 @@ public:
 			int endedThread = 0;
 		};
 
-		LockProtected<Request>	_request;
-		LockProtected<Result>	_result;
+		MyCondVarProtected<Request>	_request;
+		MyCondVarProtected<Result>	_result;
 	};
 
 	class MyThread {
@@ -172,7 +114,7 @@ public:
 	};
 
 	static void run() {
-		printf("\n========== my_example4 ========\n");
+		printf("\n========== my_example5 ========\n");
 
 		MyRequest req;
 		MyThread threads[kThreadCount];

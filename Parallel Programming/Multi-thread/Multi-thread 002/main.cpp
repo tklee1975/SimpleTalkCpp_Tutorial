@@ -7,10 +7,10 @@ void my_example4();
 void my_example5();
 
 int main() {
-//	my_example1();
-//	my_example2();
-//	my_example3();
-//	my_example4();
+	my_example1();
+	my_example2();
+	my_example3();
+	my_example4();
 	my_example5();
 
 	printf("\n======= Program Ended ===========\n");

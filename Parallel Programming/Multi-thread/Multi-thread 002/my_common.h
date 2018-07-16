@@ -60,5 +60,4 @@ bool primeNumber(int64_t v) {
 
 const int64_t kPrimeStart = 1000000000LL;
 const int64_t kThreadCount = 4;
-const int64_t kBatchSize = 25;
-
+const int64_t kBatchSize = 10;

@@ -33,6 +33,8 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="MyCondVarProtected.h" />
+    <ClInclude Include="MyMutexProtected.h" />
     <ClInclude Include="my_common.h" />
     <ClInclude Include="precompiledHeader.h" />
   </ItemGroup>
