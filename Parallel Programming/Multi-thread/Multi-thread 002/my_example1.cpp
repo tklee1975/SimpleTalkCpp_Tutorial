@@ -4,7 +4,7 @@ void my_example1() {
 	printf("\n========== my_example1 ========\n");
 
 	auto t = GetCurrentThread();
-	SetThreadAffinityMask(t, 1);
+	SetThreadAffinityMask(t, 1 << 3);
 
 	int64_t resultCount = 0;
 	MyTimer timer;

@@ -43,14 +43,15 @@ public:
 			_result.notify_all();
 		}
 
-		bool isDone() {
+		void waitForEnd() {
 			auto r = _result.scopedLock();
-			printf("===> result count: %lld\n", r->primeNumbers.size());
-			if (r->endedThread >= kThreadCount) {
-				return true;
+			for (;;) {
+				printf("===> result count: %lld\n", r->primeNumbers.size());
+				if (r->endedThread >= kThreadCount) {
+					break;
+				}
+				r.wait();
 			}
-			r.wait();
-			return false;
 		}
 
 	private:
@@ -130,8 +131,7 @@ public:
 			threads[i].run(req, i);
 		}
 
-		while (!req.isDone()) {
-		}
+		req.waitForEnd();
 
 		printf("done\n");
 		timer.print();
