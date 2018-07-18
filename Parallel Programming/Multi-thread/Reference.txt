@@ -26,6 +26,9 @@ Reference:
 
 	C++11 Standard Library Extensions — Concurrency
 	- https://isocpp.org/wiki/faq/cpp11-library-concurrency
+	
+	Facebook C++ Library - Folloy Synchronized
+	- https://github.com/facebook/folly/blob/master/folly/docs/Synchronized.md
 		
 	UC Berkeley CS162 Operating Systems and Systems Programming - Falll 2010
 	- https://www.youtube.com/playlist?list=PLXEcjDJ1Ogg6DLOSMYWeGclZzzONHgZwc
