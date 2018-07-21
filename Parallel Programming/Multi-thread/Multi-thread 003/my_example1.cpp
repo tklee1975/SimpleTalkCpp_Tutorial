@@ -1,9 +1,5 @@
-#include <mutex>
-#include <chrono>
-#include <thread>
-#include <sstream>
+#include "my_common.h"
 
-// Dead Lock
 class Example1 {
 public:
 	using Lock = std::unique_lock<std::mutex>;

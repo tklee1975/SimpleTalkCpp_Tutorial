@@ -21,5 +21,13 @@
     <ClCompile Include="my_example1.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="my_example2.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="my_common.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
