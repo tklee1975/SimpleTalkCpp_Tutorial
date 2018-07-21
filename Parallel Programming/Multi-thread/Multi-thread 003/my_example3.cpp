@@ -11,10 +11,12 @@ public:
 
 private:
 	int& get() {
+		std::lock_guard<std::mutex> lock(_mutex);
 		return _map[myGetThreadId()];
 	}
 
 	std::map<DWORD, int> _map;
+	std::mutex _mutex;
 };
 
 class MyTlsInt {
@@ -58,7 +60,7 @@ private:
 	DWORD _tls = TLS_OUT_OF_INDEXES;
 };
 
-//int g_value = 0;
+//int g_value = 0; // not thread safe
 //MyThreadLocalInt g_value;
 //MyTlsInt g_value;
 thread_local int g_value = 0;
@@ -67,12 +69,7 @@ class Example3 {
 public:
 	static const int N = 10;
 
-	std::mutex mutex;
-	using Lock = std::lock_guard<std::mutex>;
-
 	int add(int v) {
-		Lock lock(mutex);
-
 		g_value += v;
 		Sleep(200);
 		return g_value;
