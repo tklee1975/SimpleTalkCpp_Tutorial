@@ -9,6 +9,7 @@
 #include <mutex>
 #include <condition_variable>
 #include <atomic>
+#include <map>
 
 class MyNonCopyable {
 public:
@@ -51,3 +52,7 @@ private:
 
 	uint64_t m_start;
 };
+
+inline DWORD myGetThreadId() {
+	return GetThreadId(GetCurrentThread());
+}

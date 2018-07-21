@@ -4,12 +4,6 @@ class Example1 {
 public:
 	using Lock = std::unique_lock<std::mutex>;
 
-	static std::string getThreadId() {
-		std::stringstream ss;
-		ss << std::this_thread::get_id();
-		return ss.str();
-	}
-
 	static void my_sleep() {
 		std::this_thread::sleep_for(std::chrono::seconds(1));
 	}
@@ -17,56 +11,52 @@ public:
 	class BankAccount {
 	public:
 		void transfer(BankAccount& to, int amount) {
-			doTransfer_DeadLock(to, amount);
+			//doTransfer_DeadLock(to, amount);
 			//doTransfer_LockInOrder(to, amount);
-			//doTransfer_TryLock(to, amount);
+			doTransfer_TryLock(to, amount);
 		}
 
 		void doTransfer_DeadLock(BankAccount& to, int amount) {
-			auto threadId = getThreadId();
+			printf("Thread %08X: start transfer %p -> %p\n", myGetThreadId(), this, &to);
 
-			printf("Thread %s: start transfer %p -> %p\n", threadId.c_str(), this, &to);
-
-			printf("Thread %s: lock %p\n", threadId.c_str(), this);
+			printf("Thread %08X: lock %p\n", myGetThreadId(), this);
 			Lock lockFrom(_mutex);
 
 			my_sleep();
 
-			printf("Thread %s: lock %p\n", threadId.c_str(), &to);
+			printf("Thread %08X: lock %p\n", myGetThreadId(), &to);
 			Lock lockTo(to._mutex);
 
 			my_sleep();
 			_balance -= amount;
 			to._balance += amount;
 
-			printf("Thread %s: end transfer %p -> %p\n", threadId.c_str(), this, &to);
+			printf("Thread %08X: end transfer %p -> %p\n", myGetThreadId(), this, &to);
 		}
 
 		void doTransfer_LockInOrder(BankAccount& to, int amount) {
-			auto threadId = getThreadId();
-
-			printf("Thread %s: start transfer %p -> %p\n", threadId.c_str(), this, &to);
+			printf("Thread %08X: start transfer %p -> %p\n", myGetThreadId(), this, &to);
 
 			Lock lockFrom(_mutex, std::defer_lock);
 			my_sleep();
 			Lock lockTo(to._mutex, std::defer_lock);
 
 			if (this < &to) {
-				printf("Thread %s: lock %p\n", threadId.c_str(), this);
+				printf("Thread %08X: lock %p\n", myGetThreadId(), this);
 				lockFrom.lock(); // <--- lockA first
 
 				my_sleep();
 
-				printf("Thread %s: lock %p\n", threadId.c_str(), &to);
+				printf("Thread %08X: lock %p\n", myGetThreadId(), &to);
 				lockTo.lock();
 
 			} else {
-				printf("Thread %s: lock %p\n", threadId.c_str(), &to);
+				printf("Thread %08X: lock %p\n", myGetThreadId(), &to);
 				lockTo.lock(); // <-- lockB first
 
 				my_sleep();
 
-				printf("Thread %s: lock %p\n", threadId.c_str(), this);
+				printf("Thread %08X: lock %p\n", myGetThreadId(), this);
 				lockFrom.lock();
 			}
 
@@ -74,25 +64,23 @@ public:
 			_balance -= amount;
 			to._balance += amount;
 
-			printf("Thread %s: end transfer %p -> %p\n", threadId.c_str(), this, &to);
+			printf("Thread %08X: end transfer %p -> %p\n", myGetThreadId(), this, &to);
 		}
 
 		void doTransfer_TryLock(BankAccount& to, int amount) {
-			auto threadId = getThreadId();
-
-			printf("Thread %s: start transfer %p -> %p\n", threadId.c_str(), this, &to);
+			printf("Thread %08X: start transfer %p -> %p\n", myGetThreadId(), this, &to);
 
 			for(;;) {
-				printf("Thread %s: lock %p\n", threadId.c_str(), this);
+				printf("Thread %08X: lock %p\n", myGetThreadId(), this);
 				Lock lockFrom(_mutex);
 
 				my_sleep();
 
-				printf("Thread %s: try lock %p\n", threadId.c_str(), this);
+				printf("Thread %08X: try lock %p\n", myGetThreadId(), this);
 				Lock lockTo(to._mutex, std::try_to_lock);
 
 				if (!lockTo.owns_lock()) {
-					printf("Thread %s: unlock %p\n", threadId.c_str(), this);
+					printf("Thread %08X: unlock %p\n", myGetThreadId(), this);
 					lockFrom.unlock(); // <--- unlock before sleep
 					my_sleep();
 					continue;
@@ -102,7 +90,7 @@ public:
 				_balance -= amount;
 				to._balance += amount;
 
-				printf("Thread %s: end transfer %p -> %p\n", threadId.c_str(), this, &to);
+				printf("Thread %08X: end transfer %p -> %p\n", myGetThreadId(), this, &to);
 				break;
 			}
 		}
@@ -119,13 +107,11 @@ public:
 
 	void run() {
 		{
-			auto threadId = getThreadId();
-			printf("main thread %s\n", threadId.c_str());
+			printf("Thread %08X: main thread\n", myGetThreadId());
 		}
 
 		std::thread thread0([this](){
-			auto threadId = getThreadId();
-			printf("thread0 %s\n", threadId.c_str());
+			printf("Thread %08X: thread0 start\n", myGetThreadId());
 			accountA.transfer(accountB, 10);
 		});
 

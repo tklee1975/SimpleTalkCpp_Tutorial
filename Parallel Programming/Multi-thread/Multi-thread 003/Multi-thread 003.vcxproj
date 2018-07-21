@@ -146,6 +146,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="my_example1.cpp" />
     <ClCompile Include="my_example2.cpp" />
+    <ClCompile Include="my_example3.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="my_common.h" />
