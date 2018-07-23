@@ -6,6 +6,8 @@ option casemap :none
 
 .data
 
+	my_msg db "Good Morning", 0
+
 .code
 
 my_hello PROTO
@@ -17,8 +19,16 @@ my_print_int_stdcall PROTO stdcall v0:DWORD, v1:DWORD, v2:DWORD
 ; Obsoleted
 ; my_print_int__pascal PROTO pascal v0:DWORD, v1:DWORD, v2:DWORD
 
-my_asm_func PROC
+my_print_string PROTO pStr:DWORD
+
+my_func PROC
+	mov eax, 1234H
 	call [my_hello]
+	ret
+my_func ENDP
+
+my_asm_func PROC
+	call [my_func]
 
 	push 1
 	push 2
@@ -34,6 +44,8 @@ my_asm_func PROC
 	call [my_print_int_stdcall]
 
 	invoke my_print_int_stdcall, 4, 5, 6
+
+	invoke my_print_string, addr my_msg
 
 	ret
 

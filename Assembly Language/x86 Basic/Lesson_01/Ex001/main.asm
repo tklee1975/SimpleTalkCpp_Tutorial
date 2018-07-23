@@ -1,16 +1,17 @@
 .386
+
 .model flat, stdcall
 
-option casemap :none
-
 .data
+
 .code
 
 mainCRTStartup PROC
 	mov ecx, 0
+;	xor ecx, ecx
 
-my_label:
-	add ecx, 1
+my_label:	
+	inc ecx
 	cmp ecx, 3
 	jl my_label
 
