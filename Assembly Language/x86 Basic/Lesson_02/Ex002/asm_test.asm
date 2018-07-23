@@ -27,8 +27,23 @@ my_func PROC
 	ret
 my_func ENDP
 
+my_func_local_var PROC
+	local v_a[4] : DWORD
+
+	mov ecx, 0
+label0:
+	mov DWORD PTR [v_a + ecx * 4], ecx
+	inc ecx
+	cmp ecx, 4
+	jl label0
+
+	ret
+my_func_local_var ENDP
+
 my_asm_func PROC
 	call [my_func]
+
+	call [my_func_local_var]
 
 	push 1
 	push 2
