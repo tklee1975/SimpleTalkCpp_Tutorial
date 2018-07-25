@@ -21,6 +21,8 @@ my_print_int_stdcall PROTO stdcall v0:DWORD, v1:DWORD, v2:DWORD
 
 my_print_string PROTO pStr:DWORD
 
+MessageBoxA PROTO stdcall arg_hwnd:DWORD, arg_caption:DWORD, arg_msg:DWORD, arg_flag:DWORD
+
 my_func PROC
 	mov eax, 1234H
 	call [my_hello]
@@ -41,27 +43,36 @@ label0:
 my_func_local_var ENDP
 
 my_asm_func PROC
+	;-----------
 	call [my_func]
 
+	;-----------
 	call [my_func_local_var]
 
+	;-----------
 	push 1
 	push 2
 	push 3
 	call [my_print_int]
 	add esp, 12;  caller cleans the stack after the call
 
+	;-----------
 	invoke my_print_int, 4, 5, 6
 
+	;-----------
 	push 1
 	push 2
 	push 3
 	call [my_print_int_stdcall]
 
+	;-----------
 	invoke my_print_int_stdcall, 4, 5, 6
 
+	;-----------
 	invoke my_print_string, addr my_msg
 
+	;-----------
+	invoke MessageBoxA, 0, addr my_msg, 0, 0
 	ret
 
 my_asm_func ENDP

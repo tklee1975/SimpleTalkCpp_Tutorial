@@ -16,6 +16,9 @@ Reference:
 	Microsoft Macro Assembler Reference
 	- https://msdn.microsoft.com/en-us/library/afzk3475.aspx
 
+	Visual Studio - Registers Window (Intel x86 Processor Flags) 
+	- https://msdn.microsoft.com/en-us/library/kwydd1t7%28v=vs.85%29.aspx
+	
 	x86 Assembly Guide
 	- http://www.cs.virginia.edu/~evans/cs216/guides/x86.html
 	
@@ -35,8 +38,5 @@ Books:
 		
 tags:
 	廣東話 C++ 教學, 簡單黎講 C++, C++ in Cantonese, MASM, x86 Asm, 廣東話 程式設計
-	
-	
-
 	
 	
