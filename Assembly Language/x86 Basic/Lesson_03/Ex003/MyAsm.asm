@@ -1,14 +1,18 @@
 .686
 .XMM
 
-.model flat, stdcall
+.model flat, C
 
 option casemap :none
 
 .code
 
 asm_add_cpp PROC arg_dst:DWORD, arg_a:DWORD, arg_b:DWORD, arg_size:DWORD
-	pusha
+	;pusha
+	push ecx
+	push esi
+	push ebx
+	push edi
 
 	mov ecx, arg_size
 	mov esi, arg_a
@@ -27,7 +31,11 @@ my_loop:
 	dec ecx
 	jnz my_loop
 
-	popa
+	;popa
+	pop edi
+	pop ebx
+	pop esi
+	pop ecx
 	ret
 asm_add_cpp ENDP
 
