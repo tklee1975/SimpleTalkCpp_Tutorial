@@ -37,6 +37,6 @@ Reference:
 Books:
 		
 tags:
-	廣東話 C++ 教學, 簡單黎講 C++, C++ in Cantonese, MASM, x86 Asm, 廣東話 程式設計
+	廣東話 C++ 教學, 簡單黎講 C++, C++ in Cantonese, MASM, Assembly, SIMD, Interrupt, 廣東話 程式設計
 	
 	
