@@ -1,3 +1,6 @@
+!!! C 語言入門 #001.1 -  Create Project 步驟更改 !!!
+https://youtu.be/uxeNRoI5el8
+
 廣東話講解 C/C++ on YouTube
 
 簡單黎講 C++ - C 語言入門
