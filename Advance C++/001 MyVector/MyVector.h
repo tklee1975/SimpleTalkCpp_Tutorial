@@ -34,7 +34,10 @@ struct isRawCopyable {
 template<typename T>
 void my_memcpy(T* dst, const T* src, int n) {
 	if (n * sizeof(T) < 128) {
-		for () {
+		if (n < 0) return;
+		T* end = src + n;
+		for (;src < end; src++, dst++) {
+			*dst = *src;
 		}
 	}else{
 		memcpy(dst, src, n * sizeof(T));
