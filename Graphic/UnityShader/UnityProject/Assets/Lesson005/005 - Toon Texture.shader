@@ -1,4 +1,6 @@
-﻿Shader "MyShader/005 - Toon Texture"
+﻿// Upgrade NOTE: replaced 'mul(UNITY_MATRIX_MVP,*)' with 'UnityObjectToClipPos(*)'
+
+Shader "MyShader/005 - Toon Texture"
 {
 	Properties {
 		toonOutlineWidth	("Toon Outline Width", Range(0,1)) = 0.04
@@ -41,7 +43,7 @@
 			v2f vert (appdata v)
 			{
 				v2f o;
-				o.pos = mul(UNITY_MATRIX_MVP, v.pos);
+				o.pos = UnityObjectToClipPos(v.pos);
 
 				float3 N = mul ((float3x3)UNITY_MATRIX_MV, v.normal);
                 float2 offset = mul((float2x2)UNITY_MATRIX_P, N.xy);
@@ -87,7 +89,7 @@
 	
 			v2f vs_main (appdata v) {
 				v2f o;
-				o.pos = mul(UNITY_MATRIX_MVP, v.pos);
+				o.pos = UnityObjectToClipPos(v.pos);
 				o.wpos = mul(UNITY_MATRIX_M, v.pos).xyz;
 
 				o.color = v.color;

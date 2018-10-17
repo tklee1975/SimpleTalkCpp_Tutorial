@@ -1,4 +1,6 @@
-﻿Shader "MyShader/005 - Lighting"
+﻿// Upgrade NOTE: replaced 'mul(UNITY_MATRIX_MVP,*)' with 'UnityObjectToClipPos(*)'
+
+Shader "MyShader/005 - Lighting"
 {
 	Properties {
 		ambientColor		("Ambient Color", Color) = (0,0,0,0)
@@ -40,7 +42,7 @@
 	
 			v2f vs_main (appdata v) {
 				v2f o;
-				o.pos = mul(UNITY_MATRIX_MVP, v.pos);
+				o.pos = UnityObjectToClipPos(v.pos);
 				o.wpos = mul(UNITY_MATRIX_M, v.pos).xyz;
 
 				o.color = v.color;

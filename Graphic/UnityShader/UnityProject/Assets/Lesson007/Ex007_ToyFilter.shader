@@ -1,4 +1,4 @@
-﻿Shader "MyShader/Ex007_ToyFilter"
+Shader "MyShader/Ex007_ToyFilter"
 {
 	Properties
 	{
@@ -51,13 +51,7 @@
 
 			float4 frag (v2f i) : SV_Target
 			{
-			#if UNITY_UV_STARTS_AT_TOP
-				// DirectX
-				float2 uv = float2(i.uv.x, 1 - i.uv.y);
-			#else
-				// OpenGL
 				float2 uv = i.uv;
-			#endif
 
 				float4 blur = tex2D(blurTex, uv);
 				float4 c = tex2D(_MainTex, i.uv);

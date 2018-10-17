@@ -18,7 +18,7 @@ public class Ex009_QuatShaderDemo : MonoBehaviour {
 	[ContextMenu("Re-Create Control Cubes")]
 	void CreateControlCubes() {
 		string groupName = "_ControlCubes_";
-		var group = transform.FindChild(groupName);
+		var group = transform.Find(groupName);
 		if (group) {
 			GameObject.DestroyImmediate(group.gameObject);
 		}

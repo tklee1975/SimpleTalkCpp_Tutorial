@@ -1,4 +1,6 @@
-﻿Shader "MyShader/Ex008 - ShadowMap Cast"
+﻿// Upgrade NOTE: replaced 'mul(UNITY_MATRIX_MVP,*)' with 'UnityObjectToClipPos(*)'
+
+Shader "MyShader/Ex008 - ShadowMap Cast"
 {
 	SubShader 
 	{
@@ -32,7 +34,7 @@
 				float d = o.pos.z / o.pos.w;
 				d = d * 0.5 + 0.5;
 			#else
-				o.pos = mul(UNITY_MATRIX_MVP, v.pos);				
+				o.pos = UnityObjectToClipPos(v.pos);				
 				float d = o.pos.z / o.pos.w;
 				if (UNITY_NEAR_CLIP_VALUE == -1) {
 					d = d * 0.5 + 0.5;

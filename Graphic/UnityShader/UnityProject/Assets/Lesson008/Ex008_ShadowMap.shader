@@ -1,4 +1,6 @@
-﻿// Upgrade NOTE: replaced '_Object2World' with 'unity_ObjectToWorld'
+﻿// Upgrade NOTE: replaced 'mul(UNITY_MATRIX_MVP,*)' with 'UnityObjectToClipPos(*)'
+
+// Upgrade NOTE: replaced '_Object2World' with 'unity_ObjectToWorld'
 
 Shader "MyShader/Ex008 - Shadow Map"
 {
@@ -43,7 +45,7 @@ Shader "MyShader/Ex008 - Shadow Map"
 
 			v2f vs_main (appdata v) {
 				v2f o;
-				o.pos = mul(UNITY_MATRIX_MVP, v.pos);
+				o.pos = UnityObjectToClipPos(v.pos);
 				o.wpos = mul(UNITY_MATRIX_M, v.pos).xyz;
 
 				o.color = v.color;
