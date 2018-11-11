@@ -1,0 +1,95 @@
+=== Houdini Basic ===
+- Basic UI
+	- Pane
+		- Scene View
+		- Network View
+		- Change Pane
+		- Split Pane
+		- Remove Pane
+		- Swap pane
+
+	- Viewport	
+		- View (Hotkey: Space Bar)			
+		- Frame Selected (Hotkey: Space + F)
+		- Frame All
+		- Hold Space / Click Space
+		
+	- Select Tool
+		- Select Edge Loop (Double Click Edge)
+		- Select From/To (Hold A)
+				
+	- Move / Rotate / Scale Tool
+		- World Sapce / Object Space (Hotkey: M)
+		- Snap Grid (Hold Ctrl + Drag)
+		- Tool/ Object Pivot (Hotkey: ', Hotkey: ")
+		
+	- Attribute
+		- Default
+			- Reset to Default
+			- Set Default
+			- Reset Factory Default
+			
+		- MMB sliding
+
+- Modelling
+	- Create Box
+	- Create Simple Charactor
+	- Parent / Child
+		- Solaris System (Sun / Earth / Moon)
+		
+	- Display Options
+		- display Point / Normal
+		- Wireframe
+		- HQ OpenGL
+	
+	- Poly Modelling
+		- Extrude (with path)
+		- Subdiv
+		- Smooth
+		- Transform
+		- Merge
+		- Edit Node
+		
+	- Deform
+		- Mountain
+		- Bend / Squish / Twist
+		- Ray
+
+	- Geo
+		- Point / Edge / Primitive		
+		- Spreadsheet
+		- Add Node
+			- Add Point
+			- Add Primitive
+		
+	- Curve
+		- Draw
+		- Revolve
+				
+	- Scuplt
+	
+	- Metaball
+											
+	- Group
+	
+	- Nurbs Modelling
+		
+		
+- Rendering
+	- Assign Shader
+	- Texture
+		- UV
+		
+- Animation
+
+- Particle
+
+- Rigid Body Dynamic
+
+- Heightfield
+
+- Volume Dynamic
+
+
+		
+	
