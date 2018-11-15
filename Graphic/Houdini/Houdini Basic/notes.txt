@@ -1,3 +1,19 @@
+#  (廣東話, Cantonese) [簡單黎講 C++]
+
+簡單黎講 C++ - Houdini Basic
+廣東話 C++ 教學系列 https://www.youtube.com/channel/UCWW9g_90Ik1U8ULNG5PvoYQ
+
+facebook page
+https://www.facebook.com/%E7%B0%A1%E5%96%AE%E9%BB%8E%E8%AC%9B-C-Plus-Plus-319894615140227
+
+歡迎留言 詢問問題
+
+Example Houdini Project:
+	https://github.com/SimpleTalkCpp/SimpleTalkCpp_Tutorial/tree/master/Graphic/Houdini/Houdini%20Basic
+
+tags:
+	Houdini, 廣東話 Houdini 教學, 簡單黎講 C++
+
 === Houdini Basic ===
 - Basic UI
 	- Pane
@@ -23,7 +39,7 @@
 		- Snap Grid (Hold Ctrl + Drag)
 		- Tool/ Object Pivot (Hotkey: ', Hotkey: ")
 		
-	- Attribute
+	- Paramater
 		- Default
 			- Reset to Default
 			- Set Default
@@ -31,8 +47,7 @@
 			
 		- MMB sliding
 
-- Modelling
-	- Create Box
+- Poly Model
 	- Create Simple Charactor
 	- Parent / Child
 		- Solaris System (Sun / Earth / Moon)
@@ -49,29 +64,66 @@
 		- Transform
 		- Merge
 		- Edit Node
+		- Bend / Squish / Twist
+							
+- Poly Model 2
+	- Primitive
+		- Box
+		- Sphere
+		- Tube
+		- Font
+		- File
+		- Control (1 point)
 		
 	- Deform
 		- Mountain
-		- Bend / Squish / Twist
+		- Scuplt
 		- Ray
-
-	- Geo
-		- Point / Edge / Primitive		
-		- Spreadsheet
-		- Add Node
-			- Add Point
-			- Add Primitive
 		
+	- Boolean Node
+	- Metaball
+	- PolyWire
+	
 	- Curve
 		- Draw
+			- Project on Geo
+		- Curve Node
 		- Revolve
-				
-	- Scuplt
 	
-	- Metaball
-											
+	- Poly Bridge
+		- from same Sphere (disable auto direction)
+		- Alone curve
+		
+- Attribute	
+	- Spreadsheet		
+	- Display options > Guides
+		- Scale normal
+		- Point Size
+		- Font Size
+	
+	- Add Node
+		- Add Point
+		- Add Primitive
+		
+	- Attribute
+		- Point Node
+			- Add Color (Cd - Color Diffuse)
+				- Random
+				- Add to Primitive (only works if Point doesn't have Cd)			
+			- Add Normal
+
+	- Copy To Point
+		- Point from Grid
+		- Point from Curve
+			- Curve Normal from PolyFrame Node
+			- Curve Normal from "Point" Node
+
 	- Group
-	
+		- Group By Range
+		- Group Promote
+			
+	- Pipe Example
+						
 	- Nurbs Modelling
 		
 		
