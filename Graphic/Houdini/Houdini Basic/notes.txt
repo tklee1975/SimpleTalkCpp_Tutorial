@@ -123,17 +123,232 @@ tags:
 		- Group Promote
 			
 	- Pipe Example
-						
-	- Nurbs Modelling
-		
-		
-- Rendering
-	- Assign Shader
-	- Texture
-		- UV
-		
-- Animation
 
+==============
+- Display Curve Hull
+
+- Assign Shader
+	- PBR
+	
+- Texture Mapping	
+	- UV Project
+	- UV Quick Shade
+	- UV Edit
+		- Display UV overlap, Back face
+		- Select UV Connected
+	- UV Fuse
+	- UV Brush
+	- UV Transform (Animation)
+		- Waterfall
+	- Attr Noise (Additive)
+	- UV Flatten
+		- select edge
+	- UV Layout
+	
+==============
+save texture UV to image
+
+- SOP Geometry (Shape)
+- CHOP (Channel)
+- SHOP (Shader)
+- POP (Particle)
+- DOP (Dynamic)
+- ROP (Render)
+- COP (Compositing)
+
+- Paramater Expression
+	- HScript Expression
+		- case sensitive
+		- http://www.sidefx.com/docs/houdini/ref/expression_cookbook.html
+		- http://www.sidefx.com/docs/houdini/network/expressions.html#globals
+		
+	- +-*/ %
+	- ^, sqrt
+	- $F, $FF, $FSTART, $FEND, $FPS
+	- $T, $TSTART, $TEND	
+	- Ctrl + E - Expression Editor
+		- print("my_label:", $F)	
+		- add to channel list
+	- min, max, clamp
+	- if(expression, true_value, false_value)
+	
+	- sin, cos, tan
+	- deg / rad
+		- degree - Returns the degree a specified face or hull.
+	- abs
+		- abs(sin($F * 5) * 10)
+		
+	- floor, ceil, round, trunc,
+	- fit
+
+	- pulse(value, start, end)
+		- pulse(sin($F), 0, 1)	
+	
+	- rand(seed)
+		- noise(X, Y, Z)
+
+	- Point - old Node
+		- sin(@P.x)		
+			
+	- Open Popup ParamaterPane
+		- Drag Channel
+		- ch()
+		- ch( chs("pickNode") + "/tx" )
+		- add Null node for ref
+	
+	- Custom Paramater
+		- Data Type
+			- int / float / bool
+			- color
+			- string
+			- vector2 / vector3 / vector4
+			- vecor <-- N dim
+			- matrix			
+	
+		- Drag from node
+		- Edit Paramater Interface (Add)
+		- Param Folder
+		
+		- Button
+			- Callback Script: `print("Hello", 1 + 3)`
+		
+		- Disable When: 
+			- {testToggle 0}  <-- bool
+			- {testFloat < 2} <-- float
+			- {testToggle 0} { testFloat > 2 }
+		- Driven Key
+			- chramp("testRamp", ch("tx") / 10 , 0) <-- 1 for colorG
+
+	- Subnet
+			
+	- String
+		- Font Node
+		- $JOB
+		- `1 + 2` <-- add back quote
+		- `10 + $F`
+		- String Paramater does not eval (cannot set expression language)
+			- require set 1 keyframe
+		
+		- substr
+			- substr("The quick brown fox jumps over the lazy dog", 0, ch("test"))
+		- random color per char
+			- add text attribute
+	
+	- SOP
+		- npoints / npointsgroup
+			- npoints("../box1")
+			- npoints(opinputpath(".", 0))
+			
+		- nprims / nprimsgroup
+		- point(surface_node, point_number, attribute, index)
+			- snap to point
+			- point("../box1", 2, "P", 2)			
+		- normal(surface_node, prim_num, u, v, index)
+	
+===========================			
+- VOP	
+	- P -> Cd
+		- fit (-5, 5, 0, 1)
+		
+	- P -> P
+		- Vector to Float -> Float to Vector
+			- Swizzle
+			- Constant set Y
+			- Sine Y  (rad)
+			- Distance -> Sine
+			- MulConstant for Distance
+			- Mul and add param
+				- update param is faster (no need compile VEX again)
+			- Promote Param (MMB)
+			- Time connect to mul
+		
+
+- VEX
+	- Attr Wrangle
+	- Solver
+	
+======================================
+- HScript	
+		- string
+			- strlen
+			- strcat
+			- strcmp / strcasecmp
+			- strdup(3, "abc") = "abcabcabc" <-- repeat
+			- strreplace
+			- substr
+			- tolower / toupper
+
+			- atof / ftoa
+			- atoi
+			- padzero
+			- index <-- find char index
+			- rindex
+			
+		- Channel
+			- chexist(channel_name)
+			- property - Similar to ch(), but for render properties, with a default if the property doesn’t exist.
+					
+		- Object Path
+			- opname / opdigits
+			- oprelativepath / opfullpath
+			- opsubpath
+						
+		- 3D Math
+			- dot / cross product
+			- length(x, y, z)
+			- normalize
+			- vangle <-- angle between two vectors.
+				
+		- eval()
+				
+- Python
+	- Shell
+	- Single line is Expression
+	- Multi-line is function need "return" value		
+
+
+=====================
+	
+- Render View
+	- Set Camera	
+		- Tie View To Camera/Light
+	- Add Light		
+		- Point Light
+		- Spot Light
+			- Look Through Light
+		- Directional Light
+		- Area Light
+		- Env Light (Image Base Lighting)		
+	- Snap shot
+	- Take List
+
+========================	
+- Set Project
+	- $JOB
+
+- Compositing
+	- COP
+	- Matte
+		- Color
+		- Ramp
+		- Font
+		- Geo
+
+- Chop Network  / Audio
+	- Export To Channel
+	- Create MotionFx from Paramater
+		- Noise
+		- Constant - ch("tx")
+		- Export - colorr	
+	- File
+	- Audio Input
+	- GamePad
+
+=======================
+- Animatio Rigging
+	- Bind Skin
+
+============================
 - Particle
 
 - Rigid Body Dynamic
@@ -141,6 +356,8 @@ tags:
 - Heightfield
 
 - Volume Dynamic
+
+- Nurbs Modelling
 
 
 		
