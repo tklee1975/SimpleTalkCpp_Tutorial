@@ -246,23 +246,50 @@ save texture UV to image
 		- normal(surface_node, prim_num, u, v, index)
 	
 ===========================			
-- VOP	
-	- P -> Cd
-		- fit (-5, 5, 0, 1)
-		
-	- P -> P
-		- Vector to Float -> Float to Vector
-			- Swizzle
-			- Constant set Y
-			- Sine Y  (rad)
-			- Distance -> Sine
-			- MulConstant for Distance
-			- Mul and add param
-				- update param is faster (no need compile VEX again)
-			- Promote Param (MMB)
-			- Time connect to mul
-		
+- VOP
+	- Point - Old Node
 
+	- Ex801
+		- P -> Cd
+			- fit (-5, 5, 0, 1)
+			
+		- P -> P
+			- Vector to Float -> Float to Vector
+				- Swizzle
+				- Constant set Y
+				- Sine Y  (rad)
+				- Distance -> Sine
+				- MulConstant for Distance
+				- Mul and add param
+					- update param is faster (no need compile VEX again)
+				- Promote Param (MMB)
+				- Time connect to mul
+
+	- Ex002
+		- Periodic Noise
+			- 4D -> 3D Vector to Vector4				
+		- ptnum -> Bind Export new param "TestOut"
+		- Bind (Input)		
+	
+	- Ex003
+		- Mix Second Input
+			- import point
+		
+	- Ex004
+		- getAttrib for aim point
+		- Normal by LookAt		
+		
+	- Ex005
+		- Print String
+		
+	- Ex006
+		- Append Array 
+		- For Loop
+		
+	- Ex007	
+		- Add Point (per Point or Detail)
+		- For Loop
+		
 - VEX
 	- Attr Wrangle
 	- Solver
