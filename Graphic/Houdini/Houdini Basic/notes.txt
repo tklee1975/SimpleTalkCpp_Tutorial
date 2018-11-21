@@ -294,6 +294,27 @@ save texture UV to image
 	- Attr Wrangle
 	- Solver
 	
+=====================================
+- TimeShift
+	- Trail by Merge + For Loop
+
+	- Trail
+
+- Re-time	
+
+- Sub-network
+	
+- Copy Stamp
+	- Line + n-gon
+	- VOP add attribute (don't put stamp() inside, please add param)
+	- re-time
+
+- Solver
+	- move point without POP
+	
+- Velocity, force by VOP
+- Visiualizer
+	
 ======================================
 - HScript	
 		- string
@@ -361,22 +382,77 @@ save texture UV to image
 		- Font
 		- Geo
 
+===================================		
 - Chop Network  / Audio
+	- Create
+		- Wave
+		- Noise
+	
+	- Sample Rate
+		- Display Point (Press D)
+
+	- Output
+		- chop("../chop/node/chan")
+			- add Null node
+		- Export to Parameter
+
+	- Multiple Channels
+		- Merge (Name)
+	
+	- Comp
+		- Math
+		- Mul
+		- Bend (0 ~ 1)
+		- Effect
+			- same as Simple Blend
+			
+			
+	- Obj Node Constraint
+		- Obj Enable Constraint
+		- GetWorldPos
+		- Point Constraint
+			- Switch between 2 points
+			- Constraint Simple Blend
+		- LookAt
+		- Parent Constraint
+		- Follow Path
+		
+	- Merge
+	- Delete 
+	
+	- Geo Input	
+	- Geo Output SOP Channel
+	
 	- Export To Channel
 	- Create MotionFx from Paramater
 		- Noise
 		- Constant - ch("tx")
 		- Export - colorr	
-	- File
-	- Audio Input
+	- Audio File Input
+		- Resample !!		
 	- GamePad
-
+	
 =======================
+- Animation Curve
+
+- Null Node
+	- Icon (Cube, Circle, Custom SOP)
+
+- Obj Node Transformation
+	- Keep transformation when parent
+	- Child Compensation
+	- Pre Transform
+	- Gimbal Lock
+
 - Animatio Rigging
+	- Add Bone
+		- Pre Transform
+	- Create Sub Network for Bones (so you can hide it)
 	- Bind Skin
 
 ============================
 - Particle
+	- Pop network
 
 - Rigid Body Dynamic
 
