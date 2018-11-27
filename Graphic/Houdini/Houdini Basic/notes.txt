@@ -310,13 +310,15 @@ save texture UV to image
 		- Visualize
 		
 =======================
-
 - Obj Node Transformation
 	- Gimbal Lock
 	- Keep transformation when parent
 	- Child Compensation
 	- Pre Transform
 
+- Set Project
+	- $JOB
+	
 - Animation Curve
 	- Tangent
 		- Hold Ctrl Keep angle
@@ -349,8 +351,100 @@ save texture UV to image
 		- Menu > View > Vertical Adpat (V)
 		- Multi-Graph	
 		
-======================================
+===================================		
+- Chop Network, Constraint, Audio
+	- Create
+		- Wave
+		- Noise
 	
+	- Shape
+		- Limit
+		- Filter
+		- Lag
+		- Spline
+		- Spring
+	
+	- Output
+		- chop("../chop/node/chan")
+			- add Null node
+			
+		- Channel Node (Bind to Parameter)
+			- box1:ty  (relative to CHOP Network, not Channel Node)
+			- channel name
+				- t[xyz]
+				- blend[3-7:2]
+				- * ?
+
+		- Export to Parameter
+		
+		- Update Order
+			- Animation Curve -> Chop -> Export (MotionFX)
+		
+		- Animation Editor Menu > View > Draw Chop export
+		
+	- Sample Rate
+		- Display Point (Press D)
+		
+	- Multiple Channels	
+		- Merge (by Name)
+		- Delete 
+		- local varaible e.g. $C
+			- http://www.sidefx.com/docs/houdini/network/expressions.html		
+	
+	- Comp
+		- Math
+			- Combine Channels (All Channels from one Merged CHOP)
+			- Combine CHOPS (Combines Channels together)
+		- Mul
+	
+	- Channel VOP
+	
+	- Time
+		- Delay
+		- Cycle
+		- Extend
+		- Interpolate
+		
+	- Create MotionFx from Paramater
+		- Noise
+		- Constant - ch("tx")
+		- Export - color		
+			
+	- Obj Transformation Constraint
+		- Obj Enable Constraint
+		- GetWorldPos
+		- Point Constraint
+			- Switch between 2 points
+			- Constraint Simple Blend
+		- Pre-Transform Node
+		- LookAt
+		- Parent Constraint
+		- Follow Path
+		- Transform VOP
+			
+	- Deform Geometry by Channels
+		- Geo Input	
+		- Geo Output SOP Channel
+		- static (sample per point)
+		- animation (channel per point)
+	
+
+		
+	- Audio
+		- File Input
+		- Editor Audio Out Settings
+			- Scrub
+		- Resample !!
+		- Audio In
+		- Filter
+			
+	- Input Device
+		- Keyboard
+		- Mouse
+		- GamePad
+		
+			
+======================================
 - Animatio Rigging
 	- Bone		
 		- Bone Length
@@ -358,19 +452,14 @@ save texture UV to image
 		- Lock Rotate X, Z
 		
 	- Bone Tool		
+		- Chain Name
+		- Mouse Scroll for div
 		- (Ctrl-LMB) Split Bone
 		- (Shift-LMB) Add Bone 
+		- (Ctrl+MMB) Select Parent Bone
 		
-	- Create Sub Network for Bones (so you can hide it)
-	- Bind Skin
-				
-	- IK
-		- prefer angle
-		- IK / FK blending
-
-	- Null Node
-		- Icon (Cube, Circle, Custom SOP)
-		
+	- Create Bones from Curve
+								
 	- Capture Geo
 		- Capture Biharmonic
 			- Align Capture Pose
@@ -382,96 +471,153 @@ save texture UV to image
 			- Edit Capture Regions
 			- Edit Capture Weights			
 		
+	- IK		
+		- With Twist Affector		
+		- IK / FK blending
+
+	- Null Node
+		- Icon (Cube, Circle, Custom SOP)
 	
 	- Mirror Bones
 		- Bone name must have prefix L_
 	
-
-======================
-- VEX
-	- ; is needed
-	- Attr Wrangle
-	- vector @attr <-- same as v@attr
-	- @P = set(1, a, 0);  | @P = {1, a, 0} only work for constant
-
-=====================
-	
+========================	
 - Render View
-	- Set Camera	
+	- Create Camera
 		- Tie View To Camera/Light
+		- Set Resolution (from present)
+		- Focal Length
+		- Near / Far Clip
+		- Background image
+			
+	- Toolbar
+		- RenderNode Param
+		- Camera Param
+		- Auto Update
+		- Preview (Disable Preview for Final Render Quality)		
+		- Snapshot (Enter)
+		- Prev / Next Snapshot (Key: [,])
+		- Zoom Button -, +
+		
+		- Show Pixel Detail (Ctrl + LMB)
+		- Show Material Param on Pixel (Ctrl + Shift + LMB)
+		
 	- Add Light		
-		- Point Light
 		- Spot Light
-			- Look Through Light
+			- Look Through Light from Viewport
+		- Point Light
 		- Directional Light
 		- Area Light
-		- Env Light (Image Base Lighting)		
-	- Snap shot
-	- Take List
-
-========================	
-- Set Project
-	- $JOB
-
+		- Env Light (Image Base Lighting)
+		- Sky Light
+			- Use Time Data and Location
+			- Render Light Geometry (if want to see the Sky)
+			
+	- Create Mantra PBR
+		- Override Camera resolution
+		- Render to MPlay
+		- Render to Disk
+			- filename.$F4.png
+		- Render to Disk in BG (can close Houdini)
+		- Frame Range
+		- Network Render
+			Driver > Command
+		- Extra Image Plane
+			- Depth buffer
+			- check passes from Render View
+			- Add More Custom Pass
+		- Force Render Particular Object
+			- Disable Render All
+		- Take List
+		- Motion Blur			
+		
+=========================================================		
 - Compositing
 	- COP
+	- Set Canvas Size
+		- Menu > Edit > Composite Project Settings
+		
 	- Matte
 		- Color
 		- Ramp
 		- Font
 		- Geo
-
-===================================		
-- Chop Network  / Audio
-	- Create
-		- Wave
-		- Noise
+						
+- Out put network	
+	- Node by Node
+	- Geo File Output
+	- FBX File Output
+	- Alembic File Output
+	- Image File Output
+	- Chop File Output
+	- Particle Cache
+	- Renderer Output
 	
-	- Sample Rate
-		- Display Point (Press D)
-
-	- Output
-		- chop("../chop/node/chan")
-			- add Null node
-		- Export to Parameter
-		- Animation Editor Menu > View > Draw Chop export
-
-	- Multiple Channels
-		- Merge (Name)
-	
-	- Comp
-		- Math
-		- Mul
-		- Bend (0 ~ 1)
-		- Effect
-			- same as Simple Blend
-			
-			
-	- Obj Node Constraint
-		- Obj Enable Constraint
-		- GetWorldPos
-		- Point Constraint
-			- Switch between 2 points
-			- Constraint Simple Blend
-		- LookAt
-		- Parent Constraint
-		- Follow Path
+======================
+- VEX
+	- ; is needed
+	- Attr Wrangle
+	- Local Varaible
 		
-	- Merge
-	- Delete 
+	- auto add param to UI by VEX source
+		int     i  = chi("i");
+		float   f  = chf("f");
+		vector2 u  = chu("u");
+		vector  v  = chv("v");
+		vector4 p  = chp("p");
+		matrix2 m2 = ch2("m2");
+		matrix3 m3 = ch3("m3");
+		matrix  m4 = ch4("m4");
+		string  s  = chs("s");	
+
+	- Attr
+		- vector @attr <-- same as v@attr
+
+	- use @FF instead $F
+		
+	- @P = set(1, a, 0);  | @P = {1, a, 0} only work for constant
+		
+	- if-else
+	- while
+	- do-while
+	- for-loop	
+	- Array	
 	
-	- Geo Input	
-	- Geo Output SOP Channel
+===========================
+- Material Panel
+	- Toolbar
+		- Regenerate Shader Ball Icon (Refresh Button)
+		- Select (Select Scene Object for current Material)
+		- Assign (Assign Material to Selected Scene Object)
+		
+	- Principled Shader	
+		- Preset from Parameter options (Gear Icon)
+		- Metallic
+		- Roughness
+		- Reflection
+		- Transparents
+		- SSS
+		- Emission
+		- Normal map
+		- Displacement
+		
+	- Principled Shader Core 
+
+	- Constant Shader
+
+	- Material Builder (VOP)
+		- Drag VOP Node to Geometry or preview
+		- Menu > Edit > Collapse Selected into Material 
 	
-	- Export To Channel
-	- Create MotionFx from Paramater
-		- Noise
-		- Constant - ch("tx")
-		- Export - colorr	
-	- Audio File Input
-		- Resample !!		
-	- GamePad
+	- Layer Mix Node
+
+- OpenGL Node
 	
+- Shop (OLD)
+	- Surface Shader Builder
+	- Principled Shader	
+
+			
 ============================
 - Particle
 	- Pop network
