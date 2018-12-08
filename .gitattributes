@@ -48,3 +48,9 @@
 
 *.vcproj	-filter=lfs -diff=lfs -merge=lfs
 *.vsproj.filters	-filter=lfs -diff=lfs -merge=lfs
+
+# Unity Files
+*.shader
+*.mat
+*.meta
+*.unity
