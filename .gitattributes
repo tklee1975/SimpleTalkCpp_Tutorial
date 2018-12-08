@@ -49,8 +49,14 @@
 *.vcproj	-filter=lfs -diff=lfs -merge=lfs
 *.vsproj.filters	-filter=lfs -diff=lfs -merge=lfs
 
-# Unity Files
-*.shader
-*.mat
-*.meta
-*.unity
+# Unity Text Files
+*.anim					-filter=lfs -diff=lfs -merge=lfs
+*.asset					-filter=lfs -diff=lfs -merge=lfs
+*.controller			-filter=lfs -diff=lfs -merge=lfs
+*.mat 					-filter=lfs -diff=lfs -merge=lfs
+*.meta					-filter=lfs -diff=lfs -merge=lfs
+*.physicsMaterial2D 	-filter=lfs -diff=lfs -merge=lfs
+*.physicsMaterial 		-filter=lfs -diff=lfs -merge=lfs
+*.prefab				-filter=lfs -diff=lfs -merge=lfs
+*.shader				-filter=lfs -diff=lfs -merge=lfs
+*.unity					-filter=lfs -diff=lfs -merge=lfs
