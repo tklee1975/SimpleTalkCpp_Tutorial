@@ -482,108 +482,94 @@ save texture UV to image
 		- Bone name must have prefix L_
 	
 ========================	
-- Render View
-	- Create Camera
-		- Tie View To Camera/Light
-		- Set Resolution (from present)
-		- Focal Length
-		- Near / Far Clip
-		- Background image
-			
-	- Toolbar
+
+- Render View			
+	- Top Toolbar
 		- RenderNode Param
 		- Camera Param
 		- Auto Update
 		- Preview (Disable Preview for Final Render Quality)		
+		
+	- Right Bar 
+		- Magnify
+		
+	- View Area
+		- Show Pixel Detail (Ctrl + LMB)
+		- Show Material Param on Pixel (Ctrl + Shift + LMB)
+		- Shift LMB Drag for Render Area
+			- Shift-click outside the image to clear the region
+		- Right Click Menu > Inspect
+			
+	- Bottom Bar 1
+		- See RGBA Channels
+		- Brightness / Contract
+		- Gamma
+		
+	- Bottom Bar 2
 		- Snapshot (Enter)
 		- Prev / Next Snapshot (Key: [,])
 		- Zoom Button -, +
-		
+
+- Create Camera
+	- Focal Length
+	- Near / Far Clip
+	- Tie View To Camera/Light
+	- Background image
+	- Set Resolution (from present)
+	
+- Add Light	
+	- Ambient Light
+	- Spot Light
+		- Look Through Light from Viewport
+		- Shadow Type (No Shadow)
+	- Point Light
+	- Directional Light
+	- Area Light
+	- Geo Light
+	- Env Light (Image Base Lighting)
+	- Portal Light
+	- Sky Light
+		- Use Time Data and Location
+		- Render Light Geometry (if want to see the Sky)
+	- Caustic Light
+	- Light Linker Pane
+	
+- SOP Normal
+	- Per Point / Vertex
+	- Cusp Angle
+			
+//============================			
+- RenderView	
+	- View Area
 		- Show Pixel Detail (Ctrl + LMB)
 		- Show Material Param on Pixel (Ctrl + Shift + LMB)
+		- Shift LMB Drag for Render Area
+			- Shift-click outside the image to clear the region
+		- Right Click Menu > Inspect
 		
-	- Add Light		
-		- Spot Light
-			- Look Through Light from Viewport
-		- Point Light
-		- Directional Light
-		- Area Light
-		- Env Light (Image Base Lighting)
-		- Sky Light
-			- Use Time Data and Location
-			- Render Light Geometry (if want to see the Sky)
-			
-	- Create Mantra PBR
-		- Override Camera resolution
-		- Render to MPlay
-		- Render to Disk
-			- filename.$F4.png
-		- Render to Disk in BG (can close Houdini)
-		- Frame Range
-		- Network Render
-			Driver > Command
-		- Extra Image Plane
-			- Depth buffer
-			- check passes from Render View
-			- Add More Custom Pass
-		- Force Render Particular Object
-			- Disable Render All
-		- Take List
-		- Motion Blur			
-		
-=========================================================		
-- Compositing
-	- COP
-	- Set Canvas Size
-		- Menu > Edit > Composite Project Settings
-		
-	- Matte
-		- Color
-		- Ramp
-		- Font
-		- Geo
-						
-- Out put network	
-	- Node by Node
-	- Geo File Output
-	- FBX File Output
-	- Alembic File Output
-	- Image File Output
-	- Chop File Output
-	- Particle Cache
-	- Renderer Output
-	
-======================
-- VEX
-	- ; is needed
-	- Attr Wrangle
-	- Local Varaible
-		
-	- auto add param to UI by VEX source
-		int     i  = chi("i");
-		float   f  = chf("f");
-		vector2 u  = chu("u");
-		vector  v  = chv("v");
-		vector4 p  = chp("p");
-		matrix2 m2 = ch2("m2");
-		matrix3 m3 = ch3("m3");
-		matrix  m4 = ch4("m4");
-		string  s  = chs("s");	
+- Mantra
+	- Override Camera resolution
+	- Render to MPlay
+	- Render to Disk
+		- filename.$F4.png
+		- Check File Path - Menu > Render > Pre-flight
+	- Render to Disk in BG (can close Houdini)
+	- Frame Range
+	- Network Render
+		Driver > Command
+	- Extra Image Plane
+		- Depth buffer
+		- check passes from Render View
+		- Add More Custom Pass
+	- Force Render Particular Object
+		- Disable Render All
+	- Sample Per Pixel 3x3 -> 6x6 -> 9x9
+		- Check Houdini Doc for detail
+	- Sampling Quality from Light Node (To improve Shadow Noise)
+	- Motion Blur
 
-	- Attr
-		- vector @attr <-- same as v@attr
-
-	- use @FF instead $F
+- Take List
 		
-	- @P = set(1, a, 0);  | @P = {1, a, 0} only work for constant
-		
-	- if-else
-	- while
-	- do-while
-	- for-loop	
-	- Array	
-	
-===========================
 - Material Panel
 	- Toolbar
 		- Regenerate Shader Ball Icon (Refresh Button)
@@ -601,28 +587,160 @@ save texture UV to image
 		- Normal map
 		- Displacement
 		
-	- Principled Shader Core 
+	- Principled Shader Core
 
 	- Constant Shader
-
+	
 	- Material Builder (VOP)
 		- Drag VOP Node to Geometry or preview
 		- Menu > Edit > Collapse Selected into Material 
 	
 	- Layer Mix Node
+	
+	- PBR
+		- https://www.allegorithmic.com/pbr-guide
 
-- OpenGL Node
+=========================================================
+
+- Principled Shader	
+	- Preset from Parameter options (Gear Icon)
+	- Material Icon
+
+- nVidia De-noiser
+
+- Menu > Render > Scheduler
+
+- ROP
+	- OpenGL Node		
+	- Mantra (PBR)
+	- RenderMan
+	- Node by Node
+	- Geo File Output
+	- FBX File Output
+	- Alembic File Output
+	- Image File Output
+	- Chop File Output
+	- Particle Cache
+	- Renderer Output	
+
+- Compositing
+	- COP
+	- Set Canvas Size
+		- Menu > Edit > Composite Project Settings
+		
+	- Matte
+		- Color
+		- Ramp
+		- Font
+		- Shape
+		- Geo
+
+	- Work with 3D Rendered Images
+		- DOF
+			- De-Focus <-- Mask M
+			- Artifacts Due to Depth Discontinuities
+			- Blur Mask
+			 
+			 
+		- Bloom 
+		- ToneMap / LUT
+		
+- Bake Texture
+	- Example
+		- Create Rubber Toy
+			- Attribute Delete > Prim (shop_materialpath)
+		- Create Low Poly Geo
+			- Object Merge From Rubber Toy)
+			- Poly Reduce 10%
+		
+	- Tangent Space Normal Map
+	- Unwarpping Tab
+		- Ray Bias
+		
+======================
+- VEX
+	- ; is needed
+	- Attr Wrangle
+	- Local Varaible
+		
+	- Comments
+		
+	- auto add param to UI by VEX source
+		int     i  = chi("i");
+		float   f  = chf("f");
+		vector  v  = chv("v");
+			- v[0]
+			- xyzw, rgba
+		vector2 u  = chu("u");
+			- xy, uv
+		vector4 p  = chp("p");
+		matrix2 m2 = ch2("m2");
+		matrix3 m3 = ch3("m3");
+		matrix  m4 = ch4("m4");
+			- xx <-- [0][0]
+		string  s  = chs("s");	
+
+	- Attr
+		- vector @attr <-- same as v@attr		
+		- @P.y += 1;
+		
+		- 	float tmp = @P.x;
+			@P.x = @P.y;
+			@P.y = tmp;
+			
+	- use @FF instead $F
+		
+	- @P = set(1, a, 0);  | @P = {1, a, 0} only work for constant
+		
+	- if-else
+	- while
+	- do-while
+	- for-loop	
+	- Array	
+	
+	- define function
+	
+	- struct
+	- struct function
+			
+		
+============================
+- Particle
+	- Pop network
+	- Force	
+		- Pop Force
+			- Noise
+		- Pop Axis Force
+			- Orbit / Lift / Suction		
+		- Pop Attract
+			- Curve
+		- Pop Curve Force
+		- Pop Drag		
+		- Pop Flock
+			- flock of Sheep
+												
+	- Collision Detect
+		- Pop Solver
+			- Response
+			- Move To Hit
+			
+	- Stream
+		- Particle Follow Particle
+
+===========================
+
 	
 - Shop (OLD)
 	- Surface Shader Builder
 	- Principled Shader	
 
-			
 ============================
-- Particle
-	- Pop network
 
 - Rigid Body Dynamic
+	- Break Node
+	- Assemble Node
+	- Voronoi Fracture
+		- IsoOffset > Scatter > Voronoi
 
 - Heightfield
 
@@ -632,10 +750,18 @@ save texture UV to image
 
 - Nurbs Modelling
 
+- FLIP Fluids
+
+- Vellum
+
 ======================================			
 - Python
 	- Shell
-	- Single line is Expression
-	- Multi-line is function need "return" value		
+	- Expression
+		- Single line in Expression
+		- Multi-line in function need "return" value
+	- Python Object Node
+		
+	
 		
 	
