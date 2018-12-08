@@ -50,7 +50,7 @@
 *.vsproj.filters	-filter=lfs -diff=lfs -merge=lfs
 
 # Unity Files
-*.shader
+**/*.shader
 *.mat
 *.meta
 *.unity
