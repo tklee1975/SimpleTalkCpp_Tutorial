@@ -12,7 +12,7 @@ Example Houdini Project:
 	https://github.com/SimpleTalkCpp/SimpleTalkCpp_Tutorial/tree/master/Graphic/Houdini/Houdini%20Basic
 
 tags:
-	Houdini, 廣東話 Houdini 教學, 簡單黎講 C++
+	Houdini, 廣東話 Houdini 教學, 簡單黎講 C++, VEX, HScript
 
 === Houdini Basic ===
 - Basic UI
@@ -658,10 +658,13 @@ save texture UV to image
 		- Ray Bias
 		
 ======================
-- VEX
+- VEX part 1
 	- ; is needed
+	- +-*/%
 	- Attr Wrangle
 	- Local Varaible
+	- +=, -=, *=, /=, %=
+	- | & ^
 		
 	- Comments
 		
@@ -688,45 +691,243 @@ save texture UV to image
 			@P.x = @P.y;
 			@P.y = tmp;
 			
-	- use @FF instead $F
-		
-	- @P = set(1, a, 0);  | @P = {1, a, 0} only work for constant
-		
-	- if-else
-	- while
-	- do-while
-	- for-loop	
-	- Array	
+		- @P = @P.yxz;
+		- @P = set(1, a, 0);  | @P = {1, a, 0} only work for constant
+
+===========================
+- VEX part 2	
+	@Time - Float time ($T)
+	@Frame - Float frame ($FF)
+	@SimTime - Float simulation time ($ST), only present in DOP contexts.
+	@SimFrame - Float simulation frame ($SF), only present in DOP contexts.
+	@TimeInc - Float time step (1/$FPS)
+	
+	@elemnum / @ptnum
+	@numelem / @numpt
+	
+	- Point Node VEX Demo
+
+	- floor, ceil
+	- min, max, clamp, fit
 	
 	- define function
+				
+	- if-else
+	- ==, <, <=, !=, ||, &&
+	- 
 	
-	- struct
-	- struct function
-			
+=================================
+- VEX part 3
+	- float = int + float
+		- 1, 1.0
 		
+	- div in int/float, e.g. 5 / 2 vs 5.0 / 2
+		
+	- vector = vector * float
+	
+	- variable naming, Keyword
+	
+	- string
+		- string = string + string
+		- find, re_replace("[ab]", "$", str);
+		- printf(), sprintf()
+		- warning(), error()
+
+	- Array	
+		- sprintf() convert array to string		
+		- append, push, pop
+		- resize, len, isvalidindex
+		- min
+		- sort
+		- reverse
+		- insert, removeindex, removevalue
+
+	- addpoint
+	- addprim
+		
+=================================
+- VEX part 4		
+	- array append
+
+	- while	
+		- total, average, find_min
+	
+	- do-while
+	- for-loop	
+
+	- geometry functions
+		- @opinput1_P 
+			- copy normal
+			- lerp (blendshape)
+			
+		- point(1, "P", @ptnum)
+		- attrib(1, "point", "P", @ptnum)
+		
+		- getattrib(1, "point", "P", @ptnum, ok);
+		- pointattrib(1, "P", @ptnum, ok);
+		
+		- hasattrib
+		- attribclass
+
 ============================
-- Particle
-	- Pop network
+- Particle - part 1
+	- Pop Network
+		
+	- Pop Source
+		- from First / Second Input
+		- from SOP
+		- Scatter from Surface
+			- density
+		- Birth Impulse / Const
+		
+		- @id is unique
+		- @age / @life / @dead
+		
+		- Emit from Normal Direction
+		- Extrude Box
+				
+	- Copy to Point
+		- Pack and Instance
+				
 	- Force	
 		- Pop Force
+			- Visualize
+				- Trail
+				- marker v, force
+			
+			- Show Guide
 			- Noise
+						
+		- Pop Group						
+		- Pop Fan Cone		
+		- Pop Wind
+			- Use VEX
+		
 		- Pop Axis Force
-			- Orbit / Lift / Suction		
-		- Pop Attract
-			- Curve
+			- Orbit / Lift / Suction
 		- Pop Curve Force
 		- Pop Drag		
-		- Pop Flock
-			- flock of Sheep
-												
+		- Pop Attract
+
+===============================
+- Particle - part 2
+	- Pop Attract
+		- Curve (Surface Point + U param)
+		- Keyframe (Disable popsolver)
+		- add Pop Drag to close by target point
+		
+		- Particle Follow Particle
+			- Point Group
+			- Match Method = Point Per Particle
+				- Particle ID = "id % 10"
+
+	- Display
+		- Guides
+			- Show Time
+			- Particle gnomon
+			- Scale Normal
+			
+		- Geometry > Particles 
+			- Point Size
+			- Disc Size
+
+	- Trail Node
+		- Compute Velocity
+								
+	- Pop Flock
+		- https://www.red3d.com/cwr/boids/
+		- Constant Speed
+			@v = normalize(@v) * chf("speed");
+			
+		- on 2D plane
+			@force.y = 0;
+			@v.y = 0;
+		
+									
 	- Collision Detect
+		- Gravity Node
+	
+		- Ground Plane
+			- Merge Node (order does matter)
+			- Ground Bounce = 1			
+			- Pop Object
+				- Bounce
+				- Bounce Forward
+				
+			- Pop Property				
+				
+		- Static Object Node		
+			- Use Default (Volume)
+			- Use Surface Collision						
+			- Obj Path
+				- Collide with Moving Static Object (Plane)
+				
+		- Friction
+				
 		- Pop Solver
 			- Response
+				- Stop / Stick (Moving Object)
 			- Move To Hit
 			
-	- Stream
-		- Particle Follow Particle
+			- Sleeping
+				
+		- Terrain Object Node
+		
+						
+	- Pop Replicate
+		- Group 
+			- @hitnum>0
+			- from Pop Solver CreateCollideGroup
+			
+		- Birth Impulse
+		- Kill Original Particle
+		- Shape Point + Variance Velocity
+					
+			
+==========================
+Particle - part3 rendering		
+	- Delete Static Object
+		- Delete Node
+			- by Expression @id<0
+			
+	- DOP I/O
+		- DOP Network
+		- DOP Node = PopObject
+		- Field > Import + 1
+		
+	- Pop Instance
+		- add SOP Node "Instance"
+		- add SOP Node Material
+			- Material "Use Packed Color"
+			
+		- @pscale = @age / @life;
+		- @pscale = @nage;
 
+	- Pop Sprite
+		- Pop Wrangle
+			@pscale = 0.5;
+			i@texIndex = (int)(@age * $FPS);
+			f@Alpha = chramp("alphaRamp", @nage);			
+			
+		- Use VEX
+			- Texture
+				- textureindex = @texIndex;
+			- Alpha
+				- alpha = @Alpha;
+				
+	- Sprite Material
+		- Material Builder
+		- Sprite Procedural
+			- Attribute = Cd Alpha
+	
+	- Render Motion Blur
+	
+	- Metaball
+		- Copy To Point
+		- Don't use "Pack and Instance"
+	
+	- Particle Fluid Surface
+		
 ===========================
 
 	
