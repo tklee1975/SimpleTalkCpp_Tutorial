@@ -928,21 +928,73 @@ Particle - part3 rendering
 	
 	- Particle Fluid Surface
 		
-===========================
-
-	
-- Shop (OLD)
-	- Surface Shader Builder
-	- Principled Shader	
-
 ============================
-
-- Rigid Body Dynamic
-	- Break Node
+Rigid Body Dynamic
+	- DOP Network
+	- Rigid Body Solver
+	- RDB Object
+		- Density (Compute Mass)
+		- Mass
+		- Center of Mass
+		- Bounce
+		- Rotation Stiffness
+		- Friction
+		- Dynamic Friction Scale
+		
+	- SOP DopImport
+		- DOP Network
+			- add Null Node
+			- `opinputpath("/obj/box1/dopimport1/", 0)`
+		- Single Object
+		
+	- Spreadsheet
+		- Affector Matrix
+		
+	- Pop Solver + Rigid Body Dynamic
+		
+	- Copy to Point
 	- Assemble Node
+		- Create Packed Geometry	
+
+	- RBD Packed Object
+		- Bullet Data
+			- Show Guide
+			- Geometry Representation = "demo" Concave		
+
+	- Break Node
 	- Voronoi Fracture
 		- IsoOffset > Scatter > Voronoi
-
+	- ExplodedView
+		
+===============================
+Rigid Body Dynamic - part 2		
+		
+	- Constraint Network
+		- Create Line SOP
+			- Points = 5
+		
+		- ConvertLine - restlength	
+		
+		- Create Constraintt Network
+			- SOP Path = Line		
+				
+		- Primitive Wrangle 
+			- s@constraint_name = "ConRelHard";
+			- f@strength = 1;
+		- Point Wrangle
+			- s@name = sprintf("rbdobject%d", @elemnum);
+			
+		- Hard Constraint Relationship
+		- s@constraint_type = "position" or "rotation";
+		
+		- Spring Constraint
+		- Glue Constraint
+			- f@strength = 4;
+			
+	- Newton's cradle
+					
+============================	
+	
 - Heightfield
 
 - L-System
@@ -954,6 +1006,11 @@ Particle - part3 rendering
 - FLIP Fluids
 
 - Vellum
+
+===========================
+- Shop (OLD)
+	- Surface Shader Builder
+	- Principled Shader	
 
 ======================================			
 - Python
