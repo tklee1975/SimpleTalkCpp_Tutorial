@@ -1,6 +1,6 @@
 #include "precompiledHeader.h"
 #include "MyTexture2D.h"
-#include "../external/libpng/include/png.h"
+#include "../external/libpng/png.h"
 
 void MyTexture2D::create(int width, int height, const MyColor4b* pixels) {
 	destroy();
@@ -65,16 +65,16 @@ public:
 		}
 	}
 
-	static void _onRead(png_structp png_ptr, png_bytep data, png_uint_32 length) {
+	static void _onRead(png_structp png_ptr, png_bytep data, png_size_t length) {
 		auto* p = reinterpret_cast<PngReader*>(png_get_io_ptr(png_ptr));
 		p->onRead(data, length);
 	}
 
-	void onRead(png_bytep data, png_uint_32 length) {
+	void onRead(png_bytep data, png_size_t length) {
 		if (!m_file)
 			throw MyError("read png file");
 
-		int ret = fread(data, length, 1, m_file);
+		auto ret = fread(data, length, 1, m_file);
 		if (ret < 0)
 			throw MyError("read png file");
 	}

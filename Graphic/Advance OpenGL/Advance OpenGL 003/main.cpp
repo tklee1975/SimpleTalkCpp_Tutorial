@@ -167,5 +167,5 @@ int main() {
 		DispatchMessage(&msg);  
 	}	
 
-	return msg.wParam;
+	return static_cast<int>(msg.wParam);
 }

@@ -106,7 +106,7 @@ void MyMesh::draw() {
 	if (indices.size() <= 0)
 		return;
 
-	auto stride = sizeof(vertices[0]);
+	auto stride = static_cast<GLsizei>(sizeof(vertices[0]));
 
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glVertexPointer(3, GL_FLOAT, stride, vertices[0].pos.data);
@@ -128,7 +128,7 @@ void MyMesh::draw() {
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
 	//-- draw
-	glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_SHORT, indices.data());
+	glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(indices.size()), GL_UNSIGNED_SHORT, indices.data());
 
 	//---- restore render state
 	if (wireframe)
