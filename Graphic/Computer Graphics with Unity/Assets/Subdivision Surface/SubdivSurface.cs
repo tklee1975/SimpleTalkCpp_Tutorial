@@ -123,6 +123,10 @@ public class HEMesh
 			return faceEdgeHead == faceEdgeTail;
 		}
 
+		public int OppositePoint(int p0) {
+			return p0 == point0 ? point1 : point0;
+		}
+
 		public Vector3 Center(HEMesh mesh) {
 			var sum = mesh.m_points[point0].pos + mesh.m_points[point1].pos;
 			return sum / 2;
@@ -382,6 +386,39 @@ public class HEMesh
 			}
 		}
 
+		// point at edge center
+		{
+			for (int i = 0; i < m_edges.Count; i++) {
+				ref var edge = ref m_edges[i];
+
+				var newPos = Vector3.zero;
+				var div = 0;
+
+				newPos += m_points[edge.point0].pos;
+				newPos += m_points[edge.point1].pos;
+				div += 2;
+
+				if (!edge.IsBoundary()) {
+					// adjacent face center
+					var fe = edge.faceEdgeHead;
+					if (fe >= 0) {
+						do {
+							ref var faceEdge = ref m_faceEdges[fe];
+
+							newPos += target.m_points[newFacePointStart + faceEdge.face].pos;
+							div++;
+
+							fe = faceEdge.adjacent;
+						} while (fe != edge.faceEdgeHead);
+					}
+				}
+
+				ref var pt = ref target.m_points[newEdgePointStart + i];
+				pt.Init(newEdgePointStart + i);
+				pt.pos = newPos / div;
+			}
+		}
+
 		// point
 		{
 			for (int i = 0; i < m_points.Count; i++) {
@@ -438,7 +475,7 @@ public class HEMesh
 				pt.Init(i);
 
 				if (sumBoundaryEdgeCount > 0) {
-					pt.pos = (srcPt.pos + sumBoundaryEdgePoint / sumBoundaryEdgeCount) / 2;
+					pt.pos = (srcPt.pos + sumBoundaryEdgePoint) / (sumBoundaryEdgeCount + 1);
 
 				} else {
 					pt.pos = (
@@ -449,50 +486,6 @@ public class HEMesh
 				}
 			}
 		}
-
-		// point at edge center
-		{
-			for (int i = 0; i < m_edges.Count; i++) {
-				ref var edge = ref m_edges[i];
-
-				var newPos = Vector3.zero;
-				var div = 0;
-
-
-				if (edge.IsBoundary()) {
-					newPos += target.m_points[edge.point0].pos;
-					newPos += target.m_points[edge.point1].pos;
-					div += 2;
-
-					newPos += m_points[edge.point0].pos * 2;
-					newPos += m_points[edge.point1].pos * 2;
-					div += 4;
-
-				} else {
-					newPos += m_points[edge.point0].pos;
-					newPos += m_points[edge.point1].pos;
-					div += 2;
-
-					// adjacent face center
-					var fe = edge.faceEdgeHead;
-					if (fe >= 0) {
-						do {
-							ref var faceEdge = ref m_faceEdges[fe];
-
-							newPos += target.m_points[newFacePointStart + faceEdge.face].pos;
-							div++;
-
-							fe = faceEdge.adjacent;
-						} while (fe != edge.faceEdgeHead);
-					}
-				}
-
-				ref var pt = ref target.m_points[newEdgePointStart + i];
-				pt.Init(newEdgePointStart + i);
-				pt.pos = newPos / div;
-			}
-		}
-
 	}
 
 	public void Clear() {
