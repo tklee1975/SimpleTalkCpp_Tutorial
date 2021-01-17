@@ -1,3 +1,24 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:9c986664f0819f6d3d1a743a46a3bae03f21139ee27a755835863a8f0e638843
-size 346
+#pragma once
+
+#include "Reflection.h"
+
+class Shape : public MyObject {
+	MY_TYPE(Shape, MyObject)
+public:
+	float x = 0;
+	float y = 0;
+};
+
+class Circle : public Shape {
+	MY_TYPE(Circle, Shape)
+public:
+	double radius = 0;
+};
+
+class Rect : public Shape {
+	MY_TYPE(Rect, Shape)
+public:
+	float width = 0;
+	float height = 0;
+};
+

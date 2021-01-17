@@ -1,3 +1,43 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:7d15c2430430f680575c22358636db6986d8a063f72e4da650f63e8fd7fb4f96
-size 802
+#include "Reflection.h"
+
+#define my_typeof_impl(T) \
+	template<> const TypeInfo* my_typeof<T>() { \
+		static TypeInfoInitNoBase<T> ti(#T); \
+		return &ti; \
+	} \
+//----
+
+my_typeof_impl(float)
+my_typeof_impl(double)
+
+my_typeof_impl(int8_t)
+my_typeof_impl(int16_t)
+my_typeof_impl(int32_t)
+my_typeof_impl(int64_t)
+
+my_typeof_impl(uint8_t)
+my_typeof_impl(uint16_t)
+my_typeof_impl(uint32_t)
+my_typeof_impl(uint64_t)
+
+// my_typeof_define(char8_t) c++20
+my_typeof_impl(char16_t)
+my_typeof_impl(char32_t)
+my_typeof_impl(wchar_t)
+
+template<> const TypeInfo* my_typeof<MyObject>() {
+	class TI : public TypeInfo {
+	public:
+		TI() {
+			name = "MyObject";
+		}
+	};
+	static TI ti;
+	return &ti;
+}
+
+TypeManager* TypeManager::instance() {
+	static TypeManager m;
+	return &m;
+}
+
