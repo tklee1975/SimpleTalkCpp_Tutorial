@@ -478,11 +478,13 @@ public class HEMesh
 					pt.pos = (srcPt.pos + sumBoundaryEdgePoint) / (sumBoundaryEdgeCount + 1);
 
 				} else {
+					float n2 = n * n;
+
 					pt.pos = (
-						srcPt.pos * (n - 3)
-						+ sumEdgePoint / sumEdgeCount * 2
-						+ sumFacePoint / sumFaceCount
-					) / n;
+						srcPt.pos * ((n - 2) / n)
+						+ sumEdgePoint / sumEdgeCount / n2
+						+ sumFacePoint / sumFaceCount / n2
+					);
 				}
 			}
 		}
@@ -530,12 +532,12 @@ public class SubdivSurface : MonoBehaviour
 		mesh.AddPoint(new Vector3(1,0,1));
 		mesh.AddPoint(new Vector3(1,1,1));
 
-		mesh.AddFace(new int[]{0,1,3,2});
-		mesh.AddFace(new int[]{1,5,7,3});
-		mesh.AddFace(new int[]{0,2,6,4});
-		mesh.AddFace(new int[]{4,5,1,0});
-		mesh.AddFace(new int[]{7,6,2,3});
-//		mesh.AddFace(new int[]{5,4,6,7});
+		mesh.AddFace(new int[] { 0, 1, 3, 2 });
+		mesh.AddFace(new int[] { 1, 5, 7, 3 });
+		mesh.AddFace(new int[] { 0, 2, 6, 4 });
+		mesh.AddFace(new int[] { 4, 5, 1, 0 });
+		mesh.AddFace(new int[] { 7, 6, 2, 3 });
+		//		mesh.AddFace(new int[]{5,4,6,7});
 
 		var mf = gameObject.GetComponent<MeshFilter>();
 		if (mf) {
