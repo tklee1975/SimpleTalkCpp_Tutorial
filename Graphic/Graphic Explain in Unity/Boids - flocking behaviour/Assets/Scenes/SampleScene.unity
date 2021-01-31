@@ -842,24 +842,24 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   containerSize: {x: 110, y: 1, z: 110}
-  gizmoDrawSheeps: 1
+  gizmoDrawSheeps: 0
   gizmoDrawCells: 1
   sheepPrefab: {fileID: 4285782835918355616, guid: 5b588c964e761c342991b713b1f855ee,
     type: 3}
-  sheepCount: 200
+  sheepCount: 20
   spawnRadius: 40
-  maxSpeed: 4
+  maxSpeed: 6
   randomSpeed: 4
-  randomSteering: 120
+  randomSteering: 45
   changeRate: 0.5
   separationRadius: 2.8
-  separation: 10
+  separation: 5
   alignmentRadius: 10
   alignmentViewAngle: 90
-  alignment: 3
+  alignment: 2
   cohesionRadius: 10
-  cohesion: 2.5
-  altalternativeUpdate: 4
+  cohesion: 2
+  alternativeUpdate: 4
   minCellSize: 1
   updateUseCells: 1
 --- !u!4 &939657024

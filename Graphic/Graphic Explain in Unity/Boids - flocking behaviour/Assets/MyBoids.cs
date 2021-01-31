@@ -39,8 +39,8 @@ public class MyBoids : MonoBehaviour
 	public float cohesion = 1;
 
 	[Header("Performance")]
-	public int altalternativeUpdate = 4;
-	int altalternativeUpdateIndex;
+	public int alternativeUpdate = 4;
+	int alternativeUpdateIndex;
 	public float minCellSize = 1;
 	public bool updateUseCells = true;
 
@@ -141,7 +141,7 @@ public class MyBoids : MonoBehaviour
 		Application.targetFrameRate = 60;
 
 #if MY_BOIDS_ENABLE_CELLS
-		cellSize = Mathf.Max(minCellSize, separationRadius, alignmentRadius, cohesionRadius) + 0.01f;
+		cellSize = Mathf.Max(minCellSize, separationRadius, alignmentRadius, cohesionRadius);
 
 		{
 			var div = containerSize / cellSize;
@@ -195,9 +195,9 @@ public class MyBoids : MonoBehaviour
 #endif
 		}
 
-		altalternativeUpdateIndex = (altalternativeUpdateIndex + 1) % altalternativeUpdate;
+		alternativeUpdateIndex = (alternativeUpdateIndex + 1) % alternativeUpdate;
 
-		for (int i = altalternativeUpdateIndex; i < sheepList.Count; i += altalternativeUpdate) {
+		for (int i = alternativeUpdateIndex; i < sheepList.Count; i += alternativeUpdate) {
 			var s = sheepList[i];
 
 			var nearbySheeps = sheepList;
@@ -210,6 +210,7 @@ public class MyBoids : MonoBehaviour
 #endif
 			SheepThink(s, Time.deltaTime, nearbySheeps);
 		}
+
 	}
 
 	void SheepThink(MySheep sheep, float deltaTime, List<MySheep> nearbySheeps) {
@@ -224,18 +225,19 @@ public class MyBoids : MonoBehaviour
 		int cohesionCount = 0;
 
 		foreach (var s in nearbySheeps) {
+			if (s == sheep) continue;
+
 			var d = s.lastPosition - sheep.lastPosition;
 			var dis = d.magnitude;
-
-			if (s == sheep) continue;
+			d /= dis; // normalized
 
 			if (dis < separationRadius) {
 				separationPos += s.lastPosition;
 				separationCount++;
 			}
 
-			if (Vector3.Dot(d, sheep.transform.forward) > aligmentViewAngleCos) {
-				if (dis < alignmentRadius) {
+			if (dis < alignmentRadius) {
+				if (Vector3.Dot(d, sheep.transform.forward) > aligmentViewAngleCos) {
 					alignmentVel += s.lastVelocity;
 					alignmentCount++;
 				}
@@ -267,7 +269,7 @@ public class MyBoids : MonoBehaviour
 		var rate = changeRate * deltaTime;
 		newVel = Vector3.Lerp(sheep.lastVelocity, newVel, rate);
 
-		newVel = Quaternion.Euler(0, Random.Range(-randomSteering * rate, randomSteering * rate), 0) * newVel;
+		newVel = Quaternion.Euler(0, Random.Range(-randomSteering, randomSteering) * rate, 0) * newVel;
 
 		var newSpeed = newVel.magnitude;
 		if (newSpeed > 0.01f) {

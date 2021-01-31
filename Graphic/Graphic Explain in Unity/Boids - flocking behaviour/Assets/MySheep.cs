@@ -22,7 +22,7 @@ public class MySheep : MonoBehaviour
             var dot = Vector3.Dot(forward, hit.normal);
 
             if (dot < -0.99f) {
-                forward = Time.frameCount % 2 == 0 ? transform.right : -transform.right;
+                forward = Random.Range(0,1) == 0 ? transform.right : -transform.right;
             } else {
                 forward -= hit.normal * dot;
             }
