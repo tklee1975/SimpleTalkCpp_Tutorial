@@ -10,6 +10,10 @@ public class MyBoids : MonoBehaviour
 
 	public Vector3 containerSize = new Vector3(110, 1, 110);
 
+	[Header("Debug")]
+	public bool gizmoDrawSheeps = true;
+	public bool gizmoDrawCells = true;
+
 	[Header("Spawn Parameters")]
     public MySheep sheepPrefab;
 	public int sheepCount = 10;
@@ -38,6 +42,7 @@ public class MyBoids : MonoBehaviour
 	public int altalternativeUpdate = 4;
 	int altalternativeUpdateIndex;
 	public float minCellSize = 1;
+	public bool updateUseCells = true;
 
 
 #if MY_BOIDS_ENABLE_CELLS
@@ -92,21 +97,43 @@ public class MyBoids : MonoBehaviour
 		{ var t = cell(c.x    , c.y + 1); if (t != null) outList.AddRange(t.sheepList); }
 		{ var t = cell(c.x + 1, c.y + 1); if (t != null) outList.AddRange(t.sheepList); }
 	}
+#endif
 
-	#if UNITY_EDITOR
+#if UNITY_EDITOR
 	void OnDrawGizmos()
 	{
-		if (cellList != null) {
-			var offset = containerSize / 2;
-			foreach (var c in cellList) {
-				var size = Vector3.one * cellSize;
-				var pos = new Vector3(c.x, 0, c.y) * cellSize - offset + size/2;
-				Gizmos.DrawWireCube(pos, size);
-				UnityEditor.Handles.Label(pos, $"{c.sheepList.Count}");
+		if (gizmoDrawSheeps) {
+			foreach (var s in sheepList) {
+				var pos = s.transform.position;
+				Gizmos.color = Color.red;
+				Gizmos.DrawWireSphere(pos, separationRadius);
+
+				Gizmos.color = Color.blue;
+				var rotLeft  = Quaternion.Euler(0, -alignmentViewAngle / 2, 0);
+				var rotRight = Quaternion.Euler(0,  alignmentViewAngle / 2, 0);
+
+				Gizmos.DrawRay(pos, rotLeft  * s.transform.forward * alignmentRadius);
+				Gizmos.DrawRay(pos, rotRight * s.transform.forward * alignmentRadius);
+				// Gizmos.DrawWireSphere(pos, alignmentRadius);
+
+				Gizmos.color = new Color(0,1,0, 0.5f);
+				Gizmos.DrawWireSphere(pos, cohesionRadius);
 			}
 		}
+
+		#if MY_BOIDS_ENABLE_CELLS
+			if (gizmoDrawCells && cellList != null) {
+				var offset = containerSize / 2;
+				foreach (var c in cellList) {
+					Gizmos.color = Color.white;
+					var size = Vector3.one * cellSize;
+					var pos = new Vector3(c.x, 0, c.y) * cellSize - offset + size/2;
+					Gizmos.DrawWireCube(pos, size);
+					UnityEditor.Handles.Label(pos, $"{c.sheepList.Count}");
+				}
+			}
+		#endif
 	}
-	#endif
 #endif
 
 	private void Start()
@@ -173,12 +200,15 @@ public class MyBoids : MonoBehaviour
 		for (int i = altalternativeUpdateIndex; i < sheepList.Count; i += altalternativeUpdate) {
 			var s = sheepList[i];
 
+			var nearbySheeps = sheepList;
+
 #if MY_BOIDS_ENABLE_CELLS
-			getSheepsNearby(ref tmpSheepList, s.lastPosition);
-			SheepThink(s, Time.deltaTime, tmpSheepList);
-#else
-			SheepThink(s, Time.deltaTime, sheepList);
+			if (updateUseCells) {
+				getSheepsNearby(ref tmpSheepList, s.lastPosition);
+				nearbySheeps = tmpSheepList;
+			}
 #endif
+			SheepThink(s, Time.deltaTime, nearbySheeps);
 		}
 	}
 

@@ -842,9 +842,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   containerSize: {x: 110, y: 1, z: 110}
+  gizmoDrawSheeps: 1
+  gizmoDrawCells: 1
   sheepPrefab: {fileID: 4285782835918355616, guid: 5b588c964e761c342991b713b1f855ee,
     type: 3}
-  sheepCount: 500
+  sheepCount: 200
   spawnRadius: 40
   maxSpeed: 4
   randomSpeed: 4
@@ -859,6 +861,7 @@ MonoBehaviour:
   cohesion: 2.5
   altalternativeUpdate: 4
   minCellSize: 1
+  updateUseCells: 1
 --- !u!4 &939657024
 Transform:
   m_ObjectHideFlags: 0
