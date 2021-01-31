@@ -1,3 +1,5 @@
+#define MY_BOIDS_ENABLE_CELLS
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,33 +7,40 @@ using UnityEngine;
 public class MyBoids : MonoBehaviour
 {
 	List<MySheep> sheepList = new List<MySheep>();
-	public int sheepCount = 10;
-    public MySheep sheepPrefab;
-	public float spawnRadius = 40;
+
 	public Vector3 containerSize = new Vector3(110, 1, 110);
 
-	public float randomSpeed = 1;
+	[Header("Spawn Parameters")]
+    public MySheep sheepPrefab;
+	public int sheepCount = 10;
+	public float spawnRadius = 40;
+
+	[Header("Sheep Parameters")]
 	public float maxSpeed = 5;
-
+	public float randomSpeed = 1;
     public float randomSteering = 45;
+	public float changeRate = 0.1f;
 
+	[Header("Boids Parameters")]
 	public float separationRadius = 3;
 	public float separation = 1;
 
-	public float aligmentRadius = 10;
-	public float aligmentViewAngle = 120;
+	public float alignmentRadius = 10;
+	public float alignmentViewAngle = 120;
+	float aligmentViewAngleCos;
+
 	public float alignment = 1;
 
 	public float cohesionRadius = 20;
 	public float cohesion = 1;
 
-	public float changeRate = 0.1f;
-
+	[Header("Performance")]
 	public int altalternativeUpdate = 4;
 	int altalternativeUpdateIndex;
+	public float minCellSize = 1;
 
-	float aligmentViewAngleCos;
 
+#if MY_BOIDS_ENABLE_CELLS
 	class Cell {
 		public List<MySheep> sheepList;
 		int _x, _y;
@@ -84,6 +93,7 @@ public class MyBoids : MonoBehaviour
 		{ var t = cell(c.x + 1, c.y + 1); if (t != null) outList.AddRange(t.sheepList); }
 	}
 
+	#if UNITY_EDITOR
 	void OnDrawGizmos()
 	{
 		if (cellList != null) {
@@ -96,12 +106,16 @@ public class MyBoids : MonoBehaviour
 			}
 		}
 	}
+	#endif
+#endif
 
 	private void Start()
 	{
 		Application.targetFrameRate = 60;
 
-		cellSize = Mathf.Max(aligmentRadius, cohesionRadius);
+#if MY_BOIDS_ENABLE_CELLS
+		cellSize = Mathf.Max(minCellSize, separationRadius, alignmentRadius, cohesionRadius) + 0.01f;
+
 		{
 			var div = containerSize / cellSize;
 			cellCountX = Mathf.CeilToInt(div.x);
@@ -114,9 +128,7 @@ public class MyBoids : MonoBehaviour
 				}
 			}
 		}
-
-		aligmentViewAngleCos = Mathf.Cos(Mathf.Deg2Rad * aligmentViewAngle * 0.5f);
-
+#endif
 		if (!sheepPrefab) {
 			Debug.LogError("Missing SheepPrefab");
 			return;
@@ -136,18 +148,24 @@ public class MyBoids : MonoBehaviour
 
 	private void Update()
 	{
+		aligmentViewAngleCos = Mathf.Cos(Mathf.Deg2Rad * alignmentViewAngle * 0.5f);
+
+#if MY_BOIDS_ENABLE_CELLS
 		foreach (var c in cellList) {
 			c.sheepList.Clear();
 		}
+#endif
 
 		foreach (var s in sheepList) {
-			s.oldPosition = s.transform.localPosition;
-			s.oldVelocity = s.transform.forward * s.speed;
+			s.lastPosition = s.transform.localPosition;
+			s.lastVelocity = s.transform.forward * s.speed;
 
-			var c = cellByPos(s.oldPosition);
+#if MY_BOIDS_ENABLE_CELLS
+			var c = cellByPos(s.lastPosition);
 			if (c != null) {
 				c.sheepList.Add(s);
 			}
+#endif
 		}
 
 		altalternativeUpdateIndex = (altalternativeUpdateIndex + 1) % altalternativeUpdate;
@@ -155,8 +173,12 @@ public class MyBoids : MonoBehaviour
 		for (int i = altalternativeUpdateIndex; i < sheepList.Count; i += altalternativeUpdate) {
 			var s = sheepList[i];
 
-			getSheepsNearby(ref tmpSheepList, s.oldPosition);
+#if MY_BOIDS_ENABLE_CELLS
+			getSheepsNearby(ref tmpSheepList, s.lastPosition);
 			SheepThink(s, Time.deltaTime, tmpSheepList);
+#else
+			SheepThink(s, Time.deltaTime, sheepList);
+#endif
 		}
 	}
 
@@ -165,66 +187,66 @@ public class MyBoids : MonoBehaviour
 		var separationPos = Vector3.zero;
 		int separationCount = 0;
 
-		var aligementVel = Vector3.zero;
-		int aligementCount = 0;
+		var alignmentVel = Vector3.zero;
+		int alignmentCount = 0;
 
 		var cohesionPos = Vector3.zero;
 		int cohesionCount = 0;
 
 		foreach (var s in nearbySheeps) {
-			var d = s.oldPosition - sheep.oldPosition;
+			var d = s.lastPosition - sheep.lastPosition;
 			var dis = d.magnitude;
 
 			if (s == sheep) continue;
 
 			if (dis < separationRadius) {
-				separationPos += s.oldPosition;
+				separationPos += s.lastPosition;
 				separationCount++;
 			}
 
 			if (Vector3.Dot(d, sheep.transform.forward) > aligmentViewAngleCos) {
-				if (dis < aligmentRadius) {
-					aligementVel += s.oldVelocity;
-					aligementCount++;
+				if (dis < alignmentRadius) {
+					alignmentVel += s.lastVelocity;
+					alignmentCount++;
 				}
 			}
 
 			if (dis < cohesionRadius) {
-				cohesionPos += s.oldPosition;
+				cohesionPos += s.lastPosition;
 				cohesionCount++;
 			}
 		}
 
-		var vel = Vector3.zero;
+		var newVel = Vector3.zero;
 	
 		if (separationCount > 0) {
 			separationPos /= separationCount;
-			vel -= (separationPos - sheep.oldPosition).normalized * separation;
+			newVel -= (separationPos - sheep.lastPosition).normalized * separation;
 		}
 
-		if (aligementCount > 0) {
-			aligementVel /= aligementCount;
-			vel += aligementVel * alignment;
+		if (alignmentCount > 0) {
+			alignmentVel /= alignmentCount;
+			newVel += alignmentVel * alignment;
 		}
 
 		if (cohesionCount > 0) {
 			cohesionPos /= cohesionCount;
-			vel += (cohesionPos - sheep.oldPosition).normalized * cohesion;
+			newVel += (cohesionPos - sheep.lastPosition).normalized * cohesion;
 		}
 
 		var rate = changeRate * deltaTime;
-		vel = Vector3.Lerp(sheep.oldVelocity, vel, rate);
+		newVel = Vector3.Lerp(sheep.lastVelocity, newVel, rate);
 
-		vel = Quaternion.Euler(0, Random.Range(-randomSteering * rate, randomSteering * rate), 0) * vel;
+		newVel = Quaternion.Euler(0, Random.Range(-randomSteering * rate, randomSteering * rate), 0) * newVel;
 
-		var speed = vel.magnitude;
-		if (speed > 0.01f) {
-			sheep.transform.localRotation = Quaternion.LookRotation(vel);
+		var newSpeed = newVel.magnitude;
+		if (newSpeed > 0.01f) {
+			sheep.transform.localRotation = Quaternion.LookRotation(newVel);
 		}
 
-		speed += Random.Range(-randomSpeed, randomSpeed);
+		newSpeed += Random.Range(-randomSpeed, randomSpeed);
 
-		speed = Mathf.Lerp(sheep.speed, speed, rate);
-		sheep.speed = Mathf.Clamp(speed, 0, maxSpeed);
+		newSpeed = Mathf.Lerp(sheep.speed, newSpeed, rate);
+		sheep.speed = Mathf.Clamp(newSpeed, 0, maxSpeed);
 	}
 }

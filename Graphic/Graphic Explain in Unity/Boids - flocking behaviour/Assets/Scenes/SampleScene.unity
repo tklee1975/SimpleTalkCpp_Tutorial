@@ -841,23 +841,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d08d9faf1d032384da078fef9ac5fbc7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sheepCount: 150
+  containerSize: {x: 110, y: 1, z: 110}
   sheepPrefab: {fileID: 4285782835918355616, guid: 5b588c964e761c342991b713b1f855ee,
     type: 3}
+  sheepCount: 500
   spawnRadius: 40
-  containerSize: {x: 110, y: 1, z: 110}
-  randomSpeed: 4
   maxSpeed: 4
+  randomSpeed: 4
   randomSteering: 120
+  changeRate: 0.5
   separationRadius: 2.8
   separation: 10
-  aligmentRadius: 10
-  aligmentViewAngle: 45
-  alignment: 2
+  alignmentRadius: 10
+  alignmentViewAngle: 90
+  alignment: 3
   cohesionRadius: 10
   cohesion: 2.5
-  changeRate: 0.5
-  altalternativeUpdate: 3
+  altalternativeUpdate: 4
+  minCellSize: 1
 --- !u!4 &939657024
 Transform:
   m_ObjectHideFlags: 0
