@@ -44,9 +44,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9838c0baed0ee9f4d830efef82aa89ee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_speed: 5
-  m_collisionRadius: 2
-  m_viewRadius: 10
+  speed: 5
+  collisionRadius: 2
+  oldPosition: {x: 0, y: 0, z: 0}
+  oldVelocity: {x: 0, y: 0, z: 0}
 --- !u!1001 &4285782836359573074
 PrefabInstance:
   m_ObjectHideFlags: 0
