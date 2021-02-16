@@ -20,7 +20,8 @@ public class Lesson003 : MonoBehaviour
     float _autoProp { get; set; } // only for code
 
     [UnityEngine.SerializeField]
-    float serializeFieldValue = 1; // Edited by game designer
+    float _serializeFieldValue = 1; // Edited by game designer
+    float serializeFieldValue => _serializeFieldValue;
 
     [System.Serializable]
     public struct MyData {
