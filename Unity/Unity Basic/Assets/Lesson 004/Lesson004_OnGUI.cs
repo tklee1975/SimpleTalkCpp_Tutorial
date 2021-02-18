@@ -15,12 +15,6 @@ public class Lesson004_OnGUI : MonoBehaviour
         Application.targetFrameRate = 60;
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
 	private void OnGUI()
 	{
         GUI.matrix = Matrix4x4.Rotate(Quaternion.Euler(0,0, guiRotate));

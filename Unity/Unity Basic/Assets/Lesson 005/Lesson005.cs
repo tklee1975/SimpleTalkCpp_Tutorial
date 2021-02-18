@@ -75,7 +75,7 @@ public class Lesson005 : MonoBehaviour
         if (Input.GetKey(KeyCode.D)) rotAmount += 1;
 
         if (moveDir != 0) {
-            transform.Translate(0, 0, moveDir * _speed * Time.deltaTime, Space.Self);
+            transform.Translate(0, 0, moveDir * _speed * Time.deltaTime);
         }
 
         if (rotAmount != 0) {
