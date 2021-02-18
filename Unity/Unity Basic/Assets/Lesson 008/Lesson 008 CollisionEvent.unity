@@ -761,8 +761,8 @@ GameObject:
   - component: {fileID: 1720150171}
   - component: {fileID: 1720150170}
   - component: {fileID: 1720150169}
-  - component: {fileID: 1720150168}
   - component: {fileID: 1720150173}
+  - component: {fileID: 1720150168}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -784,7 +784,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _speed: 5
   _rotateSpeed: 180
-  useFixedUpdate: 1
+  useRigidBodyMove: 1
 --- !u!65 &1720150169
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -888,7 +888,7 @@ GameObject:
   - component: {fileID: 1984517345}
   - component: {fileID: 1984517344}
   m_Layer: 0
-  m_Name: Wall
+  m_Name: Wall - No RigidBody
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -53,7 +53,7 @@ public class Lesson008_CapsuleCast : MonoBehaviour
 
 				moveDistance -= hit.distance;
 
-				var hitCapsuleCenter = hit.point + hit.normal * (_capsule.radius + 0.001f);
+				var hitCapsuleCenter = hit.point + hit.normal * (_capsule.radius + 0.01f);
 				hitCapsuleCenter.y = pos.y; // keep Y
 
 				pos = hitCapsuleCenter;

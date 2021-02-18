@@ -6,7 +6,7 @@ public class Lesson008_CollisonEvent : MonoBehaviour
 {
     public float _speed = 5;
     public float _rotateSpeed = 180;
-	public bool useFixedUpdate = true;
+	public bool useRigidBodyMove = true;
 
 	Rigidbody _rigidbody;
 
@@ -41,7 +41,7 @@ public class Lesson008_CollisonEvent : MonoBehaviour
 
 	private void Update()
 	{
-		if (!useFixedUpdate) {
+		if (!useRigidBodyMove) {
 			float deltaTime = Time.deltaTime;
 
 			float moveDir = 0;
@@ -67,7 +67,7 @@ public class Lesson008_CollisonEvent : MonoBehaviour
 
 	private void FixedUpdate()
 	{
-		if (useFixedUpdate) {
+		if (useRigidBodyMove) {
 			float deltaTime = Time.fixedDeltaTime;
 
 			float moveDir = 0;
@@ -81,7 +81,7 @@ public class Lesson008_CollisonEvent : MonoBehaviour
 
 			if (moveDir != 0) {
 				var t = new Vector3(0,0, moveDir * _speed * deltaTime);
-				t = transform.TransformDirection(t);
+				t = _rigidbody.rotation * t;
 				_rigidbody.MovePosition(_rigidbody.position + t);
 			}
 
