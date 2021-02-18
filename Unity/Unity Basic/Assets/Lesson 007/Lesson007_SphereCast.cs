@@ -30,8 +30,10 @@ public class Lesson007_SphereCast : MonoBehaviour
         if (bHit) {
             Gizmos.color = Color.blue;
             Gizmos.DrawLine(hit.point, hit.point + hit.normal);
+            Gizmos.DrawCube(hit.point, Vector3.one * 0.25f);
 
             var center = hit.point + hit.normal * radius;
+            Gizmos.color = Color.green;
             Gizmos.DrawCube(center, Vector3.one * 0.25f);
             Gizmos.DrawWireSphere(center, radius);
         }

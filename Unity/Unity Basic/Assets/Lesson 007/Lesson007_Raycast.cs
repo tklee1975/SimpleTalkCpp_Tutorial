@@ -15,6 +15,7 @@ public class Lesson007_Raycast : MonoBehaviour
 
 	void Update()
     {
+
         ray = new Ray(transform.position, transform.forward);
         hit = new RaycastHit();
         bHit = Physics.Raycast(ray, out hit, maxDistance, layerMask);
