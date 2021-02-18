@@ -7,7 +7,6 @@ public class Lesson005 : MonoBehaviour
     public float _speed = 5;
     public float _rotateSpeed = 180;
 
-
     public float fireCooldown = 0.1f;
     float _fireCooldownRemain;
 
