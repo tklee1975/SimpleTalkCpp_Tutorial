@@ -6,16 +6,7 @@ public class Lesson009_Portal : MonoBehaviour
 {
 	public string destLevel;
 	public bool loadAsync = false;
-
-	private void OnDrawGizmos()
-	{
-		var box = GetComponent<BoxCollider>();
-		if (box) {
-			Gizmos.matrix = transform.localToWorldMatrix;
-			Gizmos.color = new Color(0,0,1, 0.5f);
-			Gizmos.DrawCube(box.center, box.size);
-		}
-	}
+	public Lesson009_ScriptableObject scriptableObject;
 
     public void LoadLevel() {
         Debug.Log($"Load Scene {destLevel}");
@@ -35,7 +26,16 @@ public class Lesson009_Portal : MonoBehaviour
         {
             yield return null;
         }
-        Debug.Log($"Scene {destLevel} Loaded");
+        Debug.Log($"Scene {destLevel} async Loaded");
     }
 
+	private void OnDrawGizmos()
+	{
+		var box = GetComponent<BoxCollider>();
+		if (box) {
+			Gizmos.matrix = transform.localToWorldMatrix;
+			Gizmos.color = scriptableObject ? scriptableObject.gizmosColor : Color.green;
+			Gizmos.DrawCube(box.center, box.size);
+		}
+	}
 }
