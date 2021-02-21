@@ -37,7 +37,7 @@ public class Lesson012_AssetPostprocessor_Animation : AssetPostprocessor
 			Debug.Log($"OnPostprocessAnimation [{assetPath}] [{obj.name}] [{clip.name}]");
 			PrintAllCurves(clip);
 			RemoveCurve(clip, "Hips", "m_LocalPosition.z");
-			AddanimationEndEvent(clip);
+			AddAnimationEndEvent(clip);
 		}
 	}
 
@@ -47,6 +47,8 @@ public class Lesson012_AssetPostprocessor_Animation : AssetPostprocessor
 
         foreach (var binding in AnimationUtility.GetCurveBindings(clip))
         {
+			if (binding.path != "Hips") continue;
+
             AnimationCurve curve = AnimationUtility.GetEditorCurve(clip, binding);
 			sb.Append($"binding path={binding.path} prop={binding.propertyName} type={binding.type.Name}\n");
         }
@@ -70,12 +72,12 @@ public class Lesson012_AssetPostprocessor_Animation : AssetPostprocessor
 		AnimationUtility.SetEditorCurve(clip, binding, curve);
 	}
 
-	void AddanimationEndEvent(AnimationClip clip) {
+	void AddAnimationEndEvent(AnimationClip clip) {
 		var list = new List<AnimationEvent>(AnimationUtility.GetAnimationEvents(clip));
 
 		var ev = new AnimationEvent();
 		ev.time = clip.length;
-		ev.functionName = "OnAnimEnd";
+		ev.functionName = "OnAnimEnd_Test";
 		ev.stringParameter = clip.name;
 		list.Add(ev);
 

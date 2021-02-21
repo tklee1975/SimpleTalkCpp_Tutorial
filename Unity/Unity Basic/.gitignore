@@ -11,3 +11,4 @@ Temp
 UserSettings
 Assembly-CSharp.csproj
 *.sln
+/*.csproj
