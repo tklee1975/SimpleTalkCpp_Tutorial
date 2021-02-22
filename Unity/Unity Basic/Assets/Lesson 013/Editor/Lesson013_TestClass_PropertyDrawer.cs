@@ -8,7 +8,6 @@ using UnityEditor;
 public class Lesson013_TestClass_PropDrawer : PropertyDrawer
 {
 	const float buttonHeight = 20;
-	const float spacing = 4;
 
 	public override void OnGUI(Rect position, SerializedProperty prop, GUIContent label)
 	{
@@ -23,15 +22,17 @@ public class Lesson013_TestClass_PropDrawer : PropertyDrawer
 			msg.Append($"type = [{prop.type}]\n");
 			msg.Append($"hasMultipleDifferentValues = {prop.hasMultipleDifferentValues}]\n");
 
-			var it = prop.Copy(); // don't change prop;
-			var end = it.GetEndProperty();
+			{ // loop all child prop
+			//  var it = prop; // don't do this !!!!!
+				var it = prop.Copy(); // don't change prop;
+				var end = prop.GetEndProperty();
 
-			while (it.NextVisible(true)) {
-				if (SerializedProperty.EqualContents(it, end)) break;
+				while (it.NextVisible(true)) {
+					if (SerializedProperty.EqualContents(it, end)) break; // cannot use if (it == end)
 
-				msg.Append($"  - child [{it.propertyPath}]\n");
+					msg.Append($"  - child [{it.propertyPath}]\n");
+				}
 			}
-
 
 			var c = prop.FindPropertyRelative("child1");
 			if (c == null) {
@@ -45,7 +46,7 @@ public class Lesson013_TestClass_PropDrawer : PropertyDrawer
 			Debug.Log(msg.ToString());
 		}
 
-		position.y = buttonRect.yMax + spacing;
+		position.y = buttonRect.yMax;
 		position.height = EditorGUI.GetPropertyHeight(prop, true);
 
 		EditorGUI.PropertyField(position, prop, true);
@@ -53,7 +54,7 @@ public class Lesson013_TestClass_PropDrawer : PropertyDrawer
 
 	public override float GetPropertyHeight(SerializedProperty prop, GUIContent label)
 	{
-		return EditorGUI.GetPropertyHeight(prop, true) + spacing + buttonHeight;
+		return EditorGUI.GetPropertyHeight(prop, true) + buttonHeight + 50;
 	}
 
 }

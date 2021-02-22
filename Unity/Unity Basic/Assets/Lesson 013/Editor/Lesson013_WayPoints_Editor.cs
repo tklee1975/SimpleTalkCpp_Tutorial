@@ -36,10 +36,9 @@ public class Lesson013_WayPoints_Editor : Editor
 
 	void OnSceneGUI()
 	{
-        var comp = target as Lesson013_WayPoints;
+        var comp = this.target as Lesson013_WayPoints;
         if (!comp) return;
 
-        bool addedUndo = false;
         Handles.matrix = comp.transform.localToWorldMatrix;
 
         for (int i = 0; i < pointsProp.arraySize; i++) {
@@ -50,14 +49,10 @@ public class Lesson013_WayPoints_Editor : Editor
 
             var newPos = Handles.PositionHandle(pos, Quaternion.identity);
 
-            if (!addedUndo) {
-                if (pos != newPos) {
-                    addedUndo = true;
-                    Undo.RecordObject(comp, "Move WayPoint");
-                }
+            if (pos != newPos) {
+                Undo.RecordObject(comp, "Move WayPoint");
+                comp.points[i] = newPos;
             }
-
-            comp.points[i] = newPos;
         }
 
         Handles.BeginGUI();
@@ -76,7 +71,9 @@ public class Lesson013_WayPoints_Editor : Editor
             var pos2d = cam.WorldToScreenPoint(worldPos);
             pos2d.y = Screen.height - pos2d.y - 1; // screen coordinate is upside down
 
-            GUI.Box(new Rect(pos2d.x, pos2d.y - 20, 40, 20), text);
+            if (GUI.Button(new Rect(pos2d.x, pos2d.y - 20, 40, 20), text)) {
+                Debug.Log($"Button {text}");
+            }
         }
         Handles.EndGUI();
     }
