@@ -7,18 +7,15 @@ using UnityEditor;
 [CustomPropertyDrawer(typeof(Lesson013_TestAttribute), true)]
 public class Lesson013_TestAttr_PropDrawer : PropertyDrawer
 {
-	const int buttonHeight = 20;
-	const int spacing = 4;
-
 	public override void OnGUI(Rect position, SerializedProperty prop, GUIContent label)
 	{
 		var buttonRect = position;
-		buttonRect.width  = 140;
-		buttonRect.height = buttonHeight;
+		buttonRect.width  = 100;
+		buttonRect.x = position.xMax - buttonRect.width;
 
-		if (GUI.Button(buttonRect, "Click Me")) {
+		if (GUI.Button(buttonRect, "+1")) {
 			var msg = new StringBuilder();
-			msg.Append("-- Click Me --\n");
+			msg.Append("-- +1 Button --\n");
 			msg.Append($"path = [{prop.propertyPath}]\n");
 			msg.Append($"type = [{prop.type}]\n");
 			msg.Append($"hasMultipleDifferentValues = {prop.hasMultipleDifferentValues}]\n");
@@ -38,15 +35,7 @@ public class Lesson013_TestAttr_PropDrawer : PropertyDrawer
 			Debug.Log(msg.ToString());
 		}
 
-		position.y = buttonRect.yMax + spacing;
-		position.height = EditorGUI.GetPropertyHeight(prop, true);
-
+		position.width -= buttonRect.width;
 		EditorGUI.PropertyField(position, prop, true);
 	}
-
-	public override float GetPropertyHeight(SerializedProperty prop, GUIContent label)
-	{
-		return EditorGUI.GetPropertyHeight(prop, true) + spacing + buttonHeight;
-	}
-
 }

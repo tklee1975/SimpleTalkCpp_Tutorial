@@ -6,7 +6,7 @@ using UnityEditor;
 public class Lesson012_AssetPostprocessor : AssetPostprocessor
 {
 	void OnPreprocessAsset() {
-		Debug.Log($"OnPreprocessAsset {assetPath}");
+//		Debug.Log($"OnPreprocessAsset {assetPath}");
 	}
 
 	static void OnPostprocessAllAssets(string[] importedAssets, string[] deletedAssets, string[] movedAssets, string[] movedFromAssetPaths) {

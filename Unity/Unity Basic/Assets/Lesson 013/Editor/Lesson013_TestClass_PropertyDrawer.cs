@@ -7,13 +7,13 @@ using UnityEditor;
 [CustomPropertyDrawer(typeof(Lesson013_TestClass), true)]
 public class Lesson013_TestClass_PropDrawer : PropertyDrawer
 {
-	const int buttonHeight = 20;
-	const int spacing = 4;
+	const float buttonHeight = 20;
+	const float spacing = 4;
 
 	public override void OnGUI(Rect position, SerializedProperty prop, GUIContent label)
 	{
 		var buttonRect = position;
-		buttonRect.width  = 140;
+		buttonRect.width  = 200;
 		buttonRect.height = buttonHeight;
 
 		if (GUI.Button(buttonRect, "Click Me")) {
