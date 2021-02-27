@@ -26,4 +26,8 @@ public class Lesson014_TestPanel : MonoBehaviour
 		Debug.Log($"OnDropdownChanged {v}");
 	}
 
+	private void OnGUI()
+	{
+		// Debug.Log($"Frame[{Time.frameCount}] OnGUI Event={Event.current.type}");
+	}
 }
