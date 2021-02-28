@@ -83,7 +83,7 @@ public class @Lesson015_InputActions_Asset : IInputActionCollection, IDisposable
             ]
         },
         {
-            ""name"": ""AnotherGameMode"",
+            ""name"": ""SwimmingMode"",
             ""id"": ""dba03386-a5be-4b38-90a7-70c0f23a492b"",
             ""actions"": [
                 {
@@ -116,9 +116,9 @@ public class @Lesson015_InputActions_Asset : IInputActionCollection, IDisposable
         m_MyGameMode = asset.FindActionMap("MyGameMode", throwIfNotFound: true);
         m_MyGameMode_Action_MoveDown = m_MyGameMode.FindAction("Action_MoveDown", throwIfNotFound: true);
         m_MyGameMode_Action_Attack = m_MyGameMode.FindAction("Action_Attack", throwIfNotFound: true);
-        // AnotherGameMode
-        m_AnotherGameMode = asset.FindActionMap("AnotherGameMode", throwIfNotFound: true);
-        m_AnotherGameMode_Newaction = m_AnotherGameMode.FindAction("New action", throwIfNotFound: true);
+        // SwimmingMode
+        m_SwimmingMode = asset.FindActionMap("SwimmingMode", throwIfNotFound: true);
+        m_SwimmingMode_Newaction = m_SwimmingMode.FindAction("New action", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -206,29 +206,29 @@ public class @Lesson015_InputActions_Asset : IInputActionCollection, IDisposable
     }
     public MyGameModeActions @MyGameMode => new MyGameModeActions(this);
 
-    // AnotherGameMode
-    private readonly InputActionMap m_AnotherGameMode;
-    private IAnotherGameModeActions m_AnotherGameModeActionsCallbackInterface;
-    private readonly InputAction m_AnotherGameMode_Newaction;
-    public struct AnotherGameModeActions
+    // SwimmingMode
+    private readonly InputActionMap m_SwimmingMode;
+    private ISwimmingModeActions m_SwimmingModeActionsCallbackInterface;
+    private readonly InputAction m_SwimmingMode_Newaction;
+    public struct SwimmingModeActions
     {
         private @Lesson015_InputActions_Asset m_Wrapper;
-        public AnotherGameModeActions(@Lesson015_InputActions_Asset wrapper) { m_Wrapper = wrapper; }
-        public InputAction @Newaction => m_Wrapper.m_AnotherGameMode_Newaction;
-        public InputActionMap Get() { return m_Wrapper.m_AnotherGameMode; }
+        public SwimmingModeActions(@Lesson015_InputActions_Asset wrapper) { m_Wrapper = wrapper; }
+        public InputAction @Newaction => m_Wrapper.m_SwimmingMode_Newaction;
+        public InputActionMap Get() { return m_Wrapper.m_SwimmingMode; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
         public bool enabled => Get().enabled;
-        public static implicit operator InputActionMap(AnotherGameModeActions set) { return set.Get(); }
-        public void SetCallbacks(IAnotherGameModeActions instance)
+        public static implicit operator InputActionMap(SwimmingModeActions set) { return set.Get(); }
+        public void SetCallbacks(ISwimmingModeActions instance)
         {
-            if (m_Wrapper.m_AnotherGameModeActionsCallbackInterface != null)
+            if (m_Wrapper.m_SwimmingModeActionsCallbackInterface != null)
             {
-                @Newaction.started -= m_Wrapper.m_AnotherGameModeActionsCallbackInterface.OnNewaction;
-                @Newaction.performed -= m_Wrapper.m_AnotherGameModeActionsCallbackInterface.OnNewaction;
-                @Newaction.canceled -= m_Wrapper.m_AnotherGameModeActionsCallbackInterface.OnNewaction;
+                @Newaction.started -= m_Wrapper.m_SwimmingModeActionsCallbackInterface.OnNewaction;
+                @Newaction.performed -= m_Wrapper.m_SwimmingModeActionsCallbackInterface.OnNewaction;
+                @Newaction.canceled -= m_Wrapper.m_SwimmingModeActionsCallbackInterface.OnNewaction;
             }
-            m_Wrapper.m_AnotherGameModeActionsCallbackInterface = instance;
+            m_Wrapper.m_SwimmingModeActionsCallbackInterface = instance;
             if (instance != null)
             {
                 @Newaction.started += instance.OnNewaction;
@@ -237,13 +237,13 @@ public class @Lesson015_InputActions_Asset : IInputActionCollection, IDisposable
             }
         }
     }
-    public AnotherGameModeActions @AnotherGameMode => new AnotherGameModeActions(this);
+    public SwimmingModeActions @SwimmingMode => new SwimmingModeActions(this);
     public interface IMyGameModeActions
     {
         void OnAction_MoveDown(InputAction.CallbackContext context);
         void OnAction_Attack(InputAction.CallbackContext context);
     }
-    public interface IAnotherGameModeActions
+    public interface ISwimmingModeActions
     {
         void OnNewaction(InputAction.CallbackContext context);
     }
