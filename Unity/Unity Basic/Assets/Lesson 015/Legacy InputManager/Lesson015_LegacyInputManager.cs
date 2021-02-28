@@ -6,8 +6,7 @@ public class Lesson015_LegacyInputManager : MonoBehaviour
 {
 	private void OnGUI()
 	{
-
-        GUI.Box( new Rect(10, 10, 300, 200),
+		GUI.Box( new Rect(10, 10, 300, 200),
 				"== Lesson015_LegacyInputManager ==\n"
 				+ $"MousePos = {Input.mousePosition}\n"
 				+ $"Vertical = {Input.GetAxis("Vertical")}\n"

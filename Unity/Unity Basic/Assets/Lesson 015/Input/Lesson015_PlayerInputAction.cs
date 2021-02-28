@@ -29,10 +29,12 @@ public class Lesson015_PlayerInputAction : MonoBehaviour
 		Debug.Log($"onActionTriggered {obj.action.name}");
 	}
 
+	//when PlayerInput.Behavior set to "Send Message"
 	void OnAction_MoveDown(UnityEngine.InputSystem.InputValue v) {
 		Debug.Log("OnAction_MoveDown " + v.Get<float>());
 	}
 
+	//when PlayerInput.Behavior set to "Send Message"
 	void OnAction_Attack(UnityEngine.InputSystem.InputValue v) {
 		Debug.Log("OnAction_Attack " + v.isPressed);
 	}

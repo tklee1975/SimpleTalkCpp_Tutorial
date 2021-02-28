@@ -22,7 +22,7 @@ public class Lesson015_InputSystem : MonoBehaviour {
 		var mouse = UnityEngine.InputSystem.Mouse.current;
 		var kb = UnityEngine.InputSystem.Keyboard.current;
 
-        GUI.Box( new Rect(10, 220, 300, 200),
+		GUI.Box( new Rect(10, 220, 300, 200),
 				"== Lesson015_InputSystem ==\n"
 				+ $"MousePos = {mouse.position.ReadValue()}\n"
 				+ $"Down = {kb.downArrowKey.isPressed}\n"
