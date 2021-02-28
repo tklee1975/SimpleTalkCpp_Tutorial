@@ -9,11 +9,13 @@ public class Lesson014_TestPanel : MonoBehaviour
 
 	private void Start()
 	{
-		if (!testDropdown) {
+		if (!testDropdown)
+		{
 			Debug.LogError("missing testDropdown");
-		} else {
-			testDropdown.AddOptions(new List<string>{"Test1", "Test2"});
-
+		}
+		else
+		{
+			testDropdown.AddOptions(new List<string> { "Test1", "Test2" });
 			testDropdown.onValueChanged.AddListener(OnDropdownChanged);
 		}
 	}
@@ -28,6 +30,6 @@ public class Lesson014_TestPanel : MonoBehaviour
 
 	private void OnGUI()
 	{
-		// Debug.Log($"Frame[{Time.frameCount}] OnGUI Event={Event.current.type}");
+//		Debug.Log($"Frame[{Time.frameCount}] OnGUI Event={Event.current.type}");
 	}
 }
