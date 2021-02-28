@@ -173,9 +173,13 @@ MonoBehaviour:
       m_Calls: []
     m_ActionId: 6c4267ee-5b2f-49b2-91df-74ebeef09dd8
     m_ActionName: MyGameMode/Attack[/Keyboard/1]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 7b79ec14-74cf-4406-a1b4-2da4a1759d76
+    m_ActionName: SwimmingMode/New action
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
-  m_DefaultActionMap: MyGameMode
+  m_DefaultActionMap: 8d867c1f-77f9-4c07-8686-b120a033c5c7
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
 --- !u!114 &684005050

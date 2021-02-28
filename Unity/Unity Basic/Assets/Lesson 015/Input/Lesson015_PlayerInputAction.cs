@@ -17,7 +17,7 @@ public class Lesson015_PlayerInputAction : MonoBehaviour
 		var moveDown = map.FindAction("Action_MoveDown");
 		var attack = map.FindAction("Action_Attack");
 
-		GUI.Box( new Rect(10, 440, 300, 200),
+		GUI.Box( new Rect(10, 240, 300, 100),
 				"== Lesson015_PlayerInputAction ==\n"
 				+ $"MoveDown = {moveDown.ReadValue<float>()}\n"
 				+ $"Attack = {attack.ReadValue<float>()}\n");

@@ -9,7 +9,7 @@ public class Lesson015_InputSystem : MonoBehaviour {
 	private void Start()
 	{
 		var kb = UnityEngine.InputSystem.Keyboard.current;
-		kb.onTextInput += Kb_onTextInput;
+		//kb.onTextInput += Kb_onTextInput;
 	}
 
 	private void Kb_onTextInput(char obj)
@@ -22,7 +22,7 @@ public class Lesson015_InputSystem : MonoBehaviour {
 		var mouse = UnityEngine.InputSystem.Mouse.current;
 		var kb = UnityEngine.InputSystem.Keyboard.current;
 
-		GUI.Box( new Rect(10, 220, 300, 200),
+		GUI.Box( new Rect(10, 120, 300, 100),
 				"== Lesson015_InputSystem ==\n"
 				+ $"MousePos = {mouse.position.ReadValue()}\n"
 				+ $"Down = {kb.downArrowKey.isPressed}\n"
