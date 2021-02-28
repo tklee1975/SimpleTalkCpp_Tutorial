@@ -25,11 +25,12 @@ public class Lesson014_ListDemo : MonoBehaviour
                 for (int i = 0; i < AddItemCount; i++) {
                     var item = Object.Instantiate(itemTemplate);
                     item.transform.SetParent(Content.transform);
-                    item.transform.localPosition = new Vector3(0, offset - i * height, 0);
+//                  item.transform.localPosition = new Vector3(0, offset - i * height, 0); // will be done by AutoLayout
                     item.gameObject.SetActive(true);
                 }
 
-                Content.sizeDelta = new Vector2(width, totalHeight);
+//                Content.sizeDelta = new Vector2(width, totalHeight); // will be done by AutoLayout
+
             }
         }
     }
